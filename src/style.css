@@ -1594,4 +1594,36 @@ table.data-table tr:hover {
   }
 }
 
+/* Mobile Category Filter Dropdown Menu Button */
+.mobile-filter-wrapper {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1.5px solid var(--ay-emerald);
+  border-radius: 8px;
+  padding: 10px 14px;
+  width: 100%;
+}
+
+.mobile-filter-select {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ay-emerald);
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .desktop-filter-buttons {
+    display: none !important;
+  }
+  .mobile-filter-wrapper {
+    display: flex !important;
+  }
+}
+
 

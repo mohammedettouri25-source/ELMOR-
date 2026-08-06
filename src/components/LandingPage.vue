@@ -417,7 +417,8 @@ function getWhatsAppUrl(orderNumber) {
 
       <!-- Filter Bar & Search -->
       <div style="background: #ffffff; border: 1px solid var(--ay-border); border-radius: 12px; padding: 16px 24px; margin-bottom: 32px; display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap;">
-        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <!-- Desktop Pill Buttons -->
+        <div class="desktop-filter-buttons" style="display: flex; gap: 10px; flex-wrap: wrap;">
           <button
             style="padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;"
             :style="selectedCategoryFilter === 'all' ? 'background: var(--ay-emerald); color: #ffffff; border: 1px solid var(--ay-emerald);' : 'background: #ffffff; color: var(--ay-dark); border: 1px solid var(--ay-border);'"
@@ -453,6 +454,18 @@ function getWhatsAppUrl(orderNumber) {
           >
             {{ t.catWatchHomme }}
           </button>
+        </div>
+
+        <!-- Mobile Filter Dropdown Selector -->
+        <div class="mobile-filter-wrapper">
+          <Filter :size="16" style="color: var(--ay-emerald);" />
+          <select v-model="selectedCategoryFilter" class="mobile-filter-select">
+            <option value="all">🔍 {{ t.allCategories }} ({{ store.products.length }})</option>
+            <option value="Accessoires Femmes">🌸 {{ t.catAccFemme }}</option>
+            <option value="Accessoires Hommes">🕶️ {{ t.catAccHomme }}</option>
+            <option value="Montres Femmes">⌚ {{ t.catWatchFemme }}</option>
+            <option value="Montres Hommes">⏱️ {{ t.catWatchHomme }}</option>
+          </select>
         </div>
 
         <div style="position: relative; width: 260px;">
