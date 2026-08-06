@@ -1637,11 +1637,28 @@ table.data-table tr:hover {
     position: sticky !important;
     top: 0 !important;
     z-index: 1000 !important;
+    background: #ffffff !important;
+    border-bottom: 1px solid var(--ay-border) !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06) !important;
   }
 
+  /* Remove glow from logo text on mobile */
   .ayla-logo-text {
     font-size: 15px !important;
     letter-spacing: 0.1em !important;
+    color: var(--ay-emerald) !important;
+    text-shadow: none !important;
+  }
+
+  /* Remove glow from nav links on mobile */
+  .ayla-nav-link {
+    color: var(--ay-dark) !important;
+    text-shadow: none !important;
+  }
+
+  .ayla-nav-link.active {
+    color: var(--ay-emerald) !important;
+    border-bottom-color: var(--ay-emerald) !important;
   }
 
   .ayla-nav-links {
