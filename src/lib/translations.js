@@ -13,7 +13,7 @@ export const translations = {
     admin: "Admin",
     ratingText: "4.9/5 · Plus de 1 400 avis vérifiés au Maroc",
     heroTitle: "ACCESSOIRES & MONTRES HOMMES & FEMMES 🇲🇦",
-    heroSubtitle: "Une collection raffinée en acier inoxydable 316L. Ne rouille pas, résiste à l'eau et conserve sa brillance. Moins de 200 DH.",
+    heroSubtitle: "Une collection raffinée en acier inoxydable 316L. Ne rouille pas, résiste à l'eau et conserve sa brillance.",
     startingFrom: "À partir de",
     discoverCatalog: "DÉCOUVRIR LE CATALOGUE",
     orderProduct: "COMMANDER CE PRODUIT",
