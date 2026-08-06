@@ -1098,10 +1098,10 @@ table.data-table tr:hover {
   font-weight: 500;
 }
 
-/* Luxury Maison Ayla Header */
+/* Luxury Maison Ayla Header (Transparent by default, White on scroll) */
 .ayla-header {
-  background: var(--ay-cream);
-  border-bottom: 1px solid var(--ay-border);
+  background: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   padding: 16px 36px;
   display: flex;
   justify-content: space-between;
@@ -1109,6 +1109,15 @@ table.data-table tr:hover {
   position: sticky;
   top: 33px;
   z-index: 1000;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ayla-header.scrolled-header {
+  background: #ffffff !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--ay-border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
 }
 
 .ayla-logo {
@@ -1130,14 +1139,14 @@ table.data-table tr:hover {
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--ay-emerald);
+  color: #ffffff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  transition: color 0.35s ease, text-shadow 0.35s ease;
 }
 
-.ayla-nav-link.active {
-  color: var(--ay-emerald);
-  border-bottom: 2px solid var(--ay-emerald);
-  padding-bottom: 4px;
-  font-weight: 800;
+.scrolled-header .ayla-logo-text {
+  color: var(--ay-emerald) !important;
+  text-shadow: none !important;
 }
 
 .ayla-nav-links {
@@ -1148,14 +1157,31 @@ table.data-table tr:hover {
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--ay-dark);
 }
 
 .ayla-nav-link {
-  color: var(--ay-dark);
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
   text-decoration: none;
-  transition: color 0.2s;
+  transition: color 0.35s ease, text-shadow 0.35s ease;
   cursor: pointer;
+}
+
+.scrolled-header .ayla-nav-link {
+  color: var(--ay-dark) !important;
+  text-shadow: none !important;
+}
+
+.ayla-nav-link.active {
+  color: #f59e0b;
+  border-bottom: 2px solid #f59e0b;
+  padding-bottom: 4px;
+  font-weight: 800;
+}
+
+.scrolled-header .ayla-nav-link.active {
+  color: var(--ay-emerald) !important;
+  border-bottom-color: var(--ay-emerald) !important;
 }
 
 .ayla-nav-link:hover {

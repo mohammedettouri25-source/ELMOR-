@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useInventoryStore, PACKAGING_OPTIONS } from '../stores/inventory'
 import { translations } from '../lib/translations'
 import {
@@ -314,6 +314,20 @@ async function handleCheckoutSubmit() {
   customerForm.value = { name: '', phone: '', city: 'Casablanca', address: '', notes: '' }
 }
 
+const isScrolled = ref(false)
+
+function handleScroll() {
+  isScrolled.value = window.scrollY > 30
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
+
 function getWhatsAppUrl(orderNumber) {
   const msg = encodeURIComponent(`Bonjour ELMORÉ, je viens de passer la commande N° ${orderNumber}. Merci de me confirmer la livraison !`)
   return `https://wa.me/212661889900?text=${msg}`
@@ -328,7 +342,7 @@ function getWhatsAppUrl(orderNumber) {
     </div>
 
     <!-- Luxury Header -->
-    <header class="ayla-header">
+    <header class="ayla-header" :class="{ 'scrolled-header': isScrolled || storePage !== 'home' }">
       <div class="ayla-logo" @click="storePage = 'home'">
         <img src="/logo.png" alt="ELMORÉ" />
         <span class="ayla-logo-text">ELMORÉ</span>
