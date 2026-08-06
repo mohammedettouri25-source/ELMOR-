@@ -38,8 +38,8 @@ const defaultProducts = [
     averageCost: 35,
     minStock: 10,
     variants: [
-      { id: 'v-101', color: 'Doré', size: '45cm', material: 'Acier Inoxydable 316L', packaging: 'nobox', sku: 'NKL-GOLD-45', barcode: '38009911001-G45', stock: 25, min: 5, purchasePrice: 35, price: 97 },
-      { id: 'v-102', color: 'Argenté', size: '45cm', material: 'Acier Inoxydable 316L', packaging: 'stdbox', sku: 'NKL-SLV-45', barcode: '38009911001-S45', stock: 18, min: 5, purchasePrice: 30, price: 89 }
+      { id: 'v-101', color: 'Doré', size: 'Standard', material: 'Acier Inoxydable 316L', packaging: 'nobox', sku: 'NKL-GOLD-ST', barcode: '38009911001-G', stock: 25, min: 5, purchasePrice: 35, price: 97 },
+      { id: 'v-102', color: 'Argenté', size: 'Standard', material: 'Acier Inoxydable 316L', packaging: 'stdbox', sku: 'NKL-SLV-ST', barcode: '38009911001-S', stock: 18, min: 5, purchasePrice: 30, price: 89 }
     ]
   },
   {
@@ -57,8 +57,8 @@ const defaultProducts = [
     averageCost: 45,
     minStock: 8,
     variants: [
-      { id: 'v-201', color: 'Argenté', size: '21cm', material: 'Acier Inoxydable 316L', packaging: 'nobox', sku: 'BRC-SLV-21', barcode: '38009922002-S21', stock: 20, min: 4, purchasePrice: 45, price: 119 },
-      { id: 'v-202', color: 'Noir Mat', size: '21cm', material: 'Acier Noir 316L', packaging: 'stdbox', sku: 'BRC-BLK-21', barcode: '38009922002-B21', stock: 15, min: 4, purchasePrice: 45, price: 119 }
+      { id: 'v-201', color: 'Argenté', size: 'Standard', material: 'Acier Inoxydable 316L', packaging: 'nobox', sku: 'BRC-SLV-ST', barcode: '38009922002-S', stock: 20, min: 4, purchasePrice: 45, price: 119 },
+      { id: 'v-202', color: 'Noir Mat', size: 'Standard', material: 'Acier Noir 316L', packaging: 'stdbox', sku: 'BRC-BLK-ST', barcode: '38009922002-B', stock: 15, min: 4, purchasePrice: 45, price: 119 }
     ]
   },
   {
@@ -76,8 +76,8 @@ const defaultProducts = [
     averageCost: 65,
     minStock: 10,
     variants: [
-      { id: 'v-301', color: 'Doré', size: '32mm', material: 'Acier Inoxydable 316L', packaging: 'stdbox', sku: 'WTC-FEM-GOLD', barcode: '38009933003-FG', stock: 18, min: 4, purchasePrice: 65, price: 189 },
-      { id: 'v-302', color: 'Argenté', size: '32mm', material: 'Acier Inoxydable 316L', packaging: 'nobox', sku: 'WTC-FEM-SLV', barcode: '38009933003-FS', stock: 12, min: 4, purchasePrice: 65, price: 189 }
+      { id: 'v-301', color: 'Doré', size: 'Standard', material: 'Acier Inoxydable 316L', packaging: 'stdbox', sku: 'WTC-FEM-GOLD', barcode: '38009933003-FG', stock: 18, min: 4, purchasePrice: 65, price: 189 },
+      { id: 'v-302', color: 'Argenté', size: 'Standard', material: 'Acier Inoxydable 316L', packaging: 'nobox', sku: 'WTC-FEM-SLV', barcode: '38009933003-FS', stock: 12, min: 4, purchasePrice: 65, price: 189 }
     ]
   },
   {
@@ -95,8 +95,8 @@ const defaultProducts = [
     averageCost: 70,
     minStock: 8,
     variants: [
-      { id: 'v-401', color: 'Noir Mat', size: '42mm', material: 'Acier Inoxydable 316L', packaging: 'luxe', sku: 'WTC-HOM-BLK', barcode: '38009944004-HB', stock: 15, min: 3, purchasePrice: 70, price: 199 },
-      { id: 'v-402', color: 'Argenté', size: '42mm', material: 'Acier Inoxydable 316L', packaging: 'stdbox', sku: 'WTC-HOM-SLV', barcode: '38009944004-HS', stock: 10, min: 3, purchasePrice: 70, price: 199 }
+      { id: 'v-401', color: 'Noir Mat', size: 'Standard', material: 'Acier Inoxydable 316L', packaging: 'luxe', sku: 'WTC-HOM-BLK', barcode: '38009944004-HB', stock: 15, min: 3, purchasePrice: 70, price: 199 },
+      { id: 'v-402', color: 'Argenté', size: 'Standard', material: 'Acier Inoxydable 316L', packaging: 'stdbox', sku: 'WTC-HOM-SLV', barcode: '38009944004-HS', stock: 10, min: 3, purchasePrice: 70, price: 199 }
     ]
   }
 ]

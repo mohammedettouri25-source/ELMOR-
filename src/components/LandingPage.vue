@@ -596,7 +596,7 @@ function getWhatsAppUrl(orderNumber) {
                 @click="selectedVariantId = v.id"
               >
                 <img :src="v.image || product.image || '/luxury_hero.png'" style="width: 24px; height: 24px; object-fit: contain; border-radius: 4px; background: #ffffff; padding: 2px;" />
-                <span>{{ v.color }} · {{ v.size }}</span>
+                <span>{{ v.color }}</span>
               </button>
             </div>
           </div>
