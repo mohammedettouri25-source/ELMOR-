@@ -79,7 +79,7 @@ const selectedPackaging = computed(() => {
 })
 
 const finalUnitPrice = computed(() => {
-  const basePrice = Number(currentVariant.value?.price || product.value?.price) || 0
+  const basePrice = Number(product.value?.price || currentVariant.value?.price) || 0
   const boxExtra = Number(selectedPackaging.value?.extraPrice) || 0
   return basePrice + boxExtra
 })
@@ -529,7 +529,7 @@ function getWhatsAppUrl(orderNumber) {
               <div style="display: flex; align-items: baseline; gap: 10px; margin-top: 2px; flex-wrap: wrap;">
                 <span style="font-size: 34px; font-weight: 900; color: var(--ay-emerald); font-family: 'Instrument Sans', sans-serif;">{{ finalUnitPrice }} DH</span>
                 <span style="font-size: 12px; color: var(--ay-dark); font-weight: 700; background: #ffffff; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--ay-border);">
-                  (Produit {{ currentVariant?.price || product.price }} DH + Coffret {{ selectedPackaging.extraPrice }} DH)
+                  (Produit {{ product.price || currentVariant?.price }} DH + Coffret {{ selectedPackaging.extraPrice }} DH)
                 </span>
               </div>
 
