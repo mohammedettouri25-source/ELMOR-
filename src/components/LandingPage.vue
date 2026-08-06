@@ -475,11 +475,11 @@ function getWhatsAppUrl(orderNumber) {
         
         <!-- LEFT COLUMN: PHOTO GALLERY SHOWCASE & THUMBNAILS -->
         <div style="position: sticky; top: 100px;">
-          <div style="background: #ffffff; border: 2px solid var(--ay-emerald); border-radius: 20px; padding: 12px; text-align: center; box-shadow: 0 12px 36px rgba(7, 60, 58, 0.08); display: flex; align-items: center; justify-content: center; min-height: 280px; max-height: 520px; overflow: hidden; position: relative;">
+          <div style="background: #ffffff; border: 2px solid var(--ay-emerald); border-radius: 20px; padding: 16px; text-align: center; box-shadow: 0 12px 36px rgba(7, 60, 58, 0.08); display: flex; align-items: center; justify-content: center; width: 100%; min-height: 320px; overflow: hidden; position: relative;">
             <img
               :src="currentVariant?.image || product.image || '/luxury_hero.png'"
               :alt="product.name"
-              style="max-height: 480px; width: auto; max-width: 100%; height: auto; object-fit: contain; border-radius: 12px; transition: transform 0.3s ease; display: block; margin: 0 auto;"
+              style="max-height: 520px; width: 100%; height: auto; object-fit: contain !important; border-radius: 12px; transition: transform 0.3s ease; display: block; margin: 0 auto;"
             />
           </div>
 

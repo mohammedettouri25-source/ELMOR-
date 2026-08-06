@@ -905,19 +905,25 @@ table.data-table tr:hover {
 .ayla-card-img-wrapper {
   position: relative;
   width: 100%;
-  height: 240px;
-  background: #F8FAFC;
-  display: grid;
-  place-items: center;
+  height: 260px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
-  padding: 16px;
+  padding: 12px;
+  border-bottom: 1px solid var(--ay-border);
 }
 
 .ayla-card-img {
+  width: 100%;
+  height: 100%;
   max-height: 100%;
   max-width: 100%;
-  object-fit: contain;
+  object-fit: contain !important;
   transition: transform 0.3s ease;
+  display: block;
+  margin: 0 auto;
 }
 
 .ayla-product-catalog-card:hover .ayla-card-img {
