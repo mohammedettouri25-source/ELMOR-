@@ -11,6 +11,7 @@ import {
   Receipt,
   BarChart3,
   Globe,
+  Gift,
   ExternalLink
 } from 'lucide-vue-next'
 
@@ -19,6 +20,7 @@ const store = useInventoryStore()
 const navItems = [
   { id: 'dashboard', label: 'Vue d\'ensemble', icon: LayoutDashboard, color: '#6366f1' },
   { id: 'products', label: 'Produits & Variantes', icon: Package, color: '#3b82f6' },
+  { id: 'packagings', label: 'Boîtes & Coffrets', icon: Gift, color: '#e11d48' },
   { id: 'movements', label: 'Mouvements Stock', icon: ArrowUpRight, color: '#10b981' },
   { id: 'warehouses', label: 'Entrepôts & Transferts', icon: Warehouse, color: '#06b6d4' },
   { id: 'purchases', label: 'Achats Fournisseurs', icon: ShoppingBag, color: '#f59e0b' },

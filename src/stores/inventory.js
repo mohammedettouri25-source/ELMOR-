@@ -3,7 +3,7 @@ import { db } from '../lib/db'
 
 const uuid = () => 'id-' + Math.random().toString(36).substring(2, 11) + '-' + Date.now().toString(36)
 
-// Default Demo Data for Accessories (Plaqué Or 18K & Acier Inoxydable 316L < 200 DH)
+// Default Demo Data for Accessories
 const defaultWarehouses = [
   { id: 'wh-main', name: 'Entrepôt Principal (Casablanca)', code: 'WH-MAIN', location: 'Casablanca Anfa', isDefault: true },
   { id: 'wh-safi', name: 'Magasin Safi Center', code: 'STORE-SAFI', location: 'Safi Ville', isDefault: false },
@@ -15,12 +15,14 @@ const defaultSuppliers = [
   { id: 'sup-2', name: 'Maroc Accessories Factory', company: 'Textile & Accessories SARL', phone: '+212 522-334455', email: 'sales@accessories.ma' }
 ]
 
-// Packaging Options & Pricing (Chaque boîte a son prix adapté pour accessoires < 200 DH)
-export const PACKAGING_OPTIONS = [
-  { id: 'nobox', label: 'Sans Boîte (Pochette Velours Offerte)', extraPrice: 0, icon: '📦', note: 'Livré dans sa pochette en velours noire (0 DH)' },
-  { id: 'stdbox', label: 'Avec Boîte Cadeau ELMORÉ', extraPrice: 25, icon: '🎁', note: 'Boîte cadeau élégante d\'origine ELMORÉ (+25 DH)' },
-  { id: 'luxe', label: 'Avec Écrin Prestige Cadeau & Ruban', extraPrice: 45, icon: '👑', note: 'Écrin rigide cadeau avec ruban de soie (+45 DH)' }
+// Packaging Options & Pricing
+export const DEFAULT_PACKAGINGS = [
+  { id: 'nobox', label: 'Sans Boîte (Pochette Offerte)', extraPrice: 0, icon: '📦', image: '/hero.png', note: 'Livré dans sa pochette en velours noire (0 DH)' },
+  { id: 'stdbox', label: 'Boîte Cadeau ELMORÉ', extraPrice: 25, icon: '🎁', image: '/luxury_hero.png', note: 'Boîte cadeau élégante d\'origine ELMORÉ (+25 DH)' },
+  { id: 'luxe', label: 'Écrin Prestige Cadeau & Ruban', extraPrice: 45, icon: '👑', image: '/hero_fullwidth.png', note: 'Écrin rigide cadeau avec ruban de soie (+45 DH)' }
 ]
+
+export const PACKAGING_OPTIONS = DEFAULT_PACKAGINGS
 
 const defaultProducts = [
   {
@@ -102,7 +104,7 @@ const defaultProducts = [
 ]
 
 const initialMovements = [
-  { id: uuid(), productId: 'prd-acc-femme-a', variantId: 'v-101', productName: 'Collier Trèfle Élégance Acier Inoxydable', variantName: 'Doré · 45cm', type: 'Initial Stock', quantity: 25, prevQuantity: 0, newQuantity: 25, warehouseId: 'wh-main', user: 'Admin', reason: 'Initialisation du Stock', createdAt: new Date().toISOString() }
+  { id: uuid(), productId: 'prd-acc-femme-a', variantId: 'v-101', productName: 'Collier Trèfle Élégance Acier Inoxydable', variantName: 'Doré · Standard', type: 'Initial Stock', quantity: 25, prevQuantity: 0, newQuantity: 25, warehouseId: 'wh-main', user: 'Admin', reason: 'Initialisation du Stock', createdAt: new Date().toISOString() }
 ]
 
 const getInitialProducts = () => {
@@ -127,6 +129,7 @@ const getInitialProducts = () => {
 export const useInventoryStore = defineStore('inventory', {
   state: () => ({
     products: getInitialProducts(),
+    packagings: JSON.parse(localStorage.getItem('elmore_packagings')) || DEFAULT_PACKAGINGS,
     warehouses: JSON.parse(localStorage.getItem('elmore_warehouses')) || defaultWarehouses,
     suppliers: JSON.parse(localStorage.getItem('elmore_suppliers')) || defaultSuppliers,
     movements: JSON.parse(localStorage.getItem('elmore_movements')) || initialMovements,
@@ -245,11 +248,38 @@ export const useInventoryStore = defineStore('inventory', {
 
     saveToStorage() {
       localStorage.setItem('elmore_products', JSON.stringify(this.products))
+      localStorage.setItem('elmore_packagings', JSON.stringify(this.packagings))
       localStorage.setItem('elmore_warehouses', JSON.stringify(this.warehouses))
       localStorage.setItem('elmore_suppliers', JSON.stringify(this.suppliers))
       localStorage.setItem('elmore_movements', JSON.stringify(this.movements))
       localStorage.setItem('elmore_sales', JSON.stringify(this.sales))
       localStorage.setItem('elmore_purchases', JSON.stringify(this.purchases))
+    },
+
+    savePackaging(packagingData) {
+      const pIdx = this.packagings.findIndex(p => p.id === packagingData.id)
+      const pkg = {
+        id: packagingData.id || `pkg-${Date.now().toString(36)}`,
+        label: packagingData.label,
+        extraPrice: Number(packagingData.extraPrice) || 0,
+        icon: packagingData.icon || '🎁',
+        image: packagingData.image || '/luxury_hero.png',
+        note: packagingData.note || ''
+      }
+      if (pIdx >= 0) {
+        this.packagings.splice(pIdx, 1, pkg)
+        this.notify('Emballage mis à jour ✓')
+      } else {
+        this.packagings.push(pkg)
+        this.notify('Nouvel emballage ajouté ✓')
+      }
+      localStorage.setItem('elmore_packagings', JSON.stringify(this.packagings))
+    },
+
+    deletePackaging(packagingId) {
+      this.packagings = this.packagings.filter(p => p.id !== packagingId)
+      localStorage.setItem('elmore_packagings', JSON.stringify(this.packagings))
+      this.notify('Emballage supprimé')
     },
 
     async recordMovement(movement) {
@@ -299,7 +329,7 @@ export const useInventoryStore = defineStore('inventory', {
         name: productData.name,
         sku: productData.sku || `SKU-${Date.now().toString(36).toUpperCase()}`,
         barcode: productData.barcode || '',
-        category: productData.category || 'Colliers & Pendentifs',
+        category: productData.category || 'Accessoires Femmes',
         brand: productData.brand || 'ELMORÉ Jewelry',
         supplierId: productData.supplierId || null,
         image: productData.image || '/hero.png',
@@ -312,7 +342,7 @@ export const useInventoryStore = defineStore('inventory', {
           id: v.id || `v-${Date.now().toString(36)}-${idx}`,
           color: v.color || 'Standard',
           size: v.size || 'Standard',
-          material: v.material || 'Plaqué Or 18K',
+          material: v.material || 'Acier Inoxydable 316L',
           packaging: v.packaging || 'nobox',
           image: v.image || productData.image || '/hero.png',
           sku: v.sku || `${productData.sku || 'SKU'}-${v.color || idx}`,

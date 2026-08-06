@@ -28,7 +28,9 @@ import {
   Minus,
   QrCode,
   Globe,
-  ExternalLink
+  ExternalLink,
+  Pencil,
+  Gift
 } from 'lucide-vue-next'
 
 const store = useInventoryStore()
@@ -44,11 +46,54 @@ onMounted(() => {
 
 // Modals State
 const showProductModal = ref(false)
+const showPackagingModal = ref(false)
 const showTransferModal = ref(false)
 const showPurchaseModal = ref(false)
 const showSessionModal = ref(false)
 const showBarcodeModal = ref(false)
 const showInvoiceModal = ref(false)
+
+const packagingForm = ref({
+  id: '',
+  label: '',
+  extraPrice: 0,
+  icon: '🎁',
+  image: '/luxury_hero.png',
+  note: ''
+})
+
+function openCreatePackaging() {
+  packagingForm.value = {
+    id: '',
+    label: '',
+    extraPrice: 0,
+    icon: '🎁',
+    image: '/luxury_hero.png',
+    note: ''
+  }
+  showPackagingModal.value = true
+}
+
+function openEditPackaging(pkg) {
+  packagingForm.value = { ...pkg }
+  showPackagingModal.value = true
+}
+
+function handlePackagingImageUpload(event) {
+  const file = event.target.files[0]
+  if (!file) return
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    packagingForm.value.image = e.target.result
+  }
+  reader.readAsDataURL(file)
+}
+
+function handleSavePackagingSubmit() {
+  if (!packagingForm.value.label) return
+  store.savePackaging(packagingForm.value)
+  showPackagingModal.value = false
+}
 
 const selectedInvoiceOrder = ref(null)
 const orderStatusFilter = ref('all')
@@ -569,6 +614,62 @@ const filteredMovements = computed(() => {
                   </td>
                   <td>
                     <button class="btn-secondary" style="padding: 6px 12px; font-size: 12px;" @click="openEditProduct(p)">Modifier</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- PACKAGINGS VIEW (GESTION DES BOÎTES ET COFFRETS) -->
+      <section v-else-if="store.activeTab === 'packagings'">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <div>
+            <h2>Gestion des Boîtes, Coffrets & Emballages</h2>
+            <p style="color: var(--text-muted); font-size: 13px;">Gérez les options d'emballage proposées au client avec leurs photos et suppléments de prix (DH)</p>
+          </div>
+          <button class="btn-primary" @click="openCreatePackaging">
+            <Plus :size="16" /> Ajouter un Emballage
+          </button>
+        </div>
+
+        <div class="panel">
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Photo Emballage</th>
+                  <th>Titre / Label</th>
+                  <th>Prix Supplémentaire (DH)</th>
+                  <th>Description & Note Client</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="pkg in (store.packagings || [])" :key="pkg.id">
+                  <td>
+                    <img :src="pkg.image || '/luxury_hero.png'" style="width: 54px; height: 54px; object-fit: contain; border-radius: 8px; border: 1px solid var(--border-color); background: #ffffff; padding: 2px;" />
+                  </td>
+                  <td>
+                    <b style="font-size: 14px;">{{ pkg.label }}</b>
+                    <span style="display: block; color: var(--text-muted); font-size: 11px;">ID: {{ pkg.id }}</span>
+                  </td>
+                  <td>
+                    <b style="color: var(--icon-emerald); font-size: 15px;">{{ pkg.extraPrice === 0 ? 'Gratuit (0 DH)' : `+${pkg.extraPrice} DH` }}</b>
+                  </td>
+                  <td>
+                    <span style="font-size: 12px; color: var(--text-muted);">{{ pkg.note }}</span>
+                  </td>
+                  <td>
+                    <div style="display: flex; gap: 8px;">
+                      <button class="btn-secondary" style="padding: 6px 12px; font-size: 11px;" @click="openEditPackaging(pkg)">
+                        <Pencil :size="13"/> Modifier
+                      </button>
+                      <button class="btn-danger" style="padding: 6px 10px; font-size: 11px;" @click="store.deletePackaging(pkg.id)" :disabled="pkg.id === 'nobox'">
+                        <Trash2 :size="13"/>
+                      </button>
+                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -1143,6 +1244,52 @@ const filteredMovements = computed(() => {
             <Printer :size="16" /> Imprimer Bon / Facture 🖨️
           </button>
         </div>
+      </div>
+    </div>
+
+    <!-- ADMIN MODAL: EDIT/CREATE PACKAGING BOX -->
+    <div v-if="showPackagingModal" class="modal-overlay" @click.self="showPackagingModal = false">
+      <div class="modal-card" style="max-width: 520px; width: 100%;">
+        <div class="modal-header">
+          <h3>{{ packagingForm.id ? 'Modifier l\'Emballage / Coffret' : 'Ajouter un Emballage / Coffret' }}</h3>
+          <button class="close-btn" @click="showPackagingModal = false"><X :size="18"/></button>
+        </div>
+
+        <form @submit.prevent="handleSavePackagingSubmit">
+          <div class="form-group">
+            <label>Titre de l'Emballage *</label>
+            <input v-model="packagingForm.label" class="form-control" required placeholder="Ex: Boîte Cadeau ELMORÉ avec Ruban" />
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Prix Supplémentaire (DH) *</label>
+              <input v-model.number="packagingForm.extraPrice" type="number" min="0" class="form-control" required placeholder="Ex: 25" />
+            </div>
+            <div class="form-group">
+              <label>Icône / Émoji</label>
+              <input v-model="packagingForm.icon" class="form-control" placeholder="Ex: 🎁 ou 📦" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Image de l'Emballage / Boîte (Photo)</label>
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <img :src="packagingForm.image || '/luxury_hero.png'" style="width: 60px; height: 60px; object-fit: contain; border-radius: 8px; border: 1px solid var(--border-color); background: #ffffff; padding: 2px;" />
+              <input type="file" accept="image/*" class="form-control" style="padding: 6px;" @change="handlePackagingImageUpload" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Description & Note Client</label>
+            <input v-model="packagingForm.note" class="form-control" placeholder="Ex: Boîte cadeau rigide élégante (+25 DH)" />
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+            <button type="button" class="btn-secondary" @click="showPackagingModal = false">Annuler</button>
+            <button type="submit" class="btn-primary">Enregistrer L'Emballage ✓</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>

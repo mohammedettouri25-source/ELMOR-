@@ -75,7 +75,8 @@ const currentVariant = computed(() => {
 })
 
 const selectedPackaging = computed(() => {
-  return PACKAGING_OPTIONS.find(p => p.id === selectedPackagingId.value) || PACKAGING_OPTIONS[0]
+  const packagings = store.packagings || []
+  return packagings.find(p => p.id === selectedPackagingId.value) || packagings[0] || { extraPrice: 0, label: 'Sans Boîte' }
 })
 
 const finalUnitPrice = computed(() => {
@@ -609,21 +610,22 @@ function getWhatsAppUrl(orderNumber) {
 
             <div style="display: flex; flex-direction: column; gap: 10px;">
               <div
-                v-for="boxOption in PACKAGING_OPTIONS"
+                v-for="boxOption in (store.packagings || [])"
                 :key="boxOption.id"
                 style="padding: 14px 18px; border-radius: 10px; border: 1px solid var(--ay-border); background: #ffffff; cursor: pointer; transition: all 0.2s; display: flex; justify-content: space-between; align-items: center;"
                 :style="selectedPackagingId === boxOption.id ? 'border-color: var(--ay-emerald); border-width: 2px; background: #f8fafc;' : ''"
                 @click="selectedPackagingId = boxOption.id"
               >
-                <div style="display: flex; align-items: center; gap: 12px;">
-                  <span style="font-size: 20px;">{{ boxOption.icon }}</span>
+                <div style="display: flex; align-items: center; gap: 14px;">
+                  <img v-if="boxOption.image" :src="boxOption.image" :alt="boxOption.label" style="width: 56px; height: 56px; object-fit: contain; border-radius: 8px; border: 1px solid var(--ay-border); background: #ffffff; padding: 2px;" />
+                  <span v-else style="font-size: 24px;">{{ boxOption.icon }}</span>
                   <div>
                     <b style="font-size: 13px; color: var(--ay-emerald); display: block;">{{ boxOption.label }}</b>
                     <small style="color: var(--ay-muted); font-size: 11px;">{{ boxOption.note }}</small>
                   </div>
                 </div>
 
-                <div style="font-size: 12px; font-weight: 800; padding: 4px 10px; border-radius: 6px;" :style="boxOption.extraPrice === 0 ? 'background: #f1f5f9; color: #475569;' : 'background: var(--ay-gold); color: #ffffff;'">
+                <div style="font-size: 12px; font-weight: 800; padding: 6px 12px; border-radius: 6px;" :style="boxOption.extraPrice === 0 ? 'background: #f1f5f9; color: #475569;' : 'background: var(--ay-gold); color: #ffffff;'">
                   {{ boxOption.extraPrice === 0 ? 'Inclus (0 DH)' : `+${boxOption.extraPrice} DH` }}
                 </div>
               </div>
