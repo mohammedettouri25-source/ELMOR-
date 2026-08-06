@@ -1007,6 +1007,54 @@ table.data-table tr:hover {
   color: var(--ay-gold);
 }
 
+/* Full Width Hero Banner Overlay */
+.ayla-hero-fullwidth {
+  width: 100%;
+  min-height: 560px;
+  background: linear-gradient(180deg, rgba(7, 60, 58, 0.78) 0%, rgba(9, 9, 11, 0.88) 100%), url('/hero_fullwidth.png');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 24px;
+  color: #ffffff;
+}
+
+.ayla-hero-overlay-content {
+  max-width: 860px;
+  margin: 0 auto;
+  z-index: 10;
+}
+
+.ayla-hero-overlay-title {
+  font-family: 'Instrument Sans', serif, sans-serif;
+  font-size: 50px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #ffffff;
+  line-height: 1.12;
+  margin-bottom: 16px;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+@media (max-width: 768px) {
+  .ayla-hero-overlay-title {
+    font-size: 32px;
+  }
+}
+
+.ayla-hero-overlay-subtitle {
+  font-size: 18px;
+  color: #e2e8f0;
+  line-height: 1.6;
+  margin-bottom: 32px;
+  font-weight: 500;
+}
+
 /* Luxury Maison Ayla Header */
 .ayla-header {
   background: var(--ay-cream);

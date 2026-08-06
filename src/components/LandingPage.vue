@@ -195,63 +195,47 @@ function getWhatsAppUrl(orderNumber) {
     </header>
 
     <!-- ====================================================================
-         PAGE 1: ACCUEIL / HOME HERO SHOWCASE
+         PAGE 1: ACCUEIL / FULL-WIDTH HERO OVERLAY SHOWCASE
          ==================================================================== -->
     <main v-if="storePage === 'home'">
-      <section class="ayla-hero">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;">
-          <!-- Left Content -->
-          <div>
-            <div class="ayla-badge-rating">
-              <span style="color: #f59e0b; display: flex; gap: 2px;">
-                <Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" />
-              </span>
-              <span>4.9/5 · Plus de 1 400 avis vérifiés au Maroc</span>
-            </div>
-
-            <h1 class="ayla-title">HORLOGERIE & ACCESSOIRES DE LUXE</h1>
-            <p class="ayla-subtitle">
-              Alliez l'élégance suprême à la précision mécanique. Conçus en acier inoxydable 316L chirurgical avec verre saphir inrayable.
-            </p>
-
-            <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 28px;">
-              <span style="font-size: 38px; font-weight: 800; color: var(--ay-emerald); font-family: 'Instrument Sans', sans-serif;">
-                À partir de {{ product.price }} DH
-              </span>
-              <span style="font-size: 20px; color: var(--ay-muted); text-decoration: line-through;">
-                {{ Math.round(product.price * 1.35) }} DH
-              </span>
-            </div>
-
-            <div style="display: flex; gap: 16px; margin-bottom: 32px;">
-              <button class="ayla-btn-emerald" style="font-size: 13px; padding: 18px 32px;" @click="storePage = 'catalog'">
-                DÉCOUVRIR LE CATALOGUE <Grid :size="18" />
-              </button>
-              <button class="ayla-btn-gold" style="font-size: 13px; padding: 18px 32px;" @click="storePage = 'order'">
-                COMMANDER CE PRODUIT <ArrowRight :size="18" />
-              </button>
-            </div>
-
-            <div style="display: flex; gap: 24px; font-size: 12px; color: var(--ay-dark); font-weight: 700;">
-              <span>✓ Acier Inoxydable 316L</span>
-              <span>✓ Garantie 2 Ans</span>
-              <span>✓ Satisfait ou Échangé</span>
-            </div>
+      <!-- Full-Width Hero Section with Image Background & Text Overlay -->
+      <section class="ayla-hero-fullwidth">
+        <div class="ayla-hero-overlay-content">
+          <div class="ayla-badge-rating" style="background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); color: #ffffff; border: 1px solid rgba(255,255,255,0.2);">
+            <span style="color: #f59e0b; display: flex; gap: 2px;">
+              <Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" />
+            </span>
+            <span>4.9/5 · Plus de 1 400 avis vérifiés au Maroc</span>
           </div>
 
-          <!-- Right Studio Professional Generated Image -->
-          <div style="text-align: center;">
-            <div style="background: #ffffff; border: 1px solid var(--ay-border); border-radius: 24px; padding: 24px; box-shadow: 0 16px 40px rgba(7, 60, 58, 0.08); position: relative;">
-              <span style="position: absolute; top: 20px; left: 20px; background: var(--ay-emerald); color: #ffffff; font-size: 10px; font-weight: 800; padding: 4px 12px; border-radius: 4px; letter-spacing: 0.1em;">
-                ÉDITION PRO LUXE
-              </span>
-              <img src="/luxury_hero.png" alt="ELMORÉ Luxury Watch" style="width: 100%; height: 380px; object-fit: cover; border-radius: 16px;" />
-            </div>
+          <h1 class="ayla-hero-overlay-title">HORLOGERIE & ACCESSOIRES DE LUXE</h1>
+          <p class="ayla-hero-overlay-subtitle">
+            Alliez l'élégance suprême à la précision mécanique. Conçus en acier inoxydable 316L chirurgical avec verre saphir inrayable.
+          </p>
+
+          <div style="display: flex; align-items: baseline; justify-content: center; gap: 16px; margin-bottom: 32px;">
+            <span style="font-size: 42px; font-weight: 900; color: var(--ay-gold); font-family: 'Instrument Sans', sans-serif;">
+              À partir de {{ product.price }} DH
+            </span>
+            <span style="font-size: 22px; color: #cbd5e1; text-decoration: line-through;">
+              {{ Math.round(product.price * 1.35) }} DH
+            </span>
+          </div>
+
+          <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+            <button class="ayla-btn-emerald" style="background: var(--ay-gold); border-color: var(--ay-gold); color: #ffffff; font-size: 14px; padding: 18px 36px;" @click="storePage = 'catalog'">
+              DÉCOUVRIR LE CATALOGUE <Grid :size="18" />
+            </button>
+            <button class="ayla-btn-emerald" style="font-size: 14px; padding: 18px 36px;" @click="storePage = 'order'">
+              COMMANDER CE PRODUIT <ArrowRight :size="18" />
+            </button>
           </div>
         </div>
+      </section>
 
-        <!-- Trust Badges Section -->
-        <div class="ayla-trust-grid" style="margin-top: 60px;">
+      <!-- Trust Badges Section below Full Width Hero -->
+      <section class="ayla-hero" style="padding-top: 40px;">
+        <div class="ayla-trust-grid">
           <div class="ayla-trust-card">
             <div class="ayla-trust-icon"><Truck :size="24" /></div>
             <h4>LIVRAISON GRATUITE</h4>
