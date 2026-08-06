@@ -847,7 +847,7 @@ function getWhatsAppUrl(orderNumber) {
               :key="item.id"
               style="display: flex; gap: 14px; align-items: center; border-bottom: 1px solid var(--ay-border); padding-bottom: 12px; margin-bottom: 12px;"
             >
-              <img :src="item.image || '/luxury_hero.png'" style="width: 56px; height: 56px; object-fit: contain; background: #F8FAFC; border-radius: 8px; border: 1px solid var(--ay-border); padding: 4px;" />
+              <img :src="item.image || '/luxury_hero.png'" style="width: 56px; height: 56px; object-fit: contain; background: transparent; border-radius: 8px; border: none; padding: 0;" />
               <div style="flex: 1;">
                 <b style="font-size: 13px; color: var(--ay-emerald); display: block;">{{ item.name }}</b>
                 <span style="font-size: 11px; color: var(--ay-muted); display: block;">{{ item.variantName }} · {{ item.packagingOption?.label }}</span>
@@ -885,7 +885,7 @@ function getWhatsAppUrl(orderNumber) {
 
     <!-- MODAL 2: EXPRESS CHECKOUT POPUP MODAL -->
     <div v-if="showCheckoutModal" class="modal-overlay" @click.self="showCheckoutModal = false">
-      <div class="modal-card" style="max-width: 600px; width: 100%; border-radius: 16px; padding: 28px; border: 2px solid var(--ay-emerald);">
+      <div class="modal-card" style="max-width: 600px; width: 100%; border-radius: 16px; padding: 28px; border: none;">
         <div class="modal-header" style="border-bottom: 1px solid var(--ay-border); padding-bottom: 12px; margin-bottom: 18px;">
           <h3 style="font-family: 'Instrument Sans', sans-serif; font-size: 20px; font-weight: 700; color: var(--ay-emerald); text-transform: uppercase;">
             {{ t.checkoutModalTitle }}
