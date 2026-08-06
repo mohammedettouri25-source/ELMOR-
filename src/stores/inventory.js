@@ -105,7 +105,10 @@ export const useInventoryStore = defineStore('inventory', {
     grossProfit: s => s.totalSalesRevenue - s.totalCOGS,
     
     totalPurchasesAmount: s => (s.purchases || []).reduce((sum, p) => sum + Number(p.totalAmount || 0), 0),
-    latestMovements: s => [...s.movements].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 15)
+    latestMovements: s => [...s.movements].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 15),
+
+    cartTotalCount: s => s.cart.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0),
+    cartTotalPrice: s => s.cart.reduce((sum, item) => sum + (Number(item.price) || 0) * (Number(item.quantity) || 1), 0)
   },
 
   actions: {
@@ -569,6 +572,50 @@ export const useInventoryStore = defineStore('inventory', {
       link.download = `${filename}.${format === 'excel' ? 'xls' : 'csv'}`
       link.click()
       this.notify(`Fichier ${type} généré (${format.toUpperCase()}) ✓`)
+    },
+
+    addToCart({ product, variant, packagingOption, quantity = 1 }) {
+      const p = product || this.selectedLandingProduct
+      const v = variant || (p.variants || [])[0]
+      const box = packagingOption || PACKAGING_OPTIONS[0]
+      const unitPrice = (Number(v?.price || p?.price) || 0) + (Number(box?.extraPrice) || 0)
+
+      const existingItem = this.cart.find(i => i.productId === p.id && i.variantId === v?.id && i.packagingOption?.id === box.id)
+      if (existingItem) {
+        existingItem.quantity += quantity
+      } else {
+        this.cart.push({
+          id: uuid(),
+          productId: p.id,
+          variantId: v?.id || p.id,
+          name: p.name,
+          variantName: v ? `${v.color || ''} ${v.size || ''}`.trim() : 'Standard',
+          image: v?.image || p.image || '/hero.png',
+          price: unitPrice,
+          purchasePrice: Number(p.purchasePrice || v?.purchasePrice) || 0,
+          packagingOption: box,
+          quantity
+        })
+      }
+      this.notify('Produit ajouté au panier 🛒')
+    },
+
+    removeFromCart(cartItemId) {
+      this.cart = this.cart.filter(i => i.id !== cartItemId)
+      this.notify('Article retiré du panier')
+    },
+
+    updateCartQuantity(cartItemId, delta) {
+      const item = this.cart.find(i => i.id === cartItemId)
+      if (!item) return
+      item.quantity += delta
+      if (item.quantity <= 0) {
+        this.removeFromCart(cartItemId)
+      }
+    },
+
+    clearCart() {
+      this.cart = []
     }
   }
 })
