@@ -144,6 +144,7 @@ function openCreateProduct() {
     category: 'Montres & Horlogerie',
     brand: 'ELMORÉ',
     supplierId: store.suppliers[0]?.id || '',
+    image: '/hero.png',
     description: '',
     purchasePrice: 1200,
     price: 2490,
@@ -924,6 +925,14 @@ const filteredMovements = computed(() => {
                 <option value="Vêtements Cuir">Vêtements Cuir</option>
                 <option value="Accessoires">Accessoires</option>
               </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>URL de l'Image du Produit</label>
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <input v-model="productForm.image" class="form-control" placeholder="Ex: /hero.png ou https://..." />
+              <img :src="productForm.image || '/hero.png'" style="width: 42px; height: 42px; object-fit: contain; border-radius: 6px; border: 1px solid var(--border-color); background: #f8fafc;" />
             </div>
           </div>
 

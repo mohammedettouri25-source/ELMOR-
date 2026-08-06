@@ -19,7 +19,9 @@ import {
   Star,
   Check,
   RefreshCw,
-  PhoneCall
+  PhoneCall,
+  Eye,
+  ArrowRight
 } from 'lucide-vue-next'
 
 const store = useInventoryStore()
@@ -61,6 +63,12 @@ const totalPrice = computed(() => {
 })
 
 const isCopied = ref(false)
+
+function selectProduct(p) {
+  store.selectedLandingProductId = p.id
+  selectedVariantId.value = p.variants?.[0]?.id || ''
+  scrollToOrderForm()
+}
 
 function copyProductShareLink() {
   const url = `${window.location.origin}/?product=${product.value.id}`
@@ -142,7 +150,7 @@ function scrollToOrderForm() {
       ✨ <span>LIVRAISON GRATUITE PARTOUT AU MAROC 🇲🇦</span> · PAIEMENT À LA LIVRAISON (COD) · SATISFAIT OU ÉCHANGÉ ✨
     </div>
 
-    <!-- Luxury Maison Ayla Header -->
+    <!-- Luxury Maison Ayla Header (Clean White Theme) -->
     <header class="ayla-header">
       <div class="ayla-logo" @click="store.activeTab = 'landing'">
         <img src="/logo.png" alt="ELMORÉ" />
@@ -150,14 +158,14 @@ function scrollToOrderForm() {
       </div>
 
       <nav class="ayla-nav-links">
-        <a class="ayla-nav-link" href="#hero-section">ACCUEIL</a>
-        <a class="ayla-nav-link" href="#checkout-section">COLLECTIONS</a>
-        <a class="ayla-nav-link" href="#trust-section">GARANTIES</a>
+        <a class="ayla-nav-link" href="#catalog-section">NOTRE CATALOGUE</a>
+        <a class="ayla-nav-link" href="#hero-section">EN VEDETTE</a>
+        <a class="ayla-nav-link" href="#checkout-section">COMMANDER</a>
         <a class="ayla-nav-link" href="#reviews-section">AVIS CLIENTS</a>
       </nav>
 
       <div style="display: flex; align-items: center; gap: 14px;">
-        <select v-model="store.selectedLandingProductId" style="border: 1px solid var(--ay-border); background: #ffffff; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; color: var(--ay-emerald); cursor: pointer;">
+        <select v-model="store.selectedLandingProductId" style="border: 1px solid var(--ay-border); background: #ffffff; padding: 8px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; color: var(--ay-emerald); cursor: pointer;">
           <option v-for="p in store.products" :key="p.id" :value="p.id">{{ p.name }}</option>
         </select>
 
@@ -171,7 +179,7 @@ function scrollToOrderForm() {
       </div>
     </header>
 
-    <!-- Maison Ayla Style Hero Section -->
+    <!-- Maison Ayla Style Hero Section (Clean White) -->
     <section id="hero-section" class="ayla-hero">
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;">
         <!-- Left Text & Pricing -->
@@ -187,7 +195,7 @@ function scrollToOrderForm() {
           <p class="ayla-subtitle">{{ product.description }}</p>
 
           <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 24px;">
-            <span style="font-size: 36px; font-weight: 800; color: var(--ay-emerald); font-family: 'Instrument Sans', sans-serif;">
+            <span style="font-size: 38px; font-weight: 800; color: var(--ay-emerald); font-family: 'Instrument Sans', sans-serif;">
               {{ finalUnitPrice }} DH
             </span>
             <span style="font-size: 20px; color: var(--ay-muted); text-decoration: line-through;">
@@ -218,10 +226,59 @@ function scrollToOrderForm() {
           </div>
 
           <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px;">
-            <img src="/hero.png" style="width: 100%; height: 80px; object-fit: cover; border-radius: 10px; border: 2px solid var(--ay-emerald); cursor: pointer;" />
+            <img :src="product.image || '/hero.png'" style="width: 100%; height: 80px; object-fit: cover; border-radius: 10px; border: 2px solid var(--ay-emerald); cursor: pointer;" />
             <img src="/logo.png" style="width: 100%; height: 80px; object-fit: contain; background: var(--ay-emerald); border-radius: 10px; padding: 8px; cursor: pointer;" />
             <div style="background: #ffffff; border-radius: 10px; border: 1px solid var(--ay-border); display: grid; place-items: center; font-size: 11px; font-weight: 700; color: var(--ay-emerald); text-transform: uppercase;">
               Écrin Prestige
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STOREFRONT CATALOGUE GRID OF PRODUCT CARDS -->
+      <div id="catalog-section" style="margin-top: 70px;">
+        <div style="text-align: center; margin-bottom: 24px;">
+          <span style="color: var(--ay-gold); font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;">NOTRE COLLECTION EXCLUSIVE</span>
+          <h2 style="font-family: 'Instrument Sans', sans-serif; font-size: 28px; font-weight: 700; color: var(--ay-emerald); text-transform: uppercase; margin-top: 4px;">
+            DÉCOUVREZ NOS PRODUITS (CARTES CATALOGUE)
+          </h2>
+          <p style="font-size: 13px; color: var(--ay-muted);">Cliquez sur un produit pour personnaliser votre commande en 1-clic</p>
+        </div>
+
+        <div class="ayla-catalog-grid">
+          <div
+            v-for="p in store.products"
+            :key="p.id"
+            class="ayla-product-catalog-card"
+            :style="p.id === product.id ? 'border-color: var(--ay-emerald); box-shadow: 0 8px 25px rgba(7, 60, 58, 0.12);' : ''"
+            @click="selectProduct(p)"
+          >
+            <div class="ayla-card-img-wrapper">
+              <span class="ayla-card-badge">Best-Seller</span>
+              <img :src="p.image || '/hero.png'" :alt="p.name" class="ayla-card-img" />
+            </div>
+
+            <div class="ayla-card-body">
+              <div class="ayla-card-category">{{ p.brand || 'ELMORÉ' }} · {{ p.category }}</div>
+              <h3 class="ayla-card-title">{{ p.name }}</h3>
+
+              <div style="display: flex; align-items: center; gap: 4px; color: #f59e0b; font-size: 11px; margin-bottom: 8px;">
+                <Star :size="13" fill="#f59e0b" />
+                <Star :size="13" fill="#f59e0b" />
+                <Star :size="13" fill="#f59e0b" />
+                <Star :size="13" fill="#f59e0b" />
+                <Star :size="13" fill="#f59e0b" />
+                <span style="color: var(--ay-muted); margin-left: 4px; font-weight: 700;">4.9 (120+ avis)</span>
+              </div>
+
+              <div class="ayla-card-price-row">
+                <span class="ayla-card-price">{{ p.price }} DH</span>
+                <span class="ayla-card-old-price">{{ Math.round(p.price * 1.35) }} DH</span>
+              </div>
+
+              <button class="ayla-btn-emerald" style="width: 100%; margin-top: 14px; padding: 12px; font-size: 11px;">
+                COMMANDER EN 1-CLIC <ArrowRight :size="14" />
+              </button>
             </div>
           </div>
         </div>
@@ -258,7 +315,7 @@ function scrollToOrderForm() {
       <div id="checkout-section" class="ayla-product-card" style="max-width: 820px; margin: 40px auto;">
         <div style="text-align: center; margin-bottom: 32px; border-bottom: 1px solid var(--ay-border); padding-bottom: 20px;">
           <h2 style="font-family: 'Instrument Sans', sans-serif; font-size: 26px; font-weight: 700; color: var(--ay-emerald); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px;">
-            PASSER VOTRE COMMANDE (PAIEMENT À LA LIVRAISON)
+            COMMANDER : {{ product.name }}
           </h2>
           <p style="font-size: 13px; color: var(--ay-muted);">Remplissez le formulaire ci-dessous pour recevoir votre colis chez vous</p>
         </div>
@@ -446,9 +503,9 @@ function scrollToOrderForm() {
 
         <div>
           <h4>NAVIGATION</h4>
-          <p><a href="#hero-section">Accueil</a></p>
+          <p><a href="#catalog-section">Catalogue</a></p>
+          <p><a href="#hero-section">En Vedette</a></p>
           <p><a href="#checkout-section">Commander</a></p>
-          <p><a href="#trust-section">Garanties</a></p>
           <p><a href="#reviews-section">Avis Clients</a></p>
         </div>
 

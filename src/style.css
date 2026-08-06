@@ -856,22 +856,131 @@ table.data-table tr:hover {
    ========================================================================== */
 
 :root {
-  --ay-cream: #FEFBEF;
+  --ay-cream: #FFFFFF;
+  --ay-cream-light: #F8FAFC;
   --ay-emerald: #073C3A;
   --ay-emerald-hover: #0b4e4b;
   --ay-gold: #D4995C;
-  --ay-gold-light: #fdf5ea;
-  --ay-dark: #1C1C1C;
-  --ay-muted: #6b7280;
-  --ay-border: #E8E4D5;
+  --ay-gold-light: #FAF5EE;
+  --ay-dark: #09090b;
+  --ay-muted: #64748b;
+  --ay-border: #E2E8F0;
 }
 
 .ayla-container {
-  background-color: var(--ay-cream);
+  background-color: #FFFFFF;
   color: var(--ay-dark);
   min-height: 100vh;
   font-family: 'Nunito', 'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Catalog Product Cards Grid */
+.ayla-catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  margin: 32px 0 50px 0;
+}
+
+.ayla-product-catalog-card {
+  background: #FFFFFF;
+  border: 1px solid var(--ay-border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  cursor: pointer;
+}
+
+.ayla-product-catalog-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(7, 60, 58, 0.1);
+  border-color: var(--ay-emerald);
+}
+
+.ayla-card-img-wrapper {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  background: #F8FAFC;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  padding: 16px;
+}
+
+.ayla-card-img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.ayla-product-catalog-card:hover .ayla-card-img {
+  transform: scale(1.05);
+}
+
+.ayla-card-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: var(--ay-emerald);
+  color: #FFFFFF;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 4px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ayla-card-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.ayla-card-category {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ay-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+}
+
+.ayla-card-title {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ay-emerald);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.ayla-card-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+.ayla-card-price {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--ay-emerald);
+}
+
+.ayla-card-old-price {
+  font-size: 14px;
+  color: var(--ay-muted);
+  text-decoration: line-through;
 }
 
 /* Announcement Bar Sticky Top */
