@@ -920,13 +920,8 @@ table.data-table tr:hover {
   max-height: 100%;
   max-width: 100%;
   object-fit: contain !important;
-  transition: transform 0.3s ease;
   display: block;
   margin: 0 auto;
-}
-
-.ayla-product-catalog-card:hover .ayla-card-img {
-  transform: scale(1.05);
 }
 
 .ayla-card-badge {
