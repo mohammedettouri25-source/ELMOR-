@@ -475,28 +475,28 @@ function getWhatsAppUrl(orderNumber) {
     </main>
 
     <!-- ====================================================================
-         PAGE 3: PAGE DE PERSONNALISATION DU PRODUIT (SINGLE PRODUCT VIEW)
+         PAGE 3: PAGE DE PERSONNALISATION DU PRODUIT (SINGLE PRODUCT VIEW - MINIMALIST WHITE)
          ==================================================================== -->
-    <main v-else-if="storePage === 'order'" class="ayla-hero">
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start;" class="single-product-grid">
+    <main v-else-if="storePage === 'order'" style="background: #ffffff; padding: 40px 0;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: start; max-width: 1100px; margin: 0 auto;" class="single-product-grid">
         
         <!-- LEFT COLUMN: PHOTO GALLERY SHOWCASE & THUMBNAILS -->
         <div style="position: sticky; top: 100px;">
-          <div style="background: #ffffff; border: 2px solid var(--ay-emerald); border-radius: 20px; padding: 16px; text-align: center; box-shadow: 0 12px 36px rgba(7, 60, 58, 0.08); display: flex; align-items: center; justify-content: center; width: 100%; min-height: 320px; overflow: hidden; position: relative;">
+          <div style="background: #ffffff; border: 1px solid var(--ay-border); border-radius: 16px; padding: 24px; text-align: center; display: flex; align-items: center; justify-content: center; width: 100%; min-height: 360px; overflow: hidden; position: relative;">
             <img
               :src="currentVariant?.image || product.image || '/luxury_hero.png'"
               :alt="product.name"
-              style="max-height: 520px; width: 100%; height: auto; object-fit: contain !important; border-radius: 12px; transition: transform 0.3s ease; display: block; margin: 0 auto;"
+              style="max-height: 480px; width: 100%; height: auto; object-fit: contain !important; border-radius: 8px; transition: transform 0.3s ease; display: block; margin: 0 auto;"
             />
           </div>
 
           <!-- Thumbnails switcher -->
-          <div style="display: flex; gap: 10px; margin-top: 16px; overflow-x: auto; padding-bottom: 4px;">
+          <div style="display: flex; gap: 12px; margin-top: 16px; overflow-x: auto; padding-bottom: 4px;">
             <div
               v-for="v in product.variants"
               :key="v.id"
-              style="width: 70px; height: 70px; border-radius: 10px; border: 2px solid var(--ay-border); padding: 4px; background: #ffffff; cursor: pointer; display: grid; place-items: center; transition: all 0.2s;"
-              :style="selectedVariantId === v.id ? 'border-color: var(--ay-emerald); shadow: 0 4px 12px rgba(7,60,58,0.15);' : ''"
+              style="width: 64px; height: 64px; border-radius: 8px; border: 1px solid var(--ay-border); padding: 4px; background: #ffffff; cursor: pointer; display: grid; place-items: center; transition: all 0.2s;"
+              :style="selectedVariantId === v.id ? 'border-color: var(--ay-emerald); border-width: 2px;' : 'opacity: 0.7;'"
               @click="selectedVariantId = v.id"
             >
               <img :src="v.image || product.image || '/luxury_hero.png'" style="max-height: 100%; max-width: 100%; object-fit: contain;" />
@@ -504,45 +504,42 @@ function getWhatsAppUrl(orderNumber) {
           </div>
         </div>
 
-        <!-- RIGHT COLUMN: PRODUCT DETAILS & CONFIGURATOR -->
-        <div class="ayla-product-card" style="padding: 32px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <span style="font-size: 11px; font-weight: 800; color: var(--ay-gold); text-transform: uppercase; letter-spacing: 0.12em;">{{ product.brand }} · {{ product.category }}</span>
-            <span style="color: #2e7d32; font-size: 11px; font-weight: 800; background: #e8f5e9; padding: 4px 10px; border-radius: 4px;">En Stock ✓</span>
+        <!-- RIGHT COLUMN: PRODUCT DETAILS & CONFIGURATOR (PURE WHITE MINIMALIST) -->
+        <div style="background: #ffffff; padding: 10px 0;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span style="font-size: 11px; font-weight: 800; color: var(--ay-gold); text-transform: uppercase; letter-spacing: 0.15em;">{{ product.brand }} · {{ product.category }}</span>
+            <span style="color: #2e7d32; font-size: 11px; font-weight: 800; background: #f0fdf4; padding: 4px 10px; border-radius: 4px; border: 1px solid #bbf7d0;">En Stock ✓</span>
           </div>
 
-          <h1 style="font-family: 'Instrument Sans', sans-serif; font-size: 28px; font-weight: 700; color: var(--ay-emerald); line-height: 1.2; margin-bottom: 12px;">
+          <h1 style="font-family: 'Instrument Sans', sans-serif; font-size: 32px; font-weight: 700; color: var(--ay-emerald); line-height: 1.2; margin-bottom: 12px;">
             {{ product.name }}
           </h1>
 
-          <div style="display: flex; align-items: center; gap: 6px; color: #f59e0b; font-size: 12px; margin-bottom: 20px;">
+          <div style="display: flex; align-items: center; gap: 6px; color: #f59e0b; font-size: 13px; margin-bottom: 24px;">
             <Star :size="15" fill="#f59e0b" /><Star :size="15" fill="#f59e0b" /><Star :size="15" fill="#f59e0b" /><Star :size="15" fill="#f59e0b" /><Star :size="15" fill="#f59e0b" />
             <span style="color: var(--ay-muted); font-weight: 700;">{{ t.reviewsCount }}</span>
           </div>
 
-          <!-- Calculated Dynamic Pricing Box -->
-          <div style="background: var(--ay-gold-light); border: 2px solid var(--ay-gold); padding: 20px; border-radius: 14px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(212, 153, 92, 0.15);">
-            <div>
-              <span style="font-size: 11px; color: var(--ay-muted); font-weight: 800; display: block; text-transform: uppercase; letter-spacing: 0.05em;">
-                {{ store.currentLang === 'ar' ? 'السعر الإجمالي للقطعة :' : 'PRIX UNITAIRE TOTAL :' }}
-              </span>
-              <div style="display: flex; align-items: baseline; gap: 10px; margin-top: 2px; flex-wrap: wrap;">
-                <span style="font-size: 34px; font-weight: 900; color: var(--ay-emerald); font-family: 'Instrument Sans', sans-serif;">{{ finalUnitPrice }} DH</span>
-                <span style="font-size: 12px; color: var(--ay-dark); font-weight: 700; background: #ffffff; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--ay-border);">
-                  (Produit {{ product.price || currentVariant?.price }} DH + Coffret {{ selectedPackaging.extraPrice }} DH)
-                </span>
-              </div>
-
-              <div v-if="orderQuantity > 1" style="font-size: 14px; font-weight: 800; color: var(--ay-emerald); margin-top: 8px;">
-                {{ store.currentLang === 'ar' ? `المجموع لـ (${orderQuantity} قطع) :` : `TOTAL COMMANDE (${orderQuantity} pièces) :` }} <span style="font-size: 20px; color: var(--ay-gold); font-weight: 900;">{{ totalPrice }} DH</span>
-              </div>
+          <!-- Clean Minimalist Price Display -->
+          <div style="margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--ay-border);">
+            <div style="display: flex; align-items: baseline; gap: 14px;">
+              <span style="font-size: 38px; font-weight: 900; color: var(--ay-emerald); font-family: 'Instrument Sans', sans-serif;">{{ finalUnitPrice }} DH</span>
+              <span style="font-size: 18px; color: var(--ay-muted); text-decoration: line-through;">{{ Math.round((product.price || 97) * 1.35) }} DH</span>
+              <span style="background: #2e7d32; color: #ffffff; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 4px; margin-left: auto;">-35% OFFRE</span>
             </div>
-            <span style="background: #2e7d32; color: #ffffff; font-size: 11px; font-weight: 800; padding: 6px 12px; border-radius: 6px;">-35% OFFRE</span>
+            
+            <div style="font-size: 12px; color: var(--ay-muted); font-weight: 600; margin-top: 6px;">
+              (Produit {{ product.price || currentVariant?.price }} DH + Coffret {{ selectedPackaging.extraPrice }} DH)
+            </div>
+
+            <div v-if="orderQuantity > 1" style="font-size: 15px; font-weight: 800; color: var(--ay-emerald); margin-top: 10px;">
+              {{ store.currentLang === 'ar' ? `المجموع لـ (${orderQuantity} قطع) :` : `TOTAL COMMANDE (${orderQuantity} pièces) :` }} <span style="font-size: 22px; color: var(--ay-gold); font-weight: 900;">{{ totalPrice }} DH</span>
+            </div>
           </div>
 
           <!-- Section 1: Choose Variant / Finish -->
-          <div style="margin-bottom: 24px;">
-            <label style="font-size: 12px; font-weight: 800; color: var(--ay-emerald); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 10px;">
+          <div style="margin-bottom: 28px;">
+            <label style="font-size: 12px; font-weight: 800; color: var(--ay-emerald); text-transform: uppercase; letter-spacing: 0.08em; display: block; margin-bottom: 12px;">
               {{ t.finishSelection }}
             </label>
 
@@ -550,19 +547,19 @@ function getWhatsAppUrl(orderNumber) {
               <button
                 v-for="v in product.variants"
                 :key="v.id"
-                style="padding: 10px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px;"
-                :style="selectedVariantId === v.id ? 'background: var(--ay-emerald); color: #ffffff; border: 1px solid var(--ay-emerald); shadow: 0 4px 12px rgba(7,60,58,0.2);' : 'background: #ffffff; color: var(--ay-dark); border: 1px solid var(--ay-border);'"
+                style="padding: 10px 16px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px;"
+                :style="selectedVariantId === v.id ? 'background: var(--ay-emerald); color: #ffffff; border: 1px solid var(--ay-emerald);' : 'background: #ffffff; color: var(--ay-dark); border: 1px solid var(--ay-border);'"
                 @click="selectedVariantId = v.id"
               >
-                <img :src="v.image || product.image || '/luxury_hero.png'" style="width: 26px; height: 26px; object-fit: contain; border-radius: 4px; background: #ffffff; padding: 2px;" />
+                <img :src="v.image || product.image || '/luxury_hero.png'" style="width: 24px; height: 24px; object-fit: contain; border-radius: 4px; background: #ffffff; padding: 2px;" />
                 <span>{{ v.color }} · {{ v.size }}</span>
               </button>
             </div>
           </div>
 
           <!-- Section 2: Choose Box / Packaging (WITH BOX OR WITHOUT BOX) -->
-          <div style="margin-bottom: 24px;">
-            <label style="font-size: 12px; font-weight: 800; color: var(--ay-emerald); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 10px;">
+          <div style="margin-bottom: 28px;">
+            <label style="font-size: 12px; font-weight: 800; color: var(--ay-emerald); text-transform: uppercase; letter-spacing: 0.08em; display: block; margin-bottom: 12px;">
               {{ t.boxSelection }}
             </label>
 
@@ -570,19 +567,19 @@ function getWhatsAppUrl(orderNumber) {
               <div
                 v-for="boxOption in PACKAGING_OPTIONS"
                 :key="boxOption.id"
-                style="padding: 14px 18px; border-radius: 10px; border: 2px solid var(--ay-border); background: #ffffff; cursor: pointer; transition: all 0.2s; display: flex; justify-content: space-between; align-items: center;"
-                :style="selectedPackagingId === boxOption.id ? 'border-color: var(--ay-emerald); background: #f0fdf4;' : ''"
+                style="padding: 14px 18px; border-radius: 10px; border: 1px solid var(--ay-border); background: #ffffff; cursor: pointer; transition: all 0.2s; display: flex; justify-content: space-between; align-items: center;"
+                :style="selectedPackagingId === boxOption.id ? 'border-color: var(--ay-emerald); border-width: 2px; background: #f8fafc;' : ''"
                 @click="selectedPackagingId = boxOption.id"
               >
                 <div style="display: flex; align-items: center; gap: 12px;">
-                  <span style="font-size: 22px;">{{ boxOption.icon }}</span>
+                  <span style="font-size: 20px;">{{ boxOption.icon }}</span>
                   <div>
                     <b style="font-size: 13px; color: var(--ay-emerald); display: block;">{{ boxOption.label }}</b>
                     <small style="color: var(--ay-muted); font-size: 11px;">{{ boxOption.note }}</small>
                   </div>
                 </div>
 
-                <div style="font-size: 13px; font-weight: 800; padding: 4px 10px; border-radius: 6px;" :style="boxOption.extraPrice === 0 ? 'background: #e2e8f0; color: #475569;' : 'background: var(--ay-gold); color: #ffffff;'">
+                <div style="font-size: 12px; font-weight: 800; padding: 4px 10px; border-radius: 6px;" :style="boxOption.extraPrice === 0 ? 'background: #f1f5f9; color: #475569;' : 'background: var(--ay-gold); color: #ffffff;'">
                   {{ boxOption.extraPrice === 0 ? 'Inclus (0 DH)' : `+${boxOption.extraPrice} DH` }}
                 </div>
               </div>
@@ -590,22 +587,22 @@ function getWhatsAppUrl(orderNumber) {
           </div>
 
           <!-- Section 3: Quantity Counter -->
-          <div style="margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--ay-border); padding-top: 16px;">
-            <span style="font-size: 13px; font-weight: 800; color: var(--ay-emerald); text-transform: uppercase;">QUANTITÉ :</span>
+          <div style="margin-bottom: 28px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--ay-border); padding-top: 20px;">
+            <span style="font-size: 12px; font-weight: 800; color: var(--ay-emerald); text-transform: uppercase;">QUANTITÉ :</span>
             
             <div style="display: flex; align-items: center; gap: 12px;">
-              <button style="padding: 6px 14px; font-weight: 800; font-size: 16px; background: #ffffff; border: 1px solid var(--ay-border); border-radius: 6px; cursor: pointer;" @click="decrementQty">-</button>
+              <button style="width: 36px; height: 36px; font-weight: 800; font-size: 16px; background: #ffffff; border: 1px solid var(--ay-border); border-radius: 6px; cursor: pointer;" @click="decrementQty">-</button>
               <span style="font-size: 18px; font-weight: 800; min-width: 24px; text-align: center; color: var(--ay-emerald);">{{ orderQuantity }}</span>
-              <button style="padding: 6px 14px; font-weight: 800; font-size: 16px; background: #ffffff; border: 1px solid var(--ay-border); border-radius: 6px; cursor: pointer;" @click="incrementQty">+</button>
+              <button style="width: 36px; height: 36px; font-weight: 800; font-size: 16px; background: #ffffff; border: 1px solid var(--ay-border); border-radius: 6px; cursor: pointer;" @click="incrementQty">+</button>
             </div>
           </div>
 
           <!-- Action Buttons -->
-          <div style="display: flex; gap: 12px; margin-top: 24px;">
-            <button class="ayla-btn-gold" style="flex: 1; padding: 16px; font-size: 13px; justify-content: center;" @click="handleAddCurrentToCart">
+          <div style="display: flex; gap: 12px; margin-top: 28px;">
+            <button class="ayla-btn-gold" style="flex: 1; padding: 18px; font-size: 13px; justify-content: center;" @click="handleAddCurrentToCart">
               <ShoppingCart :size="16" /> {{ t.addToCartBtn }}
             </button>
-            <button class="ayla-btn-emerald" style="flex: 1.4; padding: 16px; font-size: 13px; justify-content: center;" @click="openCheckoutModal()">
+            <button class="ayla-btn-emerald" style="flex: 1.4; padding: 18px; font-size: 13px; justify-content: center;" @click="openCheckoutModal()">
               {{ t.passOrderModalBtn }} ({{ totalPrice }} DH)
             </button>
           </div>
