@@ -117,6 +117,34 @@ CREATE TABLE IF NOT EXISTS `stock_movements` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ============================================================================
+-- VUES MYSQL OPTIMISÉES POUR RAPPORTS & ANALYTICS
+-- ============================================================================
+
+CREATE OR REPLACE VIEW `v_product_stock_summary` AS
+SELECT 
+  p.id AS product_id,
+  p.name AS product_name,
+  p.sku AS product_sku,
+  p.category,
+  p.brand,
+  p.price,
+  COUNT(v.id) AS total_variants,
+  COALESCE(SUM(v.stock), 0) AS total_stock,
+  COALESCE(SUM(v.stock * p.purchase_price), 0) AS stock_value_mad
+FROM `products` p
+LEFT JOIN `product_variants` v ON p.id = v.product_id
+GROUP BY p.id;
+
+CREATE OR REPLACE VIEW `v_daily_sales_report` AS
+SELECT 
+  DATE(created_at) AS sale_date,
+  COUNT(id) AS total_orders,
+  SUM(total_amount) AS revenue_mad
+FROM `sales_orders`
+WHERE cancelled = FALSE
+GROUP BY DATE(created_at);
+
+-- ============================================================================
 -- SEED DATA INITIAL
 -- ============================================================================
 
