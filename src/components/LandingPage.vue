@@ -847,7 +847,9 @@ function getWhatsAppUrl(orderNumber) {
               :key="item.id"
               style="display: flex; gap: 14px; align-items: center; border-bottom: 1px solid var(--ay-border); padding-bottom: 12px; margin-bottom: 12px;"
             >
-              <img :src="item.image || '/luxury_hero.png'" style="width: 56px; height: 56px; object-fit: contain; background: transparent; border-radius: 8px; border: none; padding: 0;" />
+              <div style="width: 56px; height: 56px; flex-shrink: 0; border-radius: 8px; overflow: hidden; background: transparent; display: flex; align-items: center; justify-content: center;">
+                <img :src="item.image || '/luxury_hero.png'" style="width: 100%; height: 100%; object-fit: contain;" />
+              </div>
               <div style="flex: 1;">
                 <b style="font-size: 13px; color: var(--ay-emerald); display: block;">{{ item.name }}</b>
                 <span style="font-size: 11px; color: var(--ay-muted); display: block;">{{ item.variantName }} · {{ item.packagingOption?.label }}</span>
