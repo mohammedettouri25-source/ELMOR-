@@ -233,8 +233,52 @@ function getWhatsAppUrl(orderNumber) {
         </div>
       </section>
 
+      <!-- Product Cards Grid Section under Hero -->
+      <section class="ayla-hero" style="padding-top: 50px; padding-bottom: 20px;">
+        <div style="text-align: center; margin-bottom: 32px;">
+          <span style="color: var(--ay-gold); font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;">NOTRE SELECTION EN VEDETTE</span>
+          <h2 style="font-family: 'Instrument Sans', sans-serif; font-size: 30px; font-weight: 700; color: var(--ay-emerald); text-transform: uppercase; margin-top: 4px;">
+            NOS CARTES PRODUITS EXCLUSIVES
+          </h2>
+          <p style="font-size: 14px; color: var(--ay-muted);">Cliquez sur un produit pour personnaliser votre commande en 1-clic</p>
+        </div>
+
+        <div class="ayla-catalog-grid">
+          <div
+            v-for="p in store.products"
+            :key="p.id"
+            class="ayla-product-catalog-card"
+            @click="selectProductAndOrder(p)"
+          >
+            <div class="ayla-card-img-wrapper">
+              <span class="ayla-card-badge">Best-Seller</span>
+              <img :src="p.image || '/luxury_hero.png'" :alt="p.name" class="ayla-card-img" />
+            </div>
+
+            <div class="ayla-card-body">
+              <div class="ayla-card-category">{{ p.brand || 'ELMORÉ' }} · {{ p.category }}</div>
+              <h3 class="ayla-card-title">{{ p.name }}</h3>
+
+              <div style="display: flex; align-items: center; gap: 4px; color: #f59e0b; font-size: 11px; margin-bottom: 8px;">
+                <Star :size="13" fill="#f59e0b" /><Star :size="13" fill="#f59e0b" /><Star :size="13" fill="#f59e0b" /><Star :size="13" fill="#f59e0b" /><Star :size="13" fill="#f59e0b" />
+                <span style="color: var(--ay-muted); margin-left: 4px; font-weight: 700;">4.9 (140+ avis)</span>
+              </div>
+
+              <div class="ayla-card-price-row">
+                <span class="ayla-card-price">{{ p.price }} DH</span>
+                <span class="ayla-card-old-price">{{ Math.round(p.price * 1.35) }} DH</span>
+              </div>
+
+              <button class="ayla-btn-emerald" style="width: 100%; margin-top: 14px; padding: 12px; font-size: 11px;" @click.stop="selectProductAndOrder(p)">
+                COMMANDER EN 1-CLIC <ArrowRight :size="14" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- Trust Badges Section below Full Width Hero -->
-      <section class="ayla-hero" style="padding-top: 40px;">
+      <section class="ayla-hero" style="padding-top: 10px;">
         <div class="ayla-trust-grid">
           <div class="ayla-trust-card">
             <div class="ayla-trust-icon"><Truck :size="24" /></div>
