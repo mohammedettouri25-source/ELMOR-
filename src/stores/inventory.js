@@ -24,11 +24,11 @@ export const PACKAGING_OPTIONS = [
 
 const defaultProducts = [
   {
-    id: 'prd-necklace-a',
+    id: 'prd-acc-femme-a',
     name: 'Collier Trèfle Élégance Acier Inoxydable',
     sku: 'NKL-TREFLE-316L',
     barcode: '38009911001',
-    category: 'Colliers & Pendentifs',
+    category: 'Accessoires Femmes',
     brand: 'ELMORÉ Jewelry',
     supplierId: 'sup-1',
     image: '/luxury_hero.png',
@@ -39,53 +39,70 @@ const defaultProducts = [
     minStock: 10,
     variants: [
       { id: 'v-101', color: 'Doré', size: '45cm', material: 'Acier Inoxydable 316L', packaging: 'nobox', sku: 'NKL-GOLD-45', barcode: '38009911001-G45', stock: 25, min: 5, purchasePrice: 35, price: 97 },
-      { id: 'v-102', color: 'Argenté', size: '45cm', material: 'Acier Inoxydable 316L', packaging: 'stdbox', sku: 'NKL-SLV-45', barcode: '38009911001-S45', stock: 18, min: 5, purchasePrice: 30, price: 89 },
-      { id: 'v-103', color: 'Rose Gold', size: '45cm', material: 'Acier Inoxydable 316L', packaging: 'nobox', sku: 'NKL-RSE-45', barcode: '38009911001-R45', stock: 14, min: 5, purchasePrice: 35, price: 97 }
+      { id: 'v-102', color: 'Argenté', size: '45cm', material: 'Acier Inoxydable 316L', packaging: 'stdbox', sku: 'NKL-SLV-45', barcode: '38009911001-S45', stock: 18, min: 5, purchasePrice: 30, price: 89 }
     ]
   },
   {
-    id: 'prd-bracelet-b',
-    name: 'Bracelet Jonc Tressé Acier Inoxydable',
-    sku: 'BRC-JONC-316L',
+    id: 'prd-acc-homme-b',
+    name: 'Gourmette Homme Acier Inoxydable 316L',
+    sku: 'BRC-HOMME-316L',
     barcode: '38009922002',
-    category: 'Bracelets & Joncs',
+    category: 'Accessoires Hommes',
     brand: 'ELMORÉ Jewelry',
     supplierId: 'sup-1',
     image: '/hero.png',
-    description: 'Bracelet jonc rigide tressé ajustable en acier inoxydable 316L. Ne rouille jamais.',
+    description: 'Gourmette masculine tressée en acier inoxydable 316L haute résistance. Ajustable.',
     purchasePrice: 45,
-    price: 129,
+    price: 119,
     averageCost: 45,
     minStock: 8,
     variants: [
-      { id: 'v-201', color: 'Doré', size: 'Ajustable', material: 'Acier Inoxydable 316L', packaging: 'nobox', sku: 'BRC-GOLD-AJ', barcode: '38009922002-GAJ', stock: 20, min: 4, purchasePrice: 45, price: 129 },
-      { id: 'v-202', color: 'Argenté', size: 'Ajustable', material: 'Acier Inoxydable 316L', packaging: 'stdbox', sku: 'BRC-SLV-AJ', barcode: '38009922002-SAJ', stock: 15, min: 4, purchasePrice: 40, price: 119 }
+      { id: 'v-201', color: 'Argenté', size: '21cm', material: 'Acier Inoxydable 316L', packaging: 'nobox', sku: 'BRC-SLV-21', barcode: '38009922002-S21', stock: 20, min: 4, purchasePrice: 45, price: 119 },
+      { id: 'v-202', color: 'Noir Mat', size: '21cm', material: 'Acier Noir 316L', packaging: 'stdbox', sku: 'BRC-BLK-21', barcode: '38009922002-B21', stock: 15, min: 4, purchasePrice: 45, price: 119 }
     ]
   },
   {
-    id: 'prd-ring-c',
-    name: 'Bague Solitaire Éternité Acier Inoxydable',
-    sku: 'RNG-SOLITAIRE-01',
+    id: 'prd-watch-femme-c',
+    name: 'Montre ELMORÉ Élégance Femmes',
+    sku: 'WTC-FEMME-01',
     barcode: '38009933003',
-    category: 'Bagues & Solitaires',
-    brand: 'ELMORÉ Jewelry',
+    category: 'Montres Femmes',
+    brand: 'ELMORÉ Watches',
+    supplierId: 'sup-1',
+    image: '/luxury_hero.png',
+    description: 'Montre féminine raffinée avec cadran nacre et bracelet en acier inoxydable 316L. Verre saphir.',
+    purchasePrice: 65,
+    price: 189,
+    averageCost: 65,
+    minStock: 10,
+    variants: [
+      { id: 'v-301', color: 'Doré', size: '32mm', material: 'Acier Inoxydable 316L', packaging: 'stdbox', sku: 'WTC-FEM-GOLD', barcode: '38009933003-FG', stock: 18, min: 4, purchasePrice: 65, price: 189 },
+      { id: 'v-302', color: 'Argenté', size: '32mm', material: 'Acier Inoxydable 316L', packaging: 'nobox', sku: 'WTC-FEM-SLV', barcode: '38009933003-FS', stock: 12, min: 4, purchasePrice: 65, price: 189 }
+    ]
+  },
+  {
+    id: 'prd-watch-homme-d',
+    name: 'Montre ELMORÉ Chrono Prestige Hommes',
+    sku: 'WTC-HOMME-01',
+    barcode: '38009944004',
+    category: 'Montres Hommes',
+    brand: 'ELMORÉ Watches',
     supplierId: 'sup-1',
     image: '/hero_fullwidth.png',
-    description: 'Bague solitaire sertie d\'un cristal étincelant. Acier inoxydable 316L ultra résistant.',
-    purchasePrice: 25,
-    price: 79,
-    averageCost: 25,
-    minStock: 12,
+    description: 'Montre chronographe sportive masculine boîtier acier 316L et bracelet étanche. Résiste à l\'eau.',
+    purchasePrice: 70,
+    price: 199,
+    averageCost: 70,
+    minStock: 8,
     variants: [
-      { id: 'v-301', color: 'Doré', size: 'Taille 6', material: 'Acier Inoxydable 316L', packaging: 'nobox', sku: 'RNG-GOLD-T6', barcode: '38009933003-G6', stock: 30, min: 5, purchasePrice: 25, price: 79 },
-      { id: 'v-302', color: 'Doré', size: 'Taille 7', material: 'Acier Inoxydable 316L', packaging: 'nobox', sku: 'RNG-GOLD-T7', barcode: '38009933003-G7', stock: 22, min: 5, purchasePrice: 25, price: 79 },
-      { id: 'v-303', color: 'Argenté', size: 'Taille 7', material: 'Acier Inoxydable 316L', packaging: 'nobox', sku: 'RNG-SLV-T7', barcode: '38009933003-S7', stock: 18, min: 5, purchasePrice: 20, price: 69 }
+      { id: 'v-401', color: 'Noir Mat', size: '42mm', material: 'Acier Inoxydable 316L', packaging: 'luxe', sku: 'WTC-HOM-BLK', barcode: '38009944004-HB', stock: 15, min: 3, purchasePrice: 70, price: 199 },
+      { id: 'v-402', color: 'Argenté', size: '42mm', material: 'Acier Inoxydable 316L', packaging: 'stdbox', sku: 'WTC-HOM-SLV', barcode: '38009944004-HS', stock: 10, min: 3, purchasePrice: 70, price: 199 }
     ]
   }
 ]
 
 const initialMovements = [
-  { id: uuid(), productId: 'prd-necklace-a', variantId: 'v-101', productName: 'Collier Trèfle Élégance Acier Inoxydable', variantName: 'Doré · 45cm', type: 'Initial Stock', quantity: 25, prevQuantity: 0, newQuantity: 25, warehouseId: 'wh-main', user: 'Admin', reason: 'Initialisation du Stock', createdAt: new Date().toISOString() }
+  { id: uuid(), productId: 'prd-acc-femme-a', variantId: 'v-101', productName: 'Collier Trèfle Élégance Acier Inoxydable', variantName: 'Doré · 45cm', type: 'Initial Stock', quantity: 25, prevQuantity: 0, newQuantity: 25, warehouseId: 'wh-main', user: 'Admin', reason: 'Initialisation du Stock', createdAt: new Date().toISOString() }
 ]
 
 export const useInventoryStore = defineStore('inventory', {
@@ -100,7 +117,7 @@ export const useInventoryStore = defineStore('inventory', {
     cart: [],
     currentLang: localStorage.getItem('elmore_lang') || 'ar',
     activeTab: 'dashboard',
-    selectedLandingProductId: 'prd-necklace-a',
+    selectedLandingProductId: 'prd-acc-femme-a',
     toast: null,
     searchQuery: ''
   }),

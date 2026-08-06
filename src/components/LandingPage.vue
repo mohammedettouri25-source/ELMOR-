@@ -415,17 +415,31 @@ function getWhatsAppUrl(orderNumber) {
           </button>
           <button
             style="padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;"
-            :style="selectedCategoryFilter === 'Montres & Horlogerie' ? 'background: var(--ay-emerald); color: #ffffff; border: 1px solid var(--ay-emerald);' : 'background: #ffffff; color: var(--ay-dark); border: 1px solid var(--ay-border);'"
-            @click="selectedCategoryFilter = 'Montres & Horlogerie'"
+            :style="selectedCategoryFilter === 'Accessoires Femmes' ? 'background: var(--ay-emerald); color: #ffffff; border: 1px solid var(--ay-emerald);' : 'background: #ffffff; color: var(--ay-dark); border: 1px solid var(--ay-border);'"
+            @click="selectedCategoryFilter = 'Accessoires Femmes'"
           >
-            {{ store.currentLang === 'ar' ? 'ساعات فاخرة' : 'Montres & Horlogerie' }}
+            {{ t.catAccFemme }}
           </button>
           <button
             style="padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;"
-            :style="selectedCategoryFilter === 'Vêtements Cuir' ? 'background: var(--ay-emerald); color: #ffffff; border: 1px solid var(--ay-emerald);' : 'background: #ffffff; color: var(--ay-dark); border: 1px solid var(--ay-border);'"
-            @click="selectedCategoryFilter = 'Vêtements Cuir'"
+            :style="selectedCategoryFilter === 'Accessoires Hommes' ? 'background: var(--ay-emerald); color: #ffffff; border: 1px solid var(--ay-emerald);' : 'background: #ffffff; color: var(--ay-dark); border: 1px solid var(--ay-border);'"
+            @click="selectedCategoryFilter = 'Accessoires Hommes'"
           >
-            {{ store.currentLang === 'ar' ? 'سترات جلذية' : 'Vêtements Cuir' }}
+            {{ t.catAccHomme }}
+          </button>
+          <button
+            style="padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;"
+            :style="selectedCategoryFilter === 'Montres Femmes' ? 'background: var(--ay-emerald); color: #ffffff; border: 1px solid var(--ay-emerald);' : 'background: #ffffff; color: var(--ay-dark); border: 1px solid var(--ay-border);'"
+            @click="selectedCategoryFilter = 'Montres Femmes'"
+          >
+            {{ t.catWatchFemme }}
+          </button>
+          <button
+            style="padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;"
+            :style="selectedCategoryFilter === 'Montres Hommes' ? 'background: var(--ay-emerald); color: #ffffff; border: 1px solid var(--ay-emerald);' : 'background: #ffffff; color: var(--ay-dark); border: 1px solid var(--ay-border);'"
+            @click="selectedCategoryFilter = 'Montres Hommes'"
+          >
+            {{ t.catWatchHomme }}
           </button>
         </div>
 
