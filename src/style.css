@@ -1400,6 +1400,11 @@ table.data-table tr:hover {
 }
 
 @media (max-width: 768px) {
+  .single-product-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
   /* Header & Navigation Mobile */
   .ayla-header {
     padding: 10px 14px !important;

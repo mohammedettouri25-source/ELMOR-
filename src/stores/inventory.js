@@ -17,9 +17,9 @@ const defaultSuppliers = [
 
 // Packaging Options & Pricing (Chaque boîte a son prix)
 export const PACKAGING_OPTIONS = [
-  { id: 'nobox', label: 'Sans Boîte (Sans Coffret)', extraPrice: 0, icon: '📦', note: 'Emballage standard sécurisé' },
-  { id: 'stdbox', label: 'Avec Boîte Standard ELMORÉ', extraPrice: 150, icon: '🎁', note: 'Coffret rigide élégant ELMORÉ' },
-  { id: 'luxe', label: 'Avec Coffret de Luxe en Bois', extraPrice: 350, icon: '👑', note: 'Coffret Prestige en bois finition piano avec certificat' }
+  { id: 'nobox', label: 'Sans Boîte (Sans Coffret)', extraPrice: 0, icon: '📦', note: 'Livré dans un emballage sécurisé (0 DH)' },
+  { id: 'stdbox', label: 'Avec Boîte Standard ELMORÉ', extraPrice: 150, icon: '🎁', note: 'Coffret rigide d\'origine ELMORÉ (+150 DH)' },
+  { id: 'luxe', label: 'Avec Coffret de Luxe en Bois', extraPrice: 350, icon: '👑', note: 'Coffret Prestige en bois finition piano avec certificat (+350 DH)' }
 ]
 
 const defaultProducts = [
