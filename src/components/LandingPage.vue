@@ -298,10 +298,19 @@ function getWhatsAppUrl(orderNumber) {
          PAGE 1: ACCUEIL / FULL-WIDTH HERO OVERLAY SHOWCASE
          ==================================================================== -->
     <main v-if="storePage === 'home'">
-      <!-- Full-Width Hero Section -->
+      <!-- Full-Width Video Hero Section -->
       <section class="ayla-hero-fullwidth">
-        <div class="ayla-hero-overlay-content">
-          <div class="ayla-badge-rating" style="background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); color: #ffffff; border: 1px solid rgba(255,255,255,0.2);">
+        <!-- Background Video -->
+        <video autoplay loop muted playsinline class="hero-bg-video">
+          <source src="/hero_video.mp4" type="video/mp4" />
+        </video>
+
+        <!-- Luxury Overlay Gradient -->
+        <div class="hero-video-overlay"></div>
+
+        <!-- Animated Hero Overlay Content -->
+        <div class="ayla-hero-overlay-content hero-animate-in">
+          <div class="ayla-badge-rating" style="background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: #ffffff; border: 1px solid rgba(255,255,255,0.3); display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; border-radius: 50px; margin-bottom: 20px;">
             <span style="color: #f59e0b; display: flex; gap: 2px;">
               <Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" />
             </span>
@@ -312,7 +321,7 @@ function getWhatsAppUrl(orderNumber) {
           <p class="ayla-hero-overlay-subtitle">{{ t.heroSubtitle }}</p>
 
           <div style="display: flex; align-items: baseline; justify-content: center; gap: 16px; margin-bottom: 32px;">
-            <span style="font-size: 42px; font-weight: 900; color: var(--ay-gold); font-family: 'Instrument Sans', sans-serif;">
+            <span style="font-size: 42px; font-weight: 900; color: #f59e0b; font-family: 'Instrument Sans', sans-serif; text-shadow: 0 2px 10px rgba(0,0,0,0.6);">
               {{ t.startingFrom }} {{ product.price }} DH
             </span>
             <span style="font-size: 22px; color: #cbd5e1; text-decoration: line-through;">
@@ -321,10 +330,10 @@ function getWhatsAppUrl(orderNumber) {
           </div>
 
           <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-            <button class="ayla-btn-emerald" style="background: var(--ay-gold); border-color: var(--ay-gold); color: #ffffff; font-size: 14px; padding: 18px 36px;" @click="storePage = 'catalog'">
+            <button class="ayla-btn-emerald" style="background: #f59e0b; border-color: #f59e0b; color: #ffffff; font-size: 14px; padding: 18px 36px; box-shadow: 0 10px 25px rgba(245, 158, 11, 0.4);" @click="storePage = 'catalog'">
               {{ t.discoverCatalog }} <Grid :size="18" />
             </button>
-            <button class="ayla-btn-emerald" style="font-size: 14px; padding: 18px 36px;" @click="openCheckoutModal()">
+            <button class="ayla-btn-emerald" style="font-size: 14px; padding: 18px 36px; backdrop-filter: blur(10px); box-shadow: 0 10px 25px rgba(7, 60, 58, 0.5);" @click="openCheckoutModal()">
               ⚡ {{ t.orderProduct }} <ArrowRight :size="18" />
             </button>
           </div>
