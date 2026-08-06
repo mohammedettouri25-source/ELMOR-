@@ -1406,9 +1406,16 @@ table.data-table tr:hover {
 }
 
 @media (max-width: 768px) {
+  /* Container & Padding */
+  .ayla-container {
+    padding: 0 !important;
+  }
+
+  /* Single Product Layout */
   .single-product-grid {
     grid-template-columns: 1fr !important;
     gap: 20px !important;
+    padding: 12px !important;
   }
 
   /* Header & Navigation Mobile */
@@ -1416,20 +1423,23 @@ table.data-table tr:hover {
     padding: 10px 14px !important;
     flex-wrap: wrap !important;
     gap: 8px !important;
+    position: sticky !important;
     top: 0 !important;
+    z-index: 1000 !important;
   }
 
   .ayla-logo-text {
-    font-size: 16px !important;
-    letter-spacing: 0.12em !important;
+    font-size: 15px !important;
+    letter-spacing: 0.1em !important;
   }
 
   .ayla-nav-links {
     order: 3 !important;
     width: 100% !important;
+    display: flex !important;
     overflow-x: auto !important;
-    padding: 6px 0 !important;
-    gap: 14px !important;
+    padding: 8px 0 !important;
+    gap: 12px !important;
     white-space: nowrap !important;
     border-top: 1px solid var(--ay-border) !important;
     margin-top: 4px !important;
@@ -1437,19 +1447,20 @@ table.data-table tr:hover {
   }
 
   .ayla-nav-link {
-    font-size: 11px !important;
+    font-size: 12px !important;
+    padding: 4px 8px !important;
   }
 
   /* Full-Width Hero Mobile */
   .ayla-hero-fullwidth {
-    min-height: 420px !important;
-    padding: 40px 16px !important;
+    min-height: 380px !important;
+    padding: 30px 16px !important;
   }
 
   .ayla-hero-overlay-title {
-    font-size: 24px !important;
-    letter-spacing: 0.05em !important;
-    line-height: 1.2 !important;
+    font-size: 22px !important;
+    letter-spacing: 0.03em !important;
+    line-height: 1.25 !important;
   }
 
   .ayla-hero-overlay-subtitle {
@@ -1457,20 +1468,21 @@ table.data-table tr:hover {
     margin-bottom: 20px !important;
   }
 
-  /* Catalog Cards Grid Mobile (2 Columns layout on mobile for great UX) */
+  /* Catalog Cards Grid Mobile */
   .ayla-catalog-grid {
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 12px !important;
-    margin: 20px 0 30px 0 !important;
+    gap: 10px !important;
+    margin: 16px 0 24px 0 !important;
+    padding: 0 10px !important;
   }
 
   .ayla-card-img-wrapper {
-    height: 150px !important;
-    padding: 8px !important;
+    height: 140px !important;
+    padding: 6px !important;
   }
 
   .ayla-card-body {
-    padding: 12px !important;
+    padding: 10px !important;
   }
 
   .ayla-card-category {
@@ -1478,32 +1490,43 @@ table.data-table tr:hover {
   }
 
   .ayla-card-title {
-    font-size: 13px !important;
+    font-size: 12px !important;
     margin-bottom: 4px !important;
-    line-height: 1.2 !important;
+    line-height: 1.25 !important;
+    height: 32px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
   }
 
   .ayla-card-price {
-    font-size: 16px !important;
+    font-size: 15px !important;
   }
 
   .ayla-card-old-price {
-    font-size: 12px !important;
+    font-size: 11px !important;
+  }
+
+  .ayla-card-body button {
+    font-size: 10px !important;
+    padding: 8px 4px !important;
   }
 
   /* Modal Cards Mobile Fix */
   .modal-overlay {
-    padding: 8px !important;
-    align-items: flex-start !important;
-    padding-top: 20px !important;
+    padding: 0 !important;
+    align-items: flex-end !important;
   }
 
   .modal-card {
     width: 100% !important;
     max-width: 100% !important;
-    padding: 18px 14px !important;
-    border-radius: 14px !important;
-    max-height: 88vh !important;
+    padding: 20px 16px !important;
+    border-radius: 20px 20px 0 0 !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
   }
 
   .grid-2, .grid-3, .grid-4 {
@@ -1512,19 +1535,26 @@ table.data-table tr:hover {
   }
 
   .form-control {
-    font-size: 14px !important;
-    height: 44px !important;
+    font-size: 16px !important; /* Prevents auto-zoom on iOS Safari */
+    height: 46px !important;
     padding: 10px 12px !important;
+  }
+
+  /* Packaging Selector Cards on Mobile */
+  .packaging-selector {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
   }
 
   /* Trust & Footer Mobile */
   .ayla-trust-grid {
     grid-template-columns: 1fr 1fr !important;
     gap: 10px !important;
+    padding: 0 10px !important;
   }
 
   .ayla-trust-card {
-    padding: 16px 12px !important;
+    padding: 14px 10px !important;
   }
 
   .ayla-trust-card h4 {
@@ -1532,17 +1562,35 @@ table.data-table tr:hover {
   }
 
   .ayla-trust-card p {
-    font-size: 11px !important;
+    font-size: 10px !important;
   }
 
   .ayla-reviews-grid {
     grid-template-columns: 1fr !important;
     gap: 14px !important;
+    padding: 0 10px !important;
   }
 
   .ayla-footer-inner {
     grid-template-columns: 1fr !important;
-    gap: 24px !important;
+    gap: 20px !important;
+    padding: 20px 16px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .ayla-catalog-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  .ayla-card-img-wrapper {
+    height: 180px !important;
+  }
+
+  .ayla-card-body button {
+    font-size: 11px !important;
+    padding: 10px !important;
   }
 }
 
