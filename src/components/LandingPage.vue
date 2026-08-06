@@ -124,6 +124,78 @@ const filteredCatalogProducts = computed(() => {
   return list
 })
 
+const reviewsList = computed(() => {
+  const isAr = store.currentLang === 'ar'
+  return [
+    {
+      id: 'rev-1',
+      name: isAr ? 'سلمى البناني' : 'Salma Bennani',
+      city: 'Casablanca / الدار البيضاء',
+      initials: 'SB',
+      rating: 5,
+      date: isAr ? 'منذ يومين' : 'Il y a 2 jours',
+      text: isAr
+        ? 'تبارك الله السلسلة واعرة بزاف وصحيحة! ما كايتغيرش لونها كاع مع الماء والعطور. وصلتني للدار البيضاء فـ 24 ساعة وحليت الكولية عاينتها عاد خلصت.'
+        : 'TBILAH le collier trèfle est magnifique! La finition est trop classe, ne change pas de couleur même sous la douche. Livré à Casa en 24h et j\'ai vérifié la commande avant de payer!'
+    },
+    {
+      id: 'rev-2',
+      name: isAr ? 'حمزة العمراني' : 'Hamza El Amrani',
+      city: 'Rabat / الرباط',
+      initials: 'HA',
+      rating: 5,
+      date: isAr ? 'منذ 4 أيام' : 'Il y a 4 jours',
+      text: isAr
+        ? 'خديت السلسلة الرجالية والساعة. الصراحة الستيل حر وممتاز وثقيلة فـ اليد. التعامل ديالهم فـ الواتساب راقي والتوصيل كان سريع للرباط.'
+        : 'J\'ai acheté la gourmette homme et la montre chrono. Franchement la qualité 316L est top, lourde et très élégante. Service client au top sur WhatsApp.'
+    },
+    {
+      id: 'rev-3',
+      name: isAr ? 'خديجة زكي' : 'Khadija Zaki',
+      city: 'Marrakech / مراكش',
+      initials: 'KZ',
+      rating: 5,
+      date: isAr ? 'منذ أسبوع' : 'Il y a 1 semaine',
+      text: isAr
+        ? 'العلبة الفاخرة بالرباط جات روعة للإهداء! أختي حمقاتها الأساور. شكراً إلموري على التعامل الراقي والجودة العالية.'
+        : 'Le coffret prestige cadeau avec ruban est trop beau pour offrir. Ma sœur a adoré son bracelet jonc! Merci ELMORÉ pour la pochette offerte.'
+    },
+    {
+      id: 'rev-4',
+      name: isAr ? 'أمين التازي' : 'Amine Tazi',
+      city: 'Tanger / طنجة',
+      initials: 'AT',
+      rating: 5,
+      date: isAr ? 'منذ أسبوع' : 'Il y a 1 semaine',
+      text: isAr
+        ? 'وصلتني الصباح فـ طنجة. القطعة بحال الصور تماماً والسلعة نقية. الليفرور كان خلوق وخلاني نفحص الطلبية عاد نتخلص.'
+        : 'Reçu ce matin à Tanger. Produit conforme 100% aux photos. Livreur très sympa qui m\'a laissé vérifier le colis avant paiement.'
+    },
+    {
+      id: 'rev-5',
+      name: isAr ? 'مريم الودغيري' : 'Meriem Oudghiri',
+      city: 'Fès / فاس',
+      initials: 'MO',
+      rating: 5,
+      date: isAr ? 'منذ أسبوعين' : 'Il y a 2 semaines',
+      text: isAr
+        ? 'الساعة النسائية أنيقة بزاف وكتلمع! كنلبسها كل نهار وماتبدلاتش. كنوصي بها 100%.'
+        : 'Montre nacre magnifique, très élégante et brillante! Je la porte tous les jours. Je recommande à 100%.'
+    },
+    {
+      id: 'rev-6',
+      name: isAr ? 'عثمان الرحموني' : 'Othmane Rahmouni',
+      city: 'Agadir / أكادير',
+      initials: 'OR',
+      rating: 5,
+      date: isAr ? 'منذ أسبوعين' : 'Il y a 2 semaines',
+      text: isAr
+        ? 'توصيل سريع لأكادير. السوار الأسود ممتاز وصحيح ومقاوم للماء.'
+        : 'Livraison rapide à Agadir. La gourmette acier noir mat est super solide et résistante à l\'eau.'
+    }
+  ]
+})
+
 const isCopied = ref(false)
 
 function selectProductAndOrder(p) {
@@ -661,26 +733,37 @@ function getWhatsAppUrl(orderNumber) {
          ==================================================================== -->
     <main v-else-if="storePage === 'reviews'" class="ayla-hero">
       <div style="text-align: center; max-width: 800px; margin: 0 auto 36px auto;">
-        <span style="color: var(--ay-gold); font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;">ELMORÉ LUXURY</span>
+        <span style="color: var(--ay-gold); font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;">ELMORÉ LUXURY MAROC</span>
         <h1 style="font-family: 'Instrument Sans', sans-serif; font-size: 32px; font-weight: 700; color: var(--ay-emerald); text-transform: uppercase; margin-top: 6px;">
-          {{ t.navReviews }}
+          {{ t.navReviews }} (4.9 / 5.0 ⭐)
         </h1>
+        <p style="font-size: 14px; color: var(--ay-muted); margin-top: 6px;">
+          {{ store.currentLang === 'ar' ? 'أكثر من 1,420 تقييم موثق من زبنائنا الكرام في مختلف مدن المملكة المغربية 🇲🇦' : 'Plus de 1 420 avis vérifiés de nos clients partout au Maroc 🇲🇦' }}
+        </p>
       </div>
 
       <div class="ayla-reviews-grid">
-        <div class="ayla-review-card">
-          <div class="ayla-review-user">
-            <div class="ayla-review-avatar">YB</div>
-            <div>
-              <b style="font-size: 14px; display: block; color: var(--ay-emerald);">Youssef B.</b>
-              <span style="font-size: 11px; color: #2e7d32; font-weight: 700;">✓ Achat Vérifié · Casablanca</span>
+        <div v-for="rev in reviewsList" :key="rev.id" class="ayla-review-card" style="background: #ffffff; border: 1px solid var(--ay-border); border-radius: 14px; padding: 22px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+          <div class="ayla-review-user" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div class="ayla-review-avatar" style="width: 44px; height: 44px; background: var(--ay-emerald); color: #ffffff; font-weight: 800; font-size: 14px; border-radius: 50%; display: grid; place-items: center;">
+                {{ rev.initials }}
+              </div>
+              <div>
+                <b style="font-size: 14px; display: block; color: var(--ay-emerald);">{{ rev.name }}</b>
+                <span style="font-size: 11px; color: #2e7d32; font-weight: 700;">✓ {{ store.currentLang === 'ar' ? 'شراء موثق' : 'Achat Vérifié' }} · {{ rev.city }}</span>
+              </div>
             </div>
+
+            <span style="font-size: 11px; color: var(--ay-muted); font-weight: 600;">{{ rev.date }}</span>
           </div>
-          <div style="color: #f59e0b; margin-bottom: 8px; display: flex; gap: 2px;">
-            <Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" />
+
+          <div style="color: #f59e0b; margin-bottom: 12px; display: flex; gap: 3px;">
+            <Star v-for="s in rev.rating" :key="s" :size="15" fill="#f59e0b" />
           </div>
-          <p style="font-size: 13px; color: var(--ay-dark); line-height: 1.5;">
-            "Montre incroyable! Le mouvement automatique est d'une précision parfaite et la finition en acier est juste magnifique. Reçue à Casablanca en moins de 24h."
+
+          <p style="font-size: 13px; color: var(--ay-dark); line-height: 1.6;">
+            "{{ rev.text }}"
           </p>
         </div>
       </div>
