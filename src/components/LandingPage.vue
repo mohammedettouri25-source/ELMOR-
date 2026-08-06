@@ -392,12 +392,9 @@ function getWhatsAppUrl(orderNumber) {
           <h1 class="ayla-hero-overlay-title">{{ t.heroTitle }}</h1>
           <p class="ayla-hero-overlay-subtitle" style="margin-bottom: 36px;">{{ t.heroSubtitle }}</p>
 
-          <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-            <button class="ayla-btn-emerald" style="background: #f59e0b; border-color: #f59e0b; color: #ffffff; font-size: 14px; padding: 18px 36px; box-shadow: 0 10px 25px rgba(245, 158, 11, 0.4);" @click="storePage = 'catalog'">
+          <div style="display: flex; justify-content: center;">
+            <button class="ayla-btn-emerald" style="background: #f59e0b; border-color: #f59e0b; color: #ffffff; font-size: 14px; padding: 18px 38px; box-shadow: 0 10px 25px rgba(245, 158, 11, 0.4);" @click="storePage = 'catalog'">
               {{ t.discoverCatalog }} <Grid :size="18" />
-            </button>
-            <button class="ayla-btn-emerald" style="font-size: 14px; padding: 18px 36px; backdrop-filter: blur(10px); box-shadow: 0 10px 25px rgba(7, 60, 58, 0.5);" @click="openCheckoutModal()">
-              ⚡ {{ t.orderProduct }} <ArrowRight :size="18" />
             </button>
           </div>
         </div>
