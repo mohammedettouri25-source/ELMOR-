@@ -403,10 +403,11 @@ function getWhatsAppUrl(orderNumber) {
       <div class="ayla-product-card" style="max-width: 860px; margin: 0 auto;">
         <!-- Product Header Summary -->
         <div style="display: flex; gap: 24px; align-items: center; border-bottom: 1px solid var(--ay-border); padding-bottom: 24px; margin-bottom: 24px;">
-          <img :src="product.image || '/luxury_hero.png'" style="width: 100px; height: 100px; object-fit: contain; background: #F8FAFC; border-radius: 12px; padding: 8px; border: 1px solid var(--ay-border);" />
+          <img :src="currentVariant?.image || product.image || '/luxury_hero.png'" style="width: 110px; height: 110px; object-fit: contain; background: #F8FAFC; border-radius: 12px; padding: 8px; border: 2px solid var(--ay-emerald);" />
           <div>
             <span style="font-size: 11px; font-weight: 700; color: var(--ay-gold); text-transform: uppercase;">{{ product.brand }} · {{ product.category }}</span>
             <h2 style="font-family: 'Instrument Sans', sans-serif; font-size: 22px; font-weight: 700; color: var(--ay-emerald); margin: 4px 0;">{{ product.name }}</h2>
+            <div style="font-size: 13px; font-weight: 700; color: var(--ay-muted); margin-bottom: 4px;">Finition sélectionnée : <span style="color: var(--ay-emerald);">{{ currentVariant?.color }} · {{ currentVariant?.size }}</span></div>
             <div style="font-size: 22px; font-weight: 800; color: var(--ay-emerald);">{{ finalUnitPrice }} DH</div>
           </div>
 
@@ -415,21 +416,22 @@ function getWhatsAppUrl(orderNumber) {
           </button>
         </div>
 
-        <!-- 1. Select Variant -->
+        <!-- 1. Select Variant with Image Thumbnail -->
         <div style="margin-bottom: 24px;">
           <label style="font-size: 13px; font-weight: 800; color: var(--ay-emerald); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 10px;">
-            1. CHOISIR LA FINITION DE VOTRE PIÈCE :
+            1. CHOISIR LA FINITION & COULEUR (AVEC PHOTO DÉDIÉE) :
           </label>
 
-          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <div style="display: flex; gap: 12px; flex-wrap: wrap;">
             <button
               v-for="v in product.variants"
               :key="v.id"
-              style="padding: 12px 20px; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s;"
-              :style="selectedVariantId === v.id ? 'background: var(--ay-emerald); color: #ffffff; border: 1px solid var(--ay-emerald);' : 'background: #ffffff; color: var(--ay-dark); border: 1px solid var(--ay-border);'"
+              style="padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 10px;"
+              :style="selectedVariantId === v.id ? 'background: var(--ay-emerald); color: #ffffff; border: 1px solid var(--ay-emerald); shadow: 0 4px 12px rgba(7, 60, 58, 0.2);' : 'background: #ffffff; color: var(--ay-dark); border: 1px solid var(--ay-border);'"
               @click="selectedVariantId = v.id"
             >
-              {{ v.color }} · {{ v.size }} ({{ v.material || 'Acier' }})
+              <img :src="v.image || product.image || '/luxury_hero.png'" style="width: 28px; height: 28px; object-fit: contain; border-radius: 4px; background: #ffffff; padding: 2px;" />
+              <span>{{ v.color }} · {{ v.size }}</span>
             </button>
           </div>
         </div>

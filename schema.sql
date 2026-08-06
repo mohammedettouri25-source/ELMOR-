@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `products` (
   FOREIGN KEY (`supplier_id`) REFERENCES `suppliers`(`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 4. Table des Variantes Produits (Couleur, Taille, Matière, Stock)
+-- 4. Table des Variantes Produits (Couleur, Taille, Matière, Stock, Image)
 CREATE TABLE IF NOT EXISTS `product_variants` (
   `id` VARCHAR(50) PRIMARY KEY,
   `product_id` VARCHAR(50) NOT NULL,
@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS `product_variants` (
   `size` VARCHAR(50) DEFAULT NULL,
   `material` VARCHAR(100) DEFAULT 'Acier Inoxydable',
   `packaging` VARCHAR(50) DEFAULT 'stdbox',
+  `image` TEXT DEFAULT NULL,
   `sku` VARCHAR(100) NOT NULL UNIQUE,
   `barcode` VARCHAR(100) DEFAULT NULL,
   `stock` INT DEFAULT 0,

@@ -179,6 +179,26 @@ function removeVariantLine(idx) {
   productForm.value.variants.splice(idx, 1)
 }
 
+function handleMainImageUpload(event) {
+  const file = event.target.files?.[0]
+  if (!file) return
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    productForm.value.image = e.target.result
+  }
+  reader.readAsDataURL(file)
+}
+
+function handleVariantImageUpload(event, variant) {
+  const file = event.target.files?.[0]
+  if (!file) return
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    variant.image = e.target.result
+  }
+  reader.readAsDataURL(file)
+}
+
 async function submitProductForm() {
   if (!productForm.value.name) return store.notify('Veuillez saisir le nom du produit')
   await store.saveProduct(productForm.value)
@@ -929,9 +949,13 @@ const filteredMovements = computed(() => {
           </div>
 
           <div class="form-group">
-            <label>URL de l'Image du Produit</label>
+            <label>Image Principale du Produit (URL ou Téléversement Local)</label>
             <div style="display: flex; gap: 10px; align-items: center;">
-              <input v-model="productForm.image" class="form-control" placeholder="Ex: /hero.png ou https://..." />
+              <input v-model="productForm.image" class="form-control" placeholder="Ex: /hero.png ou lien web..." />
+              <label class="btn-secondary" style="padding: 8px 12px; font-size: 11px; cursor: pointer; white-space: nowrap;">
+                📁 Choisir Image Locale
+                <input type="file" accept="image/*" style="display: none;" @change="handleMainImageUpload" />
+              </label>
               <img :src="productForm.image || '/hero.png'" style="width: 42px; height: 42px; object-fit: contain; border-radius: 6px; border: 1px solid var(--border-color); background: #f8fafc;" />
             </div>
           </div>
@@ -949,15 +973,25 @@ const filteredMovements = computed(() => {
 
           <div style="border-top: 1px solid var(--border-color); margin-top: 16px; padding-top: 16px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-              <b style="font-size: 14px;">Variantes (Couleur, Taille, Matière)</b>
+              <b style="font-size: 14px;">Variantes (Couleur, Taille, Image Spécifique)</b>
               <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 12px;" @click="addVariantLine">+ Ligne Variante</button>
             </div>
 
             <div v-for="(v, idx) in productForm.variants" :key="idx" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
-              <div class="grid-3">
+              <div class="grid-3" style="margin-bottom: 8px;">
                 <input v-model="v.color" class="form-control" placeholder="Couleur (Gold, Black...)" />
                 <input v-model="v.size" class="form-control" placeholder="Taille (40mm, M...)" />
                 <input v-model.number="v.stock" type="number" min="0" class="form-control" placeholder="Stock" />
+              </div>
+
+              <div style="display: flex; gap: 10px; align-items: center;">
+                <input v-model="v.image" class="form-control" placeholder="Image de la variante (URL ou local)..." style="font-size: 12px;" />
+                <label class="btn-secondary" style="padding: 6px 10px; font-size: 11px; cursor: pointer; white-space: nowrap;">
+                  📷 Image Variante Locale
+                  <input type="file" accept="image/*" style="display: none;" @change="e => handleVariantImageUpload(e, v)" />
+                </label>
+                <img :src="v.image || productForm.image || '/hero.png'" style="width: 36px; height: 36px; object-fit: contain; border-radius: 4px; border: 1px solid var(--border-color); background: #ffffff;" />
+                <button type="button" class="close-btn" style="color: #ef4444;" @click="removeVariantLine(idx)">✕</button>
               </div>
             </div>
           </div>
