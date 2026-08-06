@@ -1837,4 +1837,16 @@ table.data-table tr:hover {
   }
 }
 
+/* Similar Products Grid Mobile */
+@media (max-width: 768px) {
+  .similar-products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+}
 
+@media (max-width: 400px) {
+  .similar-products-grid {
+    grid-template-columns: 1fr !important;
+  }
+}

@@ -108,6 +108,21 @@ const uniqueProducts = computed(() => {
   return list
 })
 
+// Similar products: same category, excluding current product
+const similarProducts = computed(() => {
+  if (!product.value) return []
+  return uniqueProducts.value
+    .filter(p => p.id !== product.value.id && p.category === product.value.category)
+    .slice(0, 6)
+    .concat(
+      // If not enough in same category, fill with other products
+      uniqueProducts.value
+        .filter(p => p.id !== product.value.id && p.category !== product.value.category)
+        .slice(0, Math.max(0, 6 - uniqueProducts.value.filter(p => p.id !== product.value.id && p.category === product.value.category).length))
+    )
+    .slice(0, 6)
+})
+
 const filteredCatalogProducts = computed(() => {
   let list = uniqueProducts.value
   if (selectedCategoryFilter.value !== 'all') {
@@ -733,6 +748,58 @@ function getWhatsAppUrl(orderNumber) {
             <button class="ayla-btn-emerald" style="flex: 1.4; padding: 18px; font-size: 13px; justify-content: center;" @click="openCheckoutModal()">
               {{ t.passOrderModalBtn }} ({{ totalPrice }} DH)
             </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======================================================
+           SECTION PRODUITS SIMILAIRES
+           ====================================================== -->
+      <div v-if="similarProducts.length > 0" style="max-width: 1100px; margin: 56px auto 0 auto; padding: 0 20px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+          <div>
+            <span style="font-size: 11px; font-weight: 800; color: var(--ay-gold); text-transform: uppercase; letter-spacing: 0.15em; display: block; margin-bottom: 4px;">ELMORÉ · COLLECTION</span>
+            <h2 style="font-family: 'Instrument Sans', sans-serif; font-size: 22px; font-weight: 700; color: var(--ay-emerald); text-transform: uppercase; margin: 0;">
+              {{ store.currentLang === 'ar' ? 'منتجات مشابهة' : 'Vous aimerez aussi' }}
+            </h2>
+          </div>
+          <button
+            class="ayla-btn-gold"
+            style="font-size: 11px; padding: 8px 16px;"
+            @click="storePage = 'catalog'"
+          >
+            {{ store.currentLang === 'ar' ? 'رؤية الكل' : 'Voir tout' }} →
+          </button>
+        </div>
+
+        <!-- Horizontal scroll cards -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px;" class="similar-products-grid">
+          <div
+            v-for="p in similarProducts"
+            :key="p.id"
+            style="background: #ffffff; border-radius: 14px; overflow: hidden; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.06);"
+            @click="store.openLandingPage(p.id)"
+            @mouseenter="$event.currentTarget.style.transform='translateY(-3px)'; $event.currentTarget.style.boxShadow='0 8px 24px rgba(0,0,0,0.10)'"
+            @mouseleave="$event.currentTarget.style.transform='none'; $event.currentTarget.style.boxShadow='0 2px 8px rgba(0,0,0,0.06)'"
+          >
+            <!-- Product image -->
+            <div style="background: #f8fafc; padding: 16px; display: flex; align-items: center; justify-content: center; height: 160px;">
+              <img
+                :src="p.variants?.[0]?.image || p.image || '/luxury_hero.png'"
+                :alt="p.name"
+                style="max-height: 130px; max-width: 100%; object-fit: contain;"
+              />
+            </div>
+
+            <!-- Product info -->
+            <div style="padding: 12px 14px 14px;">
+              <span style="font-size: 10px; font-weight: 700; color: var(--ay-gold); text-transform: uppercase; letter-spacing: 0.1em;">{{ p.category }}</span>
+              <p style="font-size: 13px; font-weight: 700; color: var(--ay-dark); margin: 4px 0 6px; line-height: 1.3;">{{ p.name }}</p>
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 15px; font-weight: 800; color: var(--ay-emerald);">{{ p.price }} DH</span>
+                <span style="font-size: 10px; background: #f0fdf4; color: #16a34a; font-weight: 700; padding: 3px 8px; border-radius: 4px;">En Stock</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
