@@ -610,7 +610,7 @@ function getWhatsAppUrl(orderNumber) {
         
         <!-- LEFT COLUMN: PHOTO GALLERY SHOWCASE & THUMBNAILS -->
         <div style="position: sticky; top: 100px;">
-          <div style="background: #ffffff; border: 1px solid var(--ay-border); border-radius: 16px; padding: 24px; text-align: center; display: flex; align-items: center; justify-content: center; width: 100%; min-height: 360px; overflow: hidden; position: relative;">
+          <div style="background: #ffffff; border: none; border-radius: 16px; padding: 24px; text-align: center; display: flex; align-items: center; justify-content: center; width: 100%; min-height: 360px; overflow: hidden; position: relative;">
             <img
               :src="currentVariant?.image || product.image || '/luxury_hero.png'"
               :alt="product.name"
@@ -623,8 +623,8 @@ function getWhatsAppUrl(orderNumber) {
             <div
               v-for="v in product.variants"
               :key="v.id"
-              style="width: 64px; height: 64px; border-radius: 8px; border: 1px solid var(--ay-border); padding: 4px; background: #ffffff; cursor: pointer; display: grid; place-items: center; transition: all 0.2s;"
-              :style="selectedVariantId === v.id ? 'border-color: var(--ay-emerald); border-width: 2px;' : 'opacity: 0.7;'"
+              style="width: 64px; height: 64px; border-radius: 8px; border: none; padding: 4px; background: #ffffff; cursor: pointer; display: grid; place-items: center; transition: all 0.2s;"
+              :style="selectedVariantId === v.id ? 'box-shadow: 0 0 0 2px var(--ay-emerald); opacity: 1;' : 'opacity: 0.6;'"
               @click="selectedVariantId = v.id"
             >
               <img :src="v.image || product.image || '/luxury_hero.png'" style="max-height: 100%; max-width: 100%; object-fit: contain;" />
