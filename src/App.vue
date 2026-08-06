@@ -440,8 +440,8 @@ const filteredMovements = computed(() => {
               <AlertTriangle :size="20" />
             </div>
             <span class="label">Alerte Stock Faible</span>
-            <div class="value" style="color: #b45309;">{{ store.lowStockList.length }}</div>
-            <span class="subtext">{{ store.outOfStockList.length }} en rupture complète</span>
+            <div class="value" style="color: #b45309;">{{ (store.lowStockList || []).length }}</div>
+            <span class="subtext">{{ (store.outOfStockList || []).length }} en rupture complète</span>
           </div>
         </div>
 

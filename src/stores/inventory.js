@@ -120,6 +120,64 @@ export const useInventoryStore = defineStore('inventory', {
     cartTotalCount: s => s.cart.reduce((sum, i) => sum + i.quantity, 0),
     cartTotalPrice: s => s.cart.reduce((sum, i) => sum + (i.price * i.quantity), 0),
 
+    todaySalesRevenue: s => {
+      const todayStr = new Date().toISOString().slice(0, 10)
+      return s.sales.reduce((sum, order) => {
+        if (order.cancelled) return sum
+        const orderDateStr = (order.createdAt || new Date().toISOString()).slice(0, 10)
+        return orderDateStr === todayStr ? sum + (Number(order.totalAmount) || 0) : sum
+      }, 0)
+    },
+
+    monthSalesRevenue: s => {
+      const monthStr = new Date().toISOString().slice(0, 7)
+      return s.sales.reduce((sum, order) => {
+        if (order.cancelled) return sum
+        const orderMonthStr = (order.createdAt || new Date().toISOString()).slice(0, 7)
+        return orderMonthStr === monthStr ? sum + (Number(order.totalAmount) || 0) : sum
+      }, 0)
+    },
+
+    lowStockList: s => {
+      const list = []
+      s.products.forEach(p => {
+        (p.variants || []).forEach(v => {
+          if (v.stock > 0 && v.stock <= (v.min || p.minStock || 5)) {
+            list.push({
+              productId: p.id,
+              productName: p.name,
+              variantId: v.id,
+              variantName: `${v.color || ''} ${v.size || ''}`.trim(),
+              sku: v.sku || p.sku,
+              stock: v.stock,
+              minStock: v.min || p.minStock || 5
+            })
+          }
+        })
+      })
+      return list
+    },
+
+    outOfStockList: s => {
+      const list = []
+      s.products.forEach(p => {
+        (p.variants || []).forEach(v => {
+          if (v.stock <= 0) {
+            list.push({
+              productId: p.id,
+              productName: p.name,
+              variantId: v.id,
+              variantName: `${v.color || ''} ${v.size || ''}`.trim(),
+              sku: v.sku || p.sku,
+              stock: 0,
+              minStock: v.min || p.minStock || 5
+            })
+          }
+        })
+      })
+      return list
+    },
+
     lowStockVariants: s => {
       const list = []
       s.products.forEach(p => {
