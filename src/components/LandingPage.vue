@@ -588,18 +588,37 @@ function getWhatsAppUrl(orderNumber) {
             ELMORÉ LUXURY 🇲🇦
           </h3>
           <p>{{ t.heroSubtitle }}</p>
+          <a :href="getWhatsAppUrl('SERVICE-CLIENT')" target="_blank" class="ayla-btn-gold" style="display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; font-size: 11px; text-decoration: none;">
+            <MessageSquare :size="16" /> {{ store.currentLang === 'ar' ? 'خدمة العملاء واتساب' : 'SERVICE CLIENT WHATSAPP' }}
+          </a>
         </div>
+
         <div>
-          <h4>{{ t.navHome }}</h4>
+          <h4>{{ store.currentLang === 'ar' ? 'التنقل' : 'NAVIGATION' }}</h4>
           <p><span style="cursor: pointer;" @click="storePage = 'home'">{{ t.navHome }}</span></p>
           <p><span style="cursor: pointer;" @click="storePage = 'catalog'">{{ t.navCatalog }}</span></p>
           <p><span style="cursor: pointer;" @click="storePage = 'order'">{{ t.navOrder }}</span></p>
+          <p><span style="cursor: pointer;" @click="storePage = 'reviews'">{{ t.navReviews }}</span></p>
         </div>
+
+        <div>
+          <h4>{{ store.currentLang === 'ar' ? 'التوصيل' : 'LIVRAISON' }}</h4>
+          <p>{{ store.currentLang === 'ar' ? 'الدار البيضاء (24 ساعة)' : 'Casablanca (24h)' }}</p>
+          <p>{{ store.currentLang === 'ar' ? 'الرباط سلا (24 ساعة)' : 'Rabat & Salé (24h)' }}</p>
+          <p>{{ store.currentLang === 'ar' ? 'مراكش وطنجة (48 ساعة)' : 'Marrakech & Tanger (48h)' }}</p>
+          <p>{{ store.currentLang === 'ar' ? 'جميع مدن المغرب' : 'Toutes Villes du Maroc' }}</p>
+        </div>
+
         <div>
           <h4>{{ store.currentLang === 'ar' ? 'التواصل' : 'CONTACT' }}</h4>
           <p>📍 Casablanca, Maroc</p>
           <p>📞 WhatsApp: +212 661-889900</p>
+          <p>✉️ contact@elmore.ma</p>
         </div>
+      </div>
+
+      <div style="border-top: 1px solid rgba(255,255,255,0.1); margin-top: 40px; padding-top: 20px; text-align: center; font-size: 12px; color: #9ca3af;">
+        © {{ new Date().getFullYear() }} ELMORÉ LUXURY. {{ store.currentLang === 'ar' ? 'جميع الحقوق محفوظة.' : 'Tous droits réservés.' }}
       </div>
     </footer>
 

@@ -1307,6 +1307,27 @@ table.data-table tr:hover {
 }
 
 /* ==========================================================================
+   ARABIC RTL TYPOGRAPHY FIXES (CRITICAL: ZERO LETTER-SPACING FOR ARABIC)
+   ========================================================================== */
+
+[dir="rtl"],
+[dir="rtl"] * {
+  letter-spacing: normal !important;
+  word-spacing: normal !important;
+  font-family: 'Cairo', 'Tajawal', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+[dir="rtl"] .ayla-hero-overlay-title,
+[dir="rtl"] .ayla-title,
+[dir="rtl"] .ayla-logo-text,
+[dir="rtl"] .ayla-announcement-bar,
+[dir="rtl"] .ayla-nav-links,
+[dir="rtl"] .ayla-footer h4,
+[dir="rtl"] button {
+  letter-spacing: 0 !important;
+}
+
+/* ==========================================================================
    MOBILE & TABLET RESPONSIVE STYLES
    ========================================================================== */
 
