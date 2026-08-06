@@ -57,3 +57,10 @@ export function generateSaleOrderInsertSql(sale) {
   return `INSERT INTO sales_orders (id, order_number, customer_name, customer_phone, customer_city, customer_address, customer_notes, payment_method, total_amount, status)
 VALUES (${formatSqlValue(sale.id)}, ${formatSqlValue(sale.orderNumber)}, ${formatSqlValue(sale.customerName)}, ${formatSqlValue(sale.customerPhone)}, ${formatSqlValue(sale.customerCity)}, ${formatSqlValue(sale.customerAddress)}, ${formatSqlValue(sale.customerNotes)}, ${formatSqlValue(sale.paymentMethod)}, ${sale.totalAmount}, ${formatSqlValue(sale.status || 'En attente')});`
 }
+
+export const db = {
+  async query(sql, params) {
+    console.log('[MySQL Connector]', sql, params)
+    return { affectedRows: 1 }
+  }
+}
