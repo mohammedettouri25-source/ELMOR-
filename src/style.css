@@ -1015,13 +1015,13 @@ table.data-table tr:hover {
 
 /* Full Width Hero Banner Overlay */
 .ayla-hero-fullwidth {
-  min-height: 520px;
+  min-height: 580px;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 90px 24px;
+  padding: 140px 24px 90px 24px;
   color: #ffffff;
   overflow: hidden;
 }
@@ -1098,26 +1098,35 @@ table.data-table tr:hover {
   font-weight: 500;
 }
 
-/* Luxury Maison Ayla Header (Transparent by default, White on scroll) */
+/* Luxury Maison Ayla Header (Truly Floating Transparent Header) */
 .ayla-header {
-  background: transparent;
+  position: absolute;
+  top: 33px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 100;
+  background: transparent !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   padding: 16px 36px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: sticky;
-  top: 33px;
-  z-index: 1000;
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .ayla-header.scrolled-header {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  z-index: 1000 !important;
   background: #ffffff !important;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--ay-border);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 .ayla-logo {
