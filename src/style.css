@@ -1851,6 +1851,27 @@ table.data-table tr:hover {
   }
   .mobile-filter-wrapper {
     display: flex !important;
+    width: 100% !important;
+  }
+
+  /* Fix catalog filter bar: stack vertically on mobile */
+  .catalog-filter-bar {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 12px 14px !important;
+    gap: 10px !important;
+  }
+
+  /* Fix catalog search bar on mobile */
+  .catalog-search-wrapper {
+    width: 100% !important;
+    order: 3;
+  }
+
+  /* Filter bar becomes a column on mobile */
+  .catalog-search-wrapper input {
+    font-size: 14px !important; /* prevent iOS zoom */
+    height: 42px !important;
   }
 }
 

@@ -520,7 +520,7 @@ function getWhatsAppUrl(orderNumber) {
       </div>
 
       <!-- Filter Bar & Search -->
-      <div style="background: #ffffff; border: 1px solid var(--ay-border); border-radius: 12px; padding: 16px 24px; margin-bottom: 32px; display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap;">
+      <div class="catalog-filter-bar" style="background: #ffffff; border: 1px solid var(--ay-border); border-radius: 12px; padding: 16px 24px; margin-bottom: 32px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
         <!-- Desktop Pill Buttons -->
         <div class="desktop-filter-buttons" style="display: flex; gap: 10px; flex-wrap: wrap;">
           <button
@@ -572,8 +572,8 @@ function getWhatsAppUrl(orderNumber) {
           </select>
         </div>
 
-        <div style="position: relative; width: 260px;">
-          <input v-model="catalogSearchQuery" :placeholder="t.searchPlaceholder" class="form-control" style="border: 1px solid var(--ay-border); padding: 8px 12px 8px 34px; border-radius: 6px; font-size: 12px;" />
+        <div class="catalog-search-wrapper" style="position: relative; width: 260px;">
+          <input v-model="catalogSearchQuery" :placeholder="t.searchPlaceholder" class="form-control" style="border: 1px solid var(--ay-border); padding: 8px 12px 8px 34px; border-radius: 6px; font-size: 12px; width: 100%;" />
           <Search :size="15" style="position: absolute; left: 10px; top: 10px; color: var(--ay-muted);" />
         </div>
       </div>
