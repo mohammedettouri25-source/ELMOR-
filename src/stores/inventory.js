@@ -196,7 +196,9 @@ export const useInventoryStore = defineStore('inventory', {
         })
       })
       return list
-    }
+    },
+
+    latestMovements: s => (s.movements || []).slice(0, 10)
   },
 
   actions: {

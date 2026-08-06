@@ -468,7 +468,7 @@ const filteredMovements = computed(() => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="m in store.latestMovements.slice(0, 6)" :key="m.id">
+                  <tr v-for="m in (store.latestMovements || store.movements || []).slice(0, 6)" :key="m.id">
                     <td>{{ new Date(m.createdAt).toLocaleDateString('fr-MA', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) }}</td>
                     <td>
                       <b>{{ m.productName }}</b>
@@ -496,8 +496,8 @@ const filteredMovements = computed(() => {
               </div>
             </div>
 
-            <div v-if="store.lowStockList.length" style="display: flex; flex-direction: column; gap: 12px;">
-              <div v-for="item in store.lowStockList.slice(0, 5)" :key="item.id" style="background: #fffbebf5; padding: 12px; border-radius: 10px; border: 1px solid #fde68a; display: flex; justify-content: space-between; align-items: center;">
+            <div v-if="(store.lowStockList || []).length" style="display: flex; flex-direction: column; gap: 12px;">
+              <div v-for="item in (store.lowStockList || []).slice(0, 5)" :key="item.variantId || item.productId" style="background: #fffbebf5; padding: 12px; border-radius: 10px; border: 1px solid #fde68a; display: flex; justify-content: space-between; align-items: center;">
                 <div>
                   <b style="font-size: 13px; display: block;">{{ item.productName }}</b>
                   <span style="font-size: 11px; color: var(--text-muted);">{{ item.color }} · {{ item.size }}</span>
