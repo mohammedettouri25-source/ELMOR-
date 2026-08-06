@@ -25,41 +25,41 @@ export const PACKAGING_OPTIONS = [
 const defaultProducts = [
   {
     id: 'prd-necklace-a',
-    name: 'Collier Trèfle Élégance Inoxydable 18K',
-    sku: 'NKL-TREFLE-18K',
+    name: 'Collier Trèfle Élégance Acier Inoxydable',
+    sku: 'NKL-TREFLE-316L',
     barcode: '38009911001',
     category: 'Colliers & Pendentifs',
     brand: 'ELMORÉ Jewelry',
     supplierId: 'sup-1',
     image: '/luxury_hero.png',
-    description: 'Magnifique collier pendentif motif trèfle en acier inoxydable 316L avec dorure à l\'or fin 18K. Résistant à l\'eau et au parfum.',
+    description: 'Magnifique collier pendentif motif trèfle en acier inoxydable 316L. Résistant à l\'eau et au parfum.',
     purchasePrice: 35,
     price: 97,
     averageCost: 35,
     minStock: 10,
     variants: [
-      { id: 'v-101', color: 'Doré 18K', size: '45cm', material: 'Plaqué Or 18K', packaging: 'nobox', sku: 'NKL-GOLD-45', barcode: '38009911001-G45', stock: 25, min: 5, purchasePrice: 35, price: 97 },
-      { id: 'v-102', color: 'Argenté', size: '45cm', material: 'Acier 316L', packaging: 'stdbox', sku: 'NKL-SLV-45', barcode: '38009911001-S45', stock: 18, min: 5, purchasePrice: 30, price: 89 },
-      { id: 'v-103', color: 'Rose Gold', size: '45cm', material: 'Plaqué Or Rose', packaging: 'nobox', sku: 'NKL-RSE-45', barcode: '38009911001-R45', stock: 14, min: 5, purchasePrice: 35, price: 97 }
+      { id: 'v-101', color: 'Doré', size: '45cm', material: 'Acier Inoxydable 316L', packaging: 'nobox', sku: 'NKL-GOLD-45', barcode: '38009911001-G45', stock: 25, min: 5, purchasePrice: 35, price: 97 },
+      { id: 'v-102', color: 'Argenté', size: '45cm', material: 'Acier Inoxydable 316L', packaging: 'stdbox', sku: 'NKL-SLV-45', barcode: '38009911001-S45', stock: 18, min: 5, purchasePrice: 30, price: 89 },
+      { id: 'v-103', color: 'Rose Gold', size: '45cm', material: 'Acier Inoxydable 316L', packaging: 'nobox', sku: 'NKL-RSE-45', barcode: '38009911001-R45', stock: 14, min: 5, purchasePrice: 35, price: 97 }
     ]
   },
   {
     id: 'prd-bracelet-b',
-    name: 'Bracelet Jonc Tressé Plaqué Or 18K',
-    sku: 'BRC-JONC-18K',
+    name: 'Bracelet Jonc Tressé Acier Inoxydable',
+    sku: 'BRC-JONC-316L',
     barcode: '38009922002',
     category: 'Bracelets & Joncs',
     brand: 'ELMORÉ Jewelry',
     supplierId: 'sup-1',
     image: '/hero.png',
-    description: 'Bracelet jonc rigide tressé ajustable en plaqué or 18k haute tenue. Ne rouille jamais.',
+    description: 'Bracelet jonc rigide tressé ajustable en acier inoxydable 316L. Ne rouille jamais.',
     purchasePrice: 45,
     price: 129,
     averageCost: 45,
     minStock: 8,
     variants: [
-      { id: 'v-201', color: 'Doré 18K', size: 'Ajustable', material: 'Plaqué Or 18K', packaging: 'nobox', sku: 'BRC-GOLD-AJ', barcode: '38009922002-GAJ', stock: 20, min: 4, purchasePrice: 45, price: 129 },
-      { id: 'v-202', color: 'Argenté', size: 'Ajustable', material: 'Acier Inoxydable', packaging: 'stdbox', sku: 'BRC-SLV-AJ', barcode: '38009922002-SAJ', stock: 15, min: 4, purchasePrice: 40, price: 119 }
+      { id: 'v-201', color: 'Doré', size: 'Ajustable', material: 'Acier Inoxydable 316L', packaging: 'nobox', sku: 'BRC-GOLD-AJ', barcode: '38009922002-GAJ', stock: 20, min: 4, purchasePrice: 45, price: 129 },
+      { id: 'v-202', color: 'Argenté', size: 'Ajustable', material: 'Acier Inoxydable 316L', packaging: 'stdbox', sku: 'BRC-SLV-AJ', barcode: '38009922002-SAJ', stock: 15, min: 4, purchasePrice: 40, price: 119 }
     ]
   },
   {
@@ -71,21 +71,21 @@ const defaultProducts = [
     brand: 'ELMORÉ Jewelry',
     supplierId: 'sup-1',
     image: '/hero_fullwidth.png',
-    description: 'Bague solitaire sertie d\'un cristal oxyde de zirconium étincelant. Boîtier acier inoxydable ultra résistant.',
+    description: 'Bague solitaire sertie d\'un cristal étincelant. Acier inoxydable 316L ultra résistant.',
     purchasePrice: 25,
     price: 79,
     averageCost: 25,
     minStock: 12,
     variants: [
-      { id: 'v-301', color: 'Doré', size: 'Taille 6', material: 'Plaqué Or', packaging: 'nobox', sku: 'RNG-GOLD-T6', barcode: '38009933003-G6', stock: 30, min: 5, purchasePrice: 25, price: 79 },
-      { id: 'v-302', color: 'Doré', size: 'Taille 7', material: 'Plaqué Or', packaging: 'nobox', sku: 'RNG-GOLD-T7', barcode: '38009933003-G7', stock: 22, min: 5, purchasePrice: 25, price: 79 },
-      { id: 'v-303', color: 'Argenté', size: 'Taille 7', material: 'Acier 316L', packaging: 'nobox', sku: 'RNG-SLV-T7', barcode: '38009933003-S7', stock: 18, min: 5, purchasePrice: 20, price: 69 }
+      { id: 'v-301', color: 'Doré', size: 'Taille 6', material: 'Acier Inoxydable 316L', packaging: 'nobox', sku: 'RNG-GOLD-T6', barcode: '38009933003-G6', stock: 30, min: 5, purchasePrice: 25, price: 79 },
+      { id: 'v-302', color: 'Doré', size: 'Taille 7', material: 'Acier Inoxydable 316L', packaging: 'nobox', sku: 'RNG-GOLD-T7', barcode: '38009933003-G7', stock: 22, min: 5, purchasePrice: 25, price: 79 },
+      { id: 'v-303', color: 'Argenté', size: 'Taille 7', material: 'Acier Inoxydable 316L', packaging: 'nobox', sku: 'RNG-SLV-T7', barcode: '38009933003-S7', stock: 18, min: 5, purchasePrice: 20, price: 69 }
     ]
   }
 ]
 
 const initialMovements = [
-  { id: uuid(), productId: 'prd-necklace-a', variantId: 'v-101', productName: 'Collier Trèfle Élégance Inoxydable 18K', variantName: 'Doré 18K · 45cm', type: 'Initial Stock', quantity: 25, prevQuantity: 0, newQuantity: 25, warehouseId: 'wh-main', user: 'Admin', reason: 'Initialisation du Stock', createdAt: new Date().toISOString() }
+  { id: uuid(), productId: 'prd-necklace-a', variantId: 'v-101', productName: 'Collier Trèfle Élégance Acier Inoxydable', variantName: 'Doré · 45cm', type: 'Initial Stock', quantity: 25, prevQuantity: 0, newQuantity: 25, warehouseId: 'wh-main', user: 'Admin', reason: 'Initialisation du Stock', createdAt: new Date().toISOString() }
 ]
 
 export const useInventoryStore = defineStore('inventory', {
