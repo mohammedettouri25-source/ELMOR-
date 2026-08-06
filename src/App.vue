@@ -367,7 +367,13 @@ const filteredMovements = computed(() => {
 </script>
 
 <template>
-  <div class="app-container">
+  <!-- STANDALONE APPLE STOREFRONT (NO ADMIN SIDEBAR/HEADER) -->
+  <div v-if="store.activeTab === 'landing'">
+    <LandingPage />
+  </div>
+
+  <!-- ADMIN DASHBOARD LAYOUT -->
+  <div v-else class="app-container">
     <Sidebar />
 
     <main class="main-content">
@@ -486,11 +492,6 @@ const filteredMovements = computed(() => {
             </div>
           </div>
         </div>
-      </section>
-
-      <!-- LANDING PAGE VIEW -->
-      <section v-else-if="store.activeTab === 'landing'">
-        <LandingPage />
       </section>
 
       <!-- PRODUCTS VIEW -->

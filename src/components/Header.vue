@@ -1,6 +1,6 @@
 <script setup>
 import { useInventoryStore } from '../stores/inventory'
-import { Search, Plus, ArrowUpRight, Bell, QrCode, ShoppingCart, Globe } from 'lucide-vue-next'
+import { Search, Plus, ArrowUpRight, Bell, QrCode, ShoppingCart, Globe, ExternalLink } from 'lucide-vue-next'
 
 const store = useInventoryStore()
 </script>
@@ -10,7 +10,6 @@ const store = useInventoryStore()
     <div class="header-title">
       <h1>
         <span v-if="store.activeTab === 'dashboard'">Vue d'ensemble Système</span>
-        <span v-else-if="store.activeTab === 'landing'">Storefront & Landing Page Produit</span>
         <span v-else-if="store.activeTab === 'products'">Gestion des Produits & Variantes</span>
         <span v-else-if="store.activeTab === 'movements'">Audit Trail & Mouvements</span>
         <span v-else-if="store.activeTab === 'warehouses'">Entrepôts & Transferts Inter-Dépôts</span>
@@ -29,8 +28,8 @@ const store = useInventoryStore()
         <input v-model="store.searchQuery" placeholder="Rechercher produit, SKU, barcode..." />
       </div>
 
-      <button class="btn-secondary" @click="store.activeTab = 'landing'">
-        <Globe :size="16" style="color: #a855f7;" /> Matjer & Landing Page
+      <button class="btn-secondary" style="border-color: #0071e3; color: #0071e3; font-weight: 700;" @click="store.activeTab = 'landing'">
+        <Globe :size="16" /> Boutique Client (Apple Store) <ExternalLink :size="13" />
       </button>
 
       <button class="btn-primary" @click="store.activeTab = 'pos'">

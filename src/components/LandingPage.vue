@@ -3,20 +3,19 @@ import { ref, computed } from 'vue'
 import { useInventoryStore, PACKAGING_OPTIONS } from '../stores/inventory'
 import {
   ShoppingBag,
-  Share2,
-  Check,
   ShieldCheck,
   Truck,
   Box,
   Gift,
   Award,
   Sparkles,
-  ChevronRight,
   Copy,
   Clock,
   CheckCircle2,
   X,
-  MessageSquare
+  MessageSquare,
+  ChevronRight,
+  Settings
 } from 'lucide-vue-next'
 
 const store = useInventoryStore()
@@ -63,7 +62,7 @@ function copyProductShareLink() {
   const url = `${window.location.origin}/?product=${product.value.id}`
   navigator.clipboard.writeText(url)
   isCopied.value = true
-  store.notify('Lien unique du produit copié !')
+  store.notify('Lien unique copié !')
   setTimeout(() => { isCopied.value = false }, 2500)
 }
 
@@ -125,77 +124,132 @@ function getWhatsAppUrl(orderNumber) {
   const msg = encodeURIComponent(`Bonjour ELMORÉ, je viens de passer la commande N° ${orderNumber}. Merci de me confirmer l'expédition !`)
   return `https://wa.me/212661889900?text=${msg}`
 }
+
+function scrollToOrderForm() {
+  const el = document.getElementById('checkout-section')
+  if (el) el.scrollIntoView({ behavior: 'smooth' })
+}
 </script>
 
 <template>
-  <div v-if="product" class="landing-container">
-    <!-- Top Product Bar & Switcher -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; background: #ffffff; padding: 12px 20px; border-radius: 14px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
-      <div style="display: flex; align-items: center; gap: 12px;">
-        <span class="badge badge-dark">Storefront Luxe</span>
-        <select v-model="store.selectedLandingProductId" class="form-control" style="width: auto; font-weight: 700;">
-          <option v-for="p in store.products" :key="p.id" :value="p.id">{{ p.name }}</option>
-        </select>
+  <div v-if="product" class="apple-store-container">
+    <!-- Apple Top Translucent Navigation Bar -->
+    <header class="apple-nav">
+      <div class="apple-nav-inner">
+        <div class="apple-nav-logo" @click="store.activeTab = 'landing'">
+          <img src="/logo.png" alt="ELMORÉ" />
+          <span style="font-size: 15px; font-weight: 800; letter-spacing: -0.02em;">ELMORÉ</span>
+        </div>
+
+        <div class="apple-nav-links">
+          <select v-model="store.selectedLandingProductId" style="border: none; background: transparent; font-size: 13px; font-weight: 600; color: #1d1d1f; cursor: pointer; outline: none;">
+            <option v-for="p in store.products" :key="p.id" :value="p.id">{{ p.name }}</option>
+          </select>
+
+          <span class="apple-nav-link" @click="copyProductShareLink">
+            {{ isCopied ? 'Lien copié ✓' : 'Partager' }}
+          </span>
+
+          <button class="btn-secondary" style="border-radius: 9999px; padding: 6px 14px; font-size: 11px; background: #09090b; color: #ffffff;" @click="store.activeTab = 'dashboard'">
+            <Settings :size="13" /> 🛠️ Administration
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Apple-Style Hero Showcase -->
+    <section class="apple-hero-section">
+      <div style="text-align: center; max-width: 780px; margin: 0 auto 48px auto;">
+        <div style="font-size: 13px; font-weight: 700; color: #86868b; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">
+          Nouveau · Collection {{ product.brand || 'ELMORÉ Luxe' }}
+        </div>
+        <h1 class="apple-hero-title">{{ product.name }}</h1>
+        <p class="apple-hero-subtitle">{{ product.description }}</p>
+
+        <div style="display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 24px;">
+          <span style="font-size: 32px; font-weight: 700; color: #1d1d1f;">{{ finalUnitPrice }} MAD</span>
+          <span style="font-size: 20px; color: #86868b; text-decoration: line-through;">{{ Math.round(finalUnitPrice * 1.35) }} MAD</span>
+          <span style="background: #e8f5e9; color: #2e7d32; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 9999px;">
+            -35% Offre Spéciale
+          </span>
+        </div>
+
+        <button class="apple-btn-primary" style="font-size: 16px; padding: 16px 36px;" @click="scrollToOrderForm">
+          Commander Maintenant <ChevronRight :size="18" />
+        </button>
       </div>
 
-      <button class="btn-secondary" style="font-size: 12px;" @click="copyProductShareLink">
-        <Copy :size="14" /> {{ isCopied ? 'Lien copié ✓' : 'Copier le lien du produit' }}
-      </button>
-    </div>
+      <!-- Main Showcase Image -->
+      <div style="position: relative; max-width: 860px; margin: 0 auto 60px auto; background: #ffffff; border-radius: 28px; padding: 40px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06); border: 1px solid rgba(0,0,0,0.04); text-align: center;">
+        <img :src="product.image || '/hero.png'" :alt="product.name" style="max-height: 420px; width: auto; object-fit: contain; border-radius: 16px;" />
+      </div>
 
-    <!-- Main Hero Landing Showcase -->
-    <div class="landing-hero">
-      <!-- Gallery Column -->
-      <div class="landing-gallery">
-        <img :src="product.image || '/hero.png'" :alt="product.name" class="main-hero-img" />
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
-          <img src="/hero.png" style="width: 100%; height: 90px; object-fit: cover; border-radius: 10px; border: 2px solid #09090b; cursor: pointer;" />
-          <img src="/logo.png" style="width: 100%; height: 90px; object-fit: contain; background: #000; border-radius: 10px; padding: 10px; cursor: pointer;" />
-          <div style="background: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0; display: grid; place-items: center; font-size: 11px; font-weight: 700; color: var(--text-muted);">
-            Écrin Luxe
+      <!-- Apple Bento Grid Features -->
+      <div class="apple-bento-grid">
+        <div class="apple-bento-card">
+          <div class="apple-bento-icon"><Sparkles :size="22" /></div>
+          <div>
+            <h4>Mouvement Automatique</h4>
+            <p>Mécanisme suisse haute précision squelette avec réserve de marche de 48h.</p>
+          </div>
+        </div>
+
+        <div class="apple-bento-card">
+          <div class="apple-bento-icon"><ShieldCheck :size="22" /></div>
+          <div>
+            <h4>Acier Inoxydable 316L</h4>
+            <p>Boîtier chirurgical haute résistance aux rayures et à la corrosion.</p>
+          </div>
+        </div>
+
+        <div class="apple-bento-card">
+          <div class="apple-bento-icon"><Box :size="22" /></div>
+          <div>
+            <h4>Verre Saphir Inrayable</h4>
+            <p>Cristal de saphir traité anti-reflets double face pour une clarté absolue.</p>
+          </div>
+        </div>
+
+        <div class="apple-bento-card">
+          <div class="apple-bento-icon"><Gift :size="22" /></div>
+          <div>
+            <h4>Écrin Luxe sur-mesure</h4>
+            <p>Coffret rigide prestige ELMORÉ avec certificat d'authenticité inclus.</p>
           </div>
         </div>
       </div>
 
-      <!-- Info & Customizer Column -->
-      <div class="landing-info">
-        <div class="brand-subtitle">{{ product.brand || 'ELMORÉ LUXURY' }} · {{ product.category }}</div>
-        <h1>{{ product.name }}</h1>
-        <p class="description">{{ product.description }}</p>
-
-        <!-- Dynamic Price Calculator Box -->
-        <div class="price-box">
-          <span class="main-price">{{ finalUnitPrice }} MAD</span>
-          <span class="original-price">{{ Math.round(finalUnitPrice * 1.35) }} MAD</span>
-          <span class="badge badge-emerald" style="margin-left: auto; font-size: 12px;">-35% Offre Spéciale</span>
+      <!-- Order Customizer & Form Card -->
+      <div id="checkout-section" class="apple-card" style="max-width: 780px; margin: 40px auto 0 auto;">
+        <div style="text-align: center; margin-bottom: 32px;">
+          <h2 style="font-size: 26px; font-weight: 700; color: #1d1d1f; margin-bottom: 6px;">Personnaliser & Commander</h2>
+          <p style="font-size: 14px; color: #86868b;">Livraison gratuite partout au Maroc · Paiement à la réception</p>
         </div>
 
-        <!-- Variant Selector (Color & Size) -->
-        <div style="margin-bottom: 20px;">
-          <div class="option-title">
-            <span>Choisir la Variante</span>
-            <span style="color: var(--icon-indigo);">Stock disponible : {{ currentVariant?.stock || 0 }}</span>
-          </div>
+        <!-- 1. Select Variant -->
+        <div style="margin-bottom: 28px;">
+          <label style="font-size: 13px; font-weight: 700; color: #1d1d1f; display: block; margin-bottom: 10px;">
+            1. Sélectionner la Finition / Variante :
+          </label>
 
-          <div class="option-chips">
-            <div
+          <div class="apple-pill-selector">
+            <button
               v-for="v in product.variants"
               :key="v.id"
-              class="chip"
+              class="apple-pill"
               :class="{ active: selectedVariantId === v.id }"
               @click="selectedVariantId = v.id"
             >
-              <b>{{ v.color }}</b> · {{ v.size }} ({{ v.material || 'Acier' }})
-            </div>
+              {{ v.color }} · {{ v.size }} ({{ v.material || 'Acier' }})
+            </button>
           </div>
         </div>
 
-        <!-- Packaging Options Selector (Avec Boîte vs Sans Boîte) -->
-        <div style="margin-bottom: 24px;">
-          <div class="option-title">
-            <span>Options d'Emballage & Boîte</span>
-            <span style="color: var(--icon-emerald); font-size: 11px;">Chaque boîte a son prix</span>
-          </div>
+        <!-- 2. Select Packaging -->
+        <div style="margin-bottom: 28px;">
+          <label style="font-size: 13px; font-weight: 700; color: #1d1d1f; display: block; margin-bottom: 10px;">
+            2. Choisir l'Emballage & Boîte :
+          </label>
 
           <div class="packaging-selector">
             <div
@@ -211,127 +265,113 @@ function getWhatsAppUrl(orderNumber) {
                 </div>
                 <small style="color: var(--text-muted); font-size: 11px; display: block;">{{ boxOption.note }}</small>
               </div>
-              <div class="box-price" style="margin-top: 10px;">
-                {{ boxOption.extraPrice === 0 ? 'Inclus Gratuitement' : `+${boxOption.extraPrice} MAD` }}
+              <div class="box-price" style="margin-top: 8px;">
+                {{ boxOption.extraPrice === 0 ? 'Inclus' : `+${boxOption.extraPrice} MAD` }}
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Quantity Selector -->
-        <div style="margin-bottom: 24px; background: #ffffff; padding: 14px 18px; border-radius: 12px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+        <!-- 3. Quantity -->
+        <div style="margin-bottom: 32px; background: #f5f5f7; padding: 16px 20px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center;">
           <div>
-            <b style="font-size: 14px; display: block;">Quantité désirée</b>
-            <small style="color: var(--text-muted); font-size: 12px;">Total: <strong style="color: var(--primary-color);">{{ totalPrice }} MAD</strong></small>
+            <span style="font-size: 14px; font-weight: 700; display: block;">Quantité :</span>
+            <small style="color: #86868b; font-size: 12px;">Total commande: <strong style="color: #0071e3;">{{ totalPrice }} MAD</strong></small>
           </div>
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <button class="btn-secondary" style="padding: 6px 14px; font-weight: 800; font-size: 16px;" @click="decrementQty">-</button>
-            <span style="font-size: 16px; font-weight: 800; min-width: 24px; text-align: center;">{{ orderQuantity }}</span>
-            <button class="btn-secondary" style="padding: 6px 14px; font-weight: 800; font-size: 16px;" @click="incrementQty">+</button>
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <button class="apple-pill" style="padding: 6px 16px; font-weight: 800; font-size: 16px;" @click="decrementQty">-</button>
+            <span style="font-size: 18px; font-weight: 800; min-width: 24px; text-align: center;">{{ orderQuantity }}</span>
+            <button class="apple-pill" style="padding: 6px 16px; font-weight: 800; font-size: 16px;" @click="incrementQty">+</button>
           </div>
         </div>
 
-        <!-- Express Direct Order Form -->
-        <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 24px; border-radius: 16px;">
-          <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
-            <ShoppingBag :size="18" style="color: var(--icon-indigo);" />
-            Commander en 1-Clic (Paiement à la Livraison)
-          </h3>
-
-          <form @submit.prevent="handleLandingCheckout">
-            <div class="grid-2">
-              <div class="form-group">
-                <label>Nom & Prénom</label>
-                <input v-model="customerForm.name" class="form-control" required placeholder="Ex: Mohamed Alami" />
-              </div>
-              <div class="form-group">
-                <label>Téléphone WhatsApp</label>
-                <input v-model="customerForm.phone" class="form-control" required placeholder="Ex: 06 61 22 33 44" />
-              </div>
-            </div>
-
-            <div class="grid-2">
-              <div class="form-group">
-                <label>Ville de Livraison</label>
-                <select v-model="customerForm.city" class="form-control">
-                  <option value="Casablanca">Casablanca</option>
-                  <option value="Rabat">Rabat</option>
-                  <option value="Marrakech">Marrakech</option>
-                  <option value="Tangier">Tanger</option>
-                  <option value="Safi">Safi</option>
-                  <option value="Agadir">Agadir</option>
-                  <option value="Fès">Fès</option>
-                  <option value="Meknès">Meknès</option>
-                  <option value="Oujda">Oujda</option>
-                  <option value="Autre Ville">Autre Ville</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Adresse Complète</label>
-                <input v-model="customerForm.address" class="form-control" placeholder="Quartier, Rue, N° Appt" />
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label>Remarques Spéciales (Optionnel)</label>
-              <input v-model="customerForm.notes" class="form-control" placeholder="Ex: Horaires de livraison préférés..." />
-            </div>
-
-            <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; padding: 14px; font-size: 15px; font-weight: 800; margin-top: 10px;" :disabled="isOrdering">
-              {{ isOrdering ? 'Confirmation en cours...' : `Confirmer la Commande (${totalPrice} MAD)` }}
-            </button>
-          </form>
-
-          <div style="display: flex; justify-content: space-around; margin-top: 16px; font-size: 11px; color: var(--text-muted); text-align: center;">
-            <span><Truck :size="14" style="color: var(--icon-emerald);" /> Livraison Gratuite au Maroc</span>
-            <span><ShieldCheck :size="14" style="color: var(--icon-indigo);" /> Garantie 2 Ans ELMORÉ</span>
-            <span><Clock :size="14" style="color: var(--icon-amber);" /> Expédition sous 24h</span>
+        <!-- 4. Customer Information Form -->
+        <form @submit.prevent="handleLandingCheckout">
+          <div style="font-size: 13px; font-weight: 700; color: #1d1d1f; margin-bottom: 12px;">
+            3. Informations de Livraison :
           </div>
+
+          <div class="grid-2" style="margin-bottom: 14px;">
+            <div class="form-group">
+              <label>Nom & Prénom</label>
+              <input v-model="customerForm.name" class="form-control" style="border-radius: 12px; padding: 12px;" required placeholder="Mohamed Alami" />
+            </div>
+            <div class="form-group">
+              <label>Téléphone WhatsApp</label>
+              <input v-model="customerForm.phone" class="form-control" style="border-radius: 12px; padding: 12px;" required placeholder="06 61 22 33 44" />
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-bottom: 14px;">
+            <div class="form-group">
+              <label>Ville</label>
+              <select v-model="customerForm.city" class="form-control" style="border-radius: 12px; padding: 12px;">
+                <option value="Casablanca">Casablanca</option>
+                <option value="Rabat">Rabat</option>
+                <option value="Marrakech">Marrakech</option>
+                <option value="Tangier">Tanger</option>
+                <option value="Safi">Safi</option>
+                <option value="Agadir">Agadir</option>
+                <option value="Fès">Fès</option>
+                <option value="Autre Ville">Autre Ville</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Adresse de Livraison</label>
+              <input v-model="customerForm.address" class="form-control" style="border-radius: 12px; padding: 12px;" placeholder="Quartier, Rue, N° Appt" />
+            </div>
+          </div>
+
+          <button type="submit" class="apple-btn-primary" style="width: 100%; justify-content: center; padding: 16px; font-size: 16px; font-weight: 700; margin-top: 10px;" :disabled="isOrdering">
+            {{ isOrdering ? 'Confirmation...' : `Confirmer la Commande (${totalPrice} MAD)` }}
+          </button>
+        </form>
+
+        <div style="display: flex; justify-content: space-around; margin-top: 24px; font-size: 12px; color: #86868b; text-align: center;">
+          <span><Truck :size="15" style="color: #2e7d32; display: inline; vertical-align: middle;" /> Livraison Gratuite</span>
+          <span><ShieldCheck :size="15" style="color: #0071e3; display: inline; vertical-align: middle;" /> Garantie 2 Ans</span>
+          <span><Clock :size="15" style="color: #ed6c02; display: inline; vertical-align: middle;" /> Expédition 24h</span>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- ORDER SUCCESS CONFIRMATION MODAL -->
+    <!-- Apple-Style Order Success Modal -->
     <div v-if="showSuccessModal && lastOrder" class="modal-overlay" @click.self="showSuccessModal = false">
-      <div class="modal-card" style="max-width: 520px; text-align: center;">
-        <div style="margin-bottom: 16px;">
-          <div style="width: 60px; height: 60px; background: #d1fae5; color: #059669; border-radius: 50%; display: grid; place-items: center; margin: 0 auto 12px auto;">
-            <CheckCircle2 :size="36" />
+      <div class="modal-card" style="max-width: 520px; text-align: center; border-radius: 28px; padding: 36px;">
+        <div style="margin-bottom: 20px;">
+          <div style="width: 64px; height: 64px; background: #e8f5e9; color: #2e7d32; border-radius: 50%; display: grid; place-items: center; margin: 0 auto 16px auto;">
+            <CheckCircle2 :size="38" />
           </div>
-          <h2 style="font-size: 22px; font-weight: 800; color: #09090b; margin-bottom: 4px;">Merci pour votre commande !</h2>
-          <p style="color: var(--text-muted); font-size: 13px;">Votre commande a été enregistrée avec succès sous la référence :</p>
-          <div style="display: inline-block; background: #09090b; color: #ffffff; padding: 6px 16px; border-radius: 8px; font-size: 18px; font-weight: 800; margin-top: 8px;">
+          <h2 style="font-size: 24px; font-weight: 700; color: #1d1d1f; margin-bottom: 6px;">Commande Confirmée !</h2>
+          <p style="color: #86868b; font-size: 14px;">Votre commande est enregistrée sous le numéro :</p>
+          <div style="display: inline-block; background: #1d1d1f; color: #ffffff; padding: 8px 20px; border-radius: 12px; font-size: 18px; font-weight: 800; margin-top: 10px;">
             {{ lastOrder.orderNumber }}
           </div>
         </div>
 
-        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; text-align: left; margin-bottom: 20px; font-size: 13px;">
-          <div style="display: flex; justify-content: space-between; margin-bottom: 8px; border-bottom: 1px dashed #cbd5e1; padding-bottom: 8px;">
-            <span style="color: var(--text-muted);">Client :</span>
+        <div style="background: #f5f5f7; border-radius: 16px; padding: 20px; text-align: left; margin-bottom: 24px; font-size: 13px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+            <span style="color: #86868b;">Client :</span>
             <b>{{ lastOrder.customerName }} ({{ lastOrder.customerPhone }})</b>
           </div>
-          <div style="display: flex; justify-content: space-between; margin-bottom: 8px; border-bottom: 1px dashed #cbd5e1; padding-bottom: 8px;">
-            <span style="color: var(--text-muted);">Livraison :</span>
-            <b>{{ lastOrder.customerCity }} {{ lastOrder.customerAddress ? `- ${lastOrder.customerAddress}` : '' }}</b>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+            <span style="color: #86868b;">Ville :</span>
+            <b>{{ lastOrder.customerCity }}</b>
           </div>
-          <div v-for="item in lastOrder.items" :key="item.variantId" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <div v-for="item in lastOrder.items" :key="item.variantId" style="display: flex; justify-content: space-between; border-top: 1px solid #e5e5ea; padding-top: 10px; margin-top: 10px;">
             <div>
               <b>{{ item.name }}</b>
-              <span style="display: block; color: var(--text-muted); font-size: 11px;">{{ item.variantName }} ({{ item.packaging }}) x{{ item.quantity }}</span>
+              <span style="display: block; color: #86868b; font-size: 11px;">{{ item.variantName }} ({{ item.packaging }}) x{{ item.quantity }}</span>
             </div>
-            <b style="color: #047857;">{{ item.subtotal }} MAD</b>
-          </div>
-          <div style="display: flex; justify-content: space-between; border-top: 2px solid #09090b; padding-top: 8px; margin-top: 8px; font-size: 15px; font-weight: 800;">
-            <span>Total (Paiement à la Livraison) :</span>
-            <span style="color: #047857;">{{ lastOrder.totalAmount }} MAD</span>
+            <b style="color: #2e7d32;">{{ item.subtotal }} MAD</b>
           </div>
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 10px;">
-          <a :href="getWhatsAppUrl(lastOrder.orderNumber)" target="_blank" class="btn-primary" style="background: #25D366; border-color: #25D366; justify-content: center; padding: 12px; font-weight: 800; font-size: 14px; text-decoration: none;">
-            <MessageSquare :size="18" /> Suivre ma Commande via WhatsApp
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <a :href="getWhatsAppUrl(lastOrder.orderNumber)" target="_blank" class="apple-btn-primary" style="background: #25D366; text-decoration: none; justify-content: center;">
+            <MessageSquare :size="18" /> Suivre ma commande sur WhatsApp
           </a>
-          <button class="btn-secondary" style="justify-content: center; padding: 10px;" @click="showSuccessModal = false">
+          <button class="btn-secondary" style="border-radius: 9999px; justify-content: center; padding: 12px;" @click="showSuccessModal = false">
             Fermer
           </button>
         </div>

@@ -11,14 +11,13 @@ import {
   Receipt,
   BarChart3,
   Globe,
-  Sparkles
+  ExternalLink
 } from 'lucide-vue-next'
 
 const store = useInventoryStore()
 
 const navItems = [
   { id: 'dashboard', label: 'Vue d\'ensemble', icon: LayoutDashboard, color: '#6366f1' },
-  { id: 'landing', label: 'Matjer & Landing Page', icon: Globe, color: '#a855f7' },
   { id: 'products', label: 'Produits & Variantes', icon: Package, color: '#3b82f6' },
   { id: 'movements', label: 'Mouvements Stock', icon: ArrowUpRight, color: '#10b981' },
   { id: 'warehouses', label: 'Entrepôts & Transferts', icon: Warehouse, color: '#06b6d4' },
@@ -32,8 +31,18 @@ const navItems = [
 
 <template>
   <aside class="sidebar">
-    <div class="brand-logo" @click="store.activeTab = 'landing'">
+    <div class="brand-logo" @click="store.activeTab = 'dashboard'">
       <img src="/logo.png" alt="ELMORÉ" />
+    </div>
+
+    <!-- Standalone Storefront Shortcut Button -->
+    <div style="margin-bottom: 20px; padding: 0 4px;">
+      <button class="btn-primary" style="width: 100%; justify-content: space-between; padding: 10px 14px; font-size: 12px; background: #0071e3; border-color: #0071e3; border-radius: 12px;" @click="store.activeTab = 'landing'">
+        <span style="display: flex; align-items: center; gap: 8px;">
+          <Globe :size="16" /> Boutique Client (Apple)
+        </span>
+        <ExternalLink :size="14" />
+      </button>
     </div>
 
     <nav class="nav-menu">
