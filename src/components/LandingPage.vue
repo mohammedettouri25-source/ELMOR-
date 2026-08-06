@@ -95,8 +95,20 @@ const checkoutTotalAmount = computed(() => {
   return totalPrice.value
 })
 
+const uniqueProducts = computed(() => {
+  const map = new Map()
+  const list = []
+  for (const p of store.products || []) {
+    if (p && p.id && !map.has(p.id)) {
+      map.set(p.id, true)
+      list.push(p)
+    }
+  }
+  return list
+})
+
 const filteredCatalogProducts = computed(() => {
-  let list = store.products || []
+  let list = uniqueProducts.value
   if (selectedCategoryFilter.value !== 'all') {
     list = list.filter(p => p.category === selectedCategoryFilter.value)
   }
@@ -325,7 +337,7 @@ function getWhatsAppUrl(orderNumber) {
 
         <div class="ayla-catalog-grid">
           <div
-            v-for="p in store.products"
+            v-for="p in uniqueProducts"
             :key="p.id"
             class="ayla-product-catalog-card"
           >

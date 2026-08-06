@@ -105,9 +105,28 @@ const initialMovements = [
   { id: uuid(), productId: 'prd-acc-femme-a', variantId: 'v-101', productName: 'Collier Trèfle Élégance Acier Inoxydable', variantName: 'Doré · 45cm', type: 'Initial Stock', quantity: 25, prevQuantity: 0, newQuantity: 25, warehouseId: 'wh-main', user: 'Admin', reason: 'Initialisation du Stock', createdAt: new Date().toISOString() }
 ]
 
+const getInitialProducts = () => {
+  const saved = localStorage.getItem('elmore_products')
+  if (!saved) return defaultProducts
+  try {
+    const parsed = JSON.parse(saved)
+    const unique = []
+    const map = new Map()
+    for (const item of parsed) {
+      if (item && item.id && !map.has(item.id)) {
+        map.set(item.id, true)
+        unique.push(item)
+      }
+    }
+    return unique.length > 0 ? unique : defaultProducts
+  } catch (e) {
+    return defaultProducts
+  }
+}
+
 export const useInventoryStore = defineStore('inventory', {
   state: () => ({
-    products: defaultProducts,
+    products: getInitialProducts(),
     warehouses: JSON.parse(localStorage.getItem('elmore_warehouses')) || defaultWarehouses,
     suppliers: JSON.parse(localStorage.getItem('elmore_suppliers')) || defaultSuppliers,
     movements: JSON.parse(localStorage.getItem('elmore_movements')) || initialMovements,
