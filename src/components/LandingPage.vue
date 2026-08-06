@@ -808,7 +808,7 @@ function getWhatsAppUrl(orderNumber) {
             </div>
           </div>
           <div v-else style="display: flex; justify-content: space-between; font-size: 12px;">
-            <span>{{ product.name }} ({{ currentVariant?.color }} · {{ currentVariant?.size }}) x{{ orderQuantity }}</span>
+            <span>{{ product.name }} ({{ currentVariant?.color }}) x{{ orderQuantity }}</span>
             <b>{{ totalPrice }} DH</b>
           </div>
 
