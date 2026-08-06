@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `suppliers` (
   `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 3. Table des Produits Principal
+-- 3. Table des Produits Principal (Utiliser LONGTEXT pour stocker les images locales Base64 sans limitation)
 CREATE TABLE IF NOT EXISTS `products` (
   `id` VARCHAR(50) PRIMARY KEY,
   `name` VARCHAR(255) NOT NULL,
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `products` (
   `category` VARCHAR(100) DEFAULT 'Montres & Horlogerie',
   `brand` VARCHAR(100) DEFAULT 'ELMORÉ',
   `supplier_id` VARCHAR(50) DEFAULT NULL,
-  `image` TEXT DEFAULT NULL,
+  `image` LONGTEXT DEFAULT NULL,
   `description` TEXT DEFAULT NULL,
   `purchase_price` DECIMAL(10,2) DEFAULT 0.00,
   `price` DECIMAL(10,2) DEFAULT 0.00,
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `products` (
   FOREIGN KEY (`supplier_id`) REFERENCES `suppliers`(`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 4. Table des Variantes Produits (Couleur, Taille, Matière, Stock, Image)
+-- 4. Table des Variantes Produits (LONGTEXT pour images locales de chaque variante)
 CREATE TABLE IF NOT EXISTS `product_variants` (
   `id` VARCHAR(50) PRIMARY KEY,
   `product_id` VARCHAR(50) NOT NULL,
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `product_variants` (
   `size` VARCHAR(50) DEFAULT NULL,
   `material` VARCHAR(100) DEFAULT 'Acier Inoxydable',
   `packaging` VARCHAR(50) DEFAULT 'stdbox',
-  `image` TEXT DEFAULT NULL,
+  `image` LONGTEXT DEFAULT NULL,
   `sku` VARCHAR(100) NOT NULL UNIQUE,
   `barcode` VARCHAR(100) DEFAULT NULL,
   `stock` INT DEFAULT 0,
@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `sales_orders` (
   `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 6. Table des Articles de Commande (Order Items)
+-- 6. Table des Articles de Commande
 CREATE TABLE IF NOT EXISTS `order_items` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `order_id` VARCHAR(50) NOT NULL,
@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `order_items` (
   FOREIGN KEY (`product_id`) REFERENCES `products`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 7. Table Historique / Audit Trail des Mouvements de Stock
+-- 7. Table Historique des Mouvements de Stock
 CREATE TABLE IF NOT EXISTS `stock_movements` (
   `id` VARCHAR(50) PRIMARY KEY,
   `product_id` VARCHAR(50) NOT NULL,
@@ -118,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `stock_movements` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ============================================================================
--- VUES MYSQL OPTIMISÉES POUR RAPPORTS & ANALYTICS
+-- VUES MYSQL OPTIMISÉES POUR RAPPORTS
 -- ============================================================================
 
 CREATE OR REPLACE VIEW `v_product_stock_summary` AS
@@ -165,11 +165,11 @@ INSERT INTO `products` (`id`, `name`, `sku`, `barcode`, `category`, `brand`, `su
 ('prd-jacket-b', 'Veste Cuir Lambskin ELMORÉ Classic', 'JKT-LAMB-01', '38009922002', 'Vêtements Cuir', 'ELMORÉ Leather', 'sup-2', '/hero.png', 'Veste en cuir véritable d\'agneau sur-mesure avec doublure satinée et fermetures éclair YKK.', 650.00, 1490.00, 8)
 ON DUPLICATE KEY UPDATE `name`=`name`;
 
-INSERT INTO `product_variants` (`id`, `product_id`, `color`, `size`, `material`, `packaging`, `sku`, `barcode`, `stock`, `min_stock`, `purchase_price`, `price`) VALUES
-('v-101', 'prd-watch-a', 'Gold', '40mm', 'Acier Doré 18K', 'stdbox', 'WTC-GOLD-40', '38009911001-G40', 12, 5, 1200.00, 2490.00),
-('v-102', 'prd-watch-a', 'Gold', '42mm', 'Acier Doré 18K', 'luxe', 'WTC-GOLD-42', '38009911001-G42', 8, 5, 1200.00, 2490.00),
-('v-103', 'prd-watch-a', 'Black', '40mm', 'Acier Noir Mat', 'nobox', 'WTC-BLK-40', '38009911001-B40', 20, 5, 1150.00, 2390.00),
-('v-104', 'prd-watch-a', 'Silver', '42mm', 'Acier Argenté', 'stdbox', 'WTC-SLV-42', '38009911001-S42', 4, 6, 1100.00, 2290.00),
-('v-201', 'prd-jacket-b', 'Noir', 'M', 'Cuir d\'agneau', 'nobox', 'JKT-BLK-M', '38009922002-BM', 15, 4, 650.00, 1490.00),
-('v-202', 'prd-jacket-b', 'Noir', 'L', 'Cuir d\'agneau', 'stdbox', 'JKT-BLK-L', '38009922002-BL', 3, 5, 650.00, 1490.00)
+INSERT INTO `product_variants` (`id`, `product_id`, `color`, `size`, `material`, `packaging`, `image`, `sku`, `barcode`, `stock`, `min_stock`, `purchase_price`, `price`) VALUES
+('v-101', 'prd-watch-a', 'Gold', '40mm', 'Acier Doré 18K', 'stdbox', '/hero.png', 'WTC-GOLD-40', '38009911001-G40', 12, 5, 1200.00, 2490.00),
+('v-102', 'prd-watch-a', 'Gold', '42mm', 'Acier Doré 18K', 'luxe', '/hero.png', 'WTC-GOLD-42', '38009911001-G42', 8, 5, 1200.00, 2490.00),
+('v-103', 'prd-watch-a', 'Black', '40mm', 'Acier Noir Mat', 'nobox', '/luxury_hero.png', 'WTC-BLK-40', '38009911001-B40', 20, 5, 1150.00, 2390.00),
+('v-104', 'prd-watch-a', 'Silver', '42mm', 'Acier Argenté', 'stdbox', '/hero_fullwidth.png', 'WTC-SLV-42', '38009911001-S42', 4, 6, 1100.00, 2290.00),
+('v-201', 'prd-jacket-b', 'Noir', 'M', 'Cuir d\'agneau', 'nobox', '/hero.png', 'JKT-BLK-M', '38009922002-BM', 15, 4, 650.00, 1490.00),
+('v-202', 'prd-jacket-b', 'Noir', 'L', 'Cuir d\'agneau', 'stdbox', '/hero.png', 'JKT-BLK-L', '38009922002-BL', 3, 5, 650.00, 1490.00)
 ON DUPLICATE KEY UPDATE `sku`=`sku`;

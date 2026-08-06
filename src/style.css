@@ -1306,6 +1306,46 @@ table.data-table tr:hover {
   font-size: 14px;
 }
 
+/* Maison Ayla Luxury Footer */
+.ayla-footer {
+  background: var(--ay-emerald) !important;
+  color: #ffffff !important;
+  padding: 60px 24px 30px 24px !important;
+  margin-top: 80px !important;
+  border-top: 4px solid var(--ay-gold) !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.ayla-footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+}
+
+.ayla-footer h4 {
+  font-family: 'Instrument Sans', serif, sans-serif;
+  color: var(--ay-gold) !important;
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 16px;
+}
+
+.ayla-footer p, .ayla-footer a, .ayla-footer span {
+  color: #d1d5db;
+  font-size: 13px;
+  line-height: 1.8;
+  text-decoration: none;
+}
+
+.ayla-footer a:hover, .ayla-footer span:hover {
+  color: var(--ay-gold) !important;
+}
+
 /* ==========================================================================
    ARABIC RTL TYPOGRAPHY FIXES (CRITICAL: ZERO LETTER-SPACING FOR ARABIC)
    ========================================================================== */
