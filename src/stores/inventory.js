@@ -82,6 +82,7 @@ export const useInventoryStore = defineStore('inventory', {
     sales: JSON.parse(localStorage.getItem('elmore_sales')) || [],
     inventorySessions: JSON.parse(localStorage.getItem('elmore_sessions')) || [],
     cart: [],
+    currentLang: localStorage.getItem('elmore_lang') || 'ar',
     activeTab: 'dashboard',
     selectedLandingProductId: 'prd-watch-a',
     toast: null,
@@ -616,6 +617,11 @@ export const useInventoryStore = defineStore('inventory', {
 
     clearCart() {
       this.cart = []
+    },
+
+    setLanguage(lang) {
+      this.currentLang = lang
+      localStorage.setItem('elmore_lang', lang)
     }
   }
 })

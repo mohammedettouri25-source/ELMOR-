@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useInventoryStore, PACKAGING_OPTIONS } from '../stores/inventory'
+import { translations } from '../lib/translations'
 import {
   ShoppingBag,
   ShieldCheck,
@@ -26,10 +27,14 @@ import {
   ShoppingCart,
   Trash2,
   Plus,
-  Minus
+  Minus,
+  Globe
 } from 'lucide-vue-next'
 
 const store = useInventoryStore()
+
+// Translations computed
+const t = computed(() => translations[store.currentLang] || translations.ar)
 
 // Page Navigation State: 'home' | 'catalog' | 'order' | 'reviews'
 const storePage = ref('home')
@@ -143,7 +148,7 @@ function copyProductShareLink() {
   const url = `${window.location.origin}/?product=${product.value.id}`
   navigator.clipboard.writeText(url)
   isCopied.value = true
-  store.notify('Lien unique copié !')
+  store.notify(store.currentLang === 'ar' ? 'تم نسخ الرابط !' : 'Lien unique copié !')
   setTimeout(() => { isCopied.value = false }, 2500)
 }
 
@@ -152,7 +157,7 @@ function incrementQty() {
   if (orderQuantity.value < maxStock) {
     orderQuantity.value++
   } else {
-    store.notify('Quantité maximale disponible atteinte')
+    store.notify(store.currentLang === 'ar' ? 'وصلت للحد الأقصى للكمية المتوفرة' : 'Quantité maximale disponible atteinte')
   }
 }
 
@@ -164,7 +169,7 @@ function decrementQty() {
 
 async function handleCheckoutSubmit() {
   if (!customerForm.value.name || !customerForm.value.phone) {
-    return store.notify('Veuillez saisir votre nom et numéro de téléphone')
+    return store.notify(store.currentLang === 'ar' ? 'يرجى إدخال الاسم ورقم الهاتف' : 'Veuillez saisir votre nom et numéro de téléphone')
   }
 
   isOrdering.value = true
@@ -219,13 +224,13 @@ function getWhatsAppUrl(orderNumber) {
 </script>
 
 <template>
-  <div v-if="product" class="ayla-container">
+  <div v-if="product" class="ayla-container" :dir="store.currentLang === 'ar' ? 'rtl' : 'ltr'">
     <!-- Announcement Bar Sticky Top -->
     <div class="ayla-announcement-bar">
-      ✨ <span>LIVRAISON GRATUITE PARTOUT AU MAROC 🇲🇦</span> · PAIEMENT À LA LIVRAISON (COD) · SATISFAIT OU ÉCHANGÉ ✨
+      {{ t.announcement }}
     </div>
 
-    <!-- Luxury Maison Ayla Header -->
+    <!-- Luxury Header -->
     <header class="ayla-header">
       <div class="ayla-logo" @click="storePage = 'home'">
         <img src="/logo.png" alt="ELMORÉ" />
@@ -233,24 +238,34 @@ function getWhatsAppUrl(orderNumber) {
       </div>
 
       <nav class="ayla-nav-links">
-        <span class="ayla-nav-link" :class="{ active: storePage === 'home' }" @click="storePage = 'home'">ACCUEIL</span>
-        <span class="ayla-nav-link" :class="{ active: storePage === 'catalog' }" @click="storePage = 'catalog'">CATALOGUE</span>
-        <span class="ayla-nav-link" :class="{ active: storePage === 'order' }" @click="storePage = 'order'">COMMANDER</span>
-        <span class="ayla-nav-link" :class="{ active: storePage === 'reviews' }" @click="storePage = 'reviews'">AVIS CLIENTS</span>
+        <span class="ayla-nav-link" :class="{ active: storePage === 'home' }" @click="storePage = 'home'">{{ t.navHome }}</span>
+        <span class="ayla-nav-link" :class="{ active: storePage === 'catalog' }" @click="storePage = 'catalog'">{{ t.navCatalog }}</span>
+        <span class="ayla-nav-link" :class="{ active: storePage === 'order' }" @click="storePage = 'order'">{{ t.navOrder }}</span>
+        <span class="ayla-nav-link" :class="{ active: storePage === 'reviews' }" @click="storePage = 'reviews'">{{ t.navReviews }}</span>
       </nav>
 
-      <div style="display: flex; align-items: center; gap: 14px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <!-- LANGUAGE SWITCHER BUTTON -->
+        <button
+          class="ayla-btn-gold"
+          style="padding: 6px 12px; font-size: 11px; display: flex; align-items: center; gap: 6px; font-weight: 800;"
+          @click="store.setLanguage(store.currentLang === 'ar' ? 'fr' : 'ar')"
+        >
+          <Globe :size="14" />
+          <span>{{ store.currentLang === 'ar' ? 'Français (FR)' : 'العربية (AR)' }}</span>
+        </button>
+
         <!-- CART BUTTON WITH COUNTER BADGE -->
-        <button class="ayla-btn-gold" style="padding: 8px 16px; font-size: 11px; display: flex; align-items: center; gap: 6px; position: relative;" @click="showCartDrawer = true">
+        <button class="ayla-btn-gold" style="padding: 6px 14px; font-size: 11px; display: flex; align-items: center; gap: 6px; position: relative;" @click="showCartDrawer = true">
           <ShoppingCart :size="15" />
-          <span>Panier</span>
+          <span>{{ t.cart }}</span>
           <span v-if="store.cartTotalCount > 0" style="background: #ef4444; color: #ffffff; border-radius: 50%; width: 18px; height: 18px; display: grid; place-items: center; font-size: 10px; font-weight: 800;">
             {{ store.cartTotalCount }}
           </span>
         </button>
 
-        <button class="ayla-btn-emerald" style="padding: 8px 16px; font-size: 11px;" @click="store.activeTab = 'dashboard'">
-          <Settings :size="13" /> 🛠️ Admin
+        <button class="ayla-btn-emerald" style="padding: 6px 12px; font-size: 11px;" @click="store.activeTab = 'dashboard'">
+          <Settings :size="13" /> {{ t.admin }}
         </button>
       </div>
     </header>
@@ -259,24 +274,22 @@ function getWhatsAppUrl(orderNumber) {
          PAGE 1: ACCUEIL / FULL-WIDTH HERO OVERLAY SHOWCASE
          ==================================================================== -->
     <main v-if="storePage === 'home'">
-      <!-- Full-Width Hero Section with Image Background & Text Overlay -->
+      <!-- Full-Width Hero Section -->
       <section class="ayla-hero-fullwidth">
         <div class="ayla-hero-overlay-content">
           <div class="ayla-badge-rating" style="background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); color: #ffffff; border: 1px solid rgba(255,255,255,0.2);">
             <span style="color: #f59e0b; display: flex; gap: 2px;">
               <Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" />
             </span>
-            <span>4.9/5 · Plus de 1 400 avis vérifiés au Maroc</span>
+            <span>{{ t.ratingText }}</span>
           </div>
 
-          <h1 class="ayla-hero-overlay-title">HORLOGERIE & ACCESSOIRES DE LUXE</h1>
-          <p class="ayla-hero-overlay-subtitle">
-            Alliez l'élégance suprême à la précision mécanique. Conçus en acier inoxydable 316L chirurgical avec verre saphir inrayable.
-          </p>
+          <h1 class="ayla-hero-overlay-title">{{ t.heroTitle }}</h1>
+          <p class="ayla-hero-overlay-subtitle">{{ t.heroSubtitle }}</p>
 
           <div style="display: flex; align-items: baseline; justify-content: center; gap: 16px; margin-bottom: 32px;">
             <span style="font-size: 42px; font-weight: 900; color: var(--ay-gold); font-family: 'Instrument Sans', sans-serif;">
-              À partir de {{ product.price }} DH
+              {{ t.startingFrom }} {{ product.price }} DH
             </span>
             <span style="font-size: 22px; color: #cbd5e1; text-decoration: line-through;">
               {{ Math.round(product.price * 1.35) }} DH
@@ -285,10 +298,10 @@ function getWhatsAppUrl(orderNumber) {
 
           <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
             <button class="ayla-btn-emerald" style="background: var(--ay-gold); border-color: var(--ay-gold); color: #ffffff; font-size: 14px; padding: 18px 36px;" @click="storePage = 'catalog'">
-              DÉCOUVRIR LE CATALOGUE <Grid :size="18" />
+              {{ t.discoverCatalog }} <Grid :size="18" />
             </button>
             <button class="ayla-btn-emerald" style="font-size: 14px; padding: 18px 36px;" @click="openCheckoutModal()">
-              ⚡ COMMANDER EN POPUP <ArrowRight :size="18" />
+              ⚡ {{ t.orderProduct }} <ArrowRight :size="18" />
             </button>
           </div>
         </div>
@@ -297,11 +310,11 @@ function getWhatsAppUrl(orderNumber) {
       <!-- Product Cards Grid Section under Hero -->
       <section class="ayla-hero" style="padding-top: 50px; padding-bottom: 20px;">
         <div style="text-align: center; margin-bottom: 32px;">
-          <span style="color: var(--ay-gold); font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;">NOTRE SELECTION EN VEDETTE</span>
+          <span style="color: var(--ay-gold); font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;">ELMORÉ LUXURY</span>
           <h2 style="font-family: 'Instrument Sans', sans-serif; font-size: 30px; font-weight: 700; color: var(--ay-emerald); text-transform: uppercase; margin-top: 4px;">
-            NOS CARTES PRODUITS EXCLUSIVES
+            {{ t.featuredTitle }}
           </h2>
-          <p style="font-size: 14px; color: var(--ay-muted);">Ajoutez au panier ou commandez directement en 1-clic popup</p>
+          <p style="font-size: 14px; color: var(--ay-muted);">{{ t.featuredSubtitle }}</p>
         </div>
 
         <div class="ayla-catalog-grid">
@@ -311,7 +324,7 @@ function getWhatsAppUrl(orderNumber) {
             class="ayla-product-catalog-card"
           >
             <div class="ayla-card-img-wrapper" @click="selectProductAndOrder(p)">
-              <span class="ayla-card-badge">Best-Seller</span>
+              <span class="ayla-card-badge">{{ t.bestSeller }}</span>
               <img :src="p.image || '/luxury_hero.png'" :alt="p.name" class="ayla-card-img" />
             </div>
 
@@ -321,7 +334,7 @@ function getWhatsAppUrl(orderNumber) {
 
               <div style="display: flex; align-items: center; gap: 4px; color: #f59e0b; font-size: 11px; margin-bottom: 8px;">
                 <Star :size="13" fill="#f59e0b" /><Star :size="13" fill="#f59e0b" /><Star :size="13" fill="#f59e0b" /><Star :size="13" fill="#f59e0b" /><Star :size="13" fill="#f59e0b" />
-                <span style="color: var(--ay-muted); margin-left: 4px; font-weight: 700;">4.9 (140+ avis)</span>
+                <span style="color: var(--ay-muted); margin-left: 4px; font-weight: 700;">{{ t.reviewsCount }}</span>
               </div>
 
               <div class="ayla-card-price-row">
@@ -331,10 +344,10 @@ function getWhatsAppUrl(orderNumber) {
 
               <div style="display: flex; gap: 8px; margin-top: 14px;">
                 <button class="ayla-btn-gold" style="flex: 1; padding: 10px; font-size: 11px; justify-content: center;" @click="handleProductQuickAddToCart(p)">
-                  <ShoppingCart :size="14" /> Panier
+                  <ShoppingCart :size="14" /> {{ t.quickAddToCart }}
                 </button>
                 <button class="ayla-btn-emerald" style="flex: 1.2; padding: 10px; font-size: 11px; justify-content: center;" @click="openProductCheckoutModal(p)">
-                  ⚡ Commander
+                  {{ t.quickOrder }}
                 </button>
               </div>
             </div>
@@ -347,26 +360,26 @@ function getWhatsAppUrl(orderNumber) {
         <div class="ayla-trust-grid">
           <div class="ayla-trust-card">
             <div class="ayla-trust-icon"><Truck :size="24" /></div>
-            <h4>LIVRAISON GRATUITE</h4>
-            <p>Expédition sous 24h à Casablanca, Rabat & partout au Maroc.</p>
+            <h4>{{ t.freeShippingTitle }}</h4>
+            <p>{{ t.freeShippingDesc }}</p>
           </div>
 
           <div class="ayla-trust-card">
             <div class="ayla-trust-icon"><ShieldCheck :size="24" /></div>
-            <h4>QUALITÉ GARANTIE 2 ANS</h4>
-            <p>Acier Inoxydable 316L inaltérable qui ne rouille jamais.</p>
+            <h4>{{ t.qualityTitle }}</h4>
+            <p>{{ t.qualityDesc }}</p>
           </div>
 
           <div class="ayla-trust-card">
             <div class="ayla-trust-icon"><Gift :size="24" /></div>
-            <h4>ÉCRIN LUXE OFFERT</h4>
-            <p>Chaque pièce est livrée dans son coffret prestige rigide.</p>
+            <h4>{{ t.giftBoxTitle }}</h4>
+            <p>{{ t.giftBoxDesc }}</p>
           </div>
 
           <div class="ayla-trust-card">
             <div class="ayla-trust-icon"><Award :size="24" /></div>
-            <h4>INSPECTER AVANT DE PAYER</h4>
-            <p>Vérifiez votre colis lors de la livraison en espèces.</p>
+            <h4>{{ t.inspectTitle }}</h4>
+            <p>{{ t.inspectDesc }}</p>
           </div>
         </div>
       </section>
@@ -377,11 +390,11 @@ function getWhatsAppUrl(orderNumber) {
          ==================================================================== -->
     <main v-else-if="storePage === 'catalog'" class="ayla-hero">
       <div style="text-align: center; max-width: 800px; margin: 0 auto 36px auto;">
-        <span style="color: var(--ay-gold); font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;">PARCOUREZ NOS COLLECTIONS</span>
+        <span style="color: var(--ay-gold); font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;">ELMORÉ LUXURY</span>
         <h1 style="font-family: 'Instrument Sans', sans-serif; font-size: 36px; font-weight: 700; color: var(--ay-emerald); text-transform: uppercase; margin-top: 6px;">
-          NOTRE CATALOGUE EXCLUSIF
+          {{ t.catalogTitle }}
         </h1>
-        <p style="font-size: 14px; color: var(--ay-muted);">Ajoutez des articles au panier ou passez commande en fenêtre modale express</p>
+        <p style="font-size: 14px; color: var(--ay-muted);">{{ t.catalogSubtitle }}</p>
       </div>
 
       <!-- Filter Bar & Search -->
@@ -392,26 +405,26 @@ function getWhatsAppUrl(orderNumber) {
             :style="selectedCategoryFilter === 'all' ? 'background: var(--ay-emerald); color: #ffffff; border: 1px solid var(--ay-emerald);' : 'background: #ffffff; color: var(--ay-dark); border: 1px solid var(--ay-border);'"
             @click="selectedCategoryFilter = 'all'"
           >
-            Toutes les Catégories ({{ store.products.length }})
+            {{ t.allCategories }} ({{ store.products.length }})
           </button>
           <button
             style="padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;"
             :style="selectedCategoryFilter === 'Montres & Horlogerie' ? 'background: var(--ay-emerald); color: #ffffff; border: 1px solid var(--ay-emerald);' : 'background: #ffffff; color: var(--ay-dark); border: 1px solid var(--ay-border);'"
             @click="selectedCategoryFilter = 'Montres & Horlogerie'"
           >
-            Montres & Horlogerie
+            {{ store.currentLang === 'ar' ? 'ساعات فاخرة' : 'Montres & Horlogerie' }}
           </button>
           <button
             style="padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;"
             :style="selectedCategoryFilter === 'Vêtements Cuir' ? 'background: var(--ay-emerald); color: #ffffff; border: 1px solid var(--ay-emerald);' : 'background: #ffffff; color: var(--ay-dark); border: 1px solid var(--ay-border);'"
             @click="selectedCategoryFilter = 'Vêtements Cuir'"
           >
-            Vêtements Cuir
+            {{ store.currentLang === 'ar' ? 'سترات جلذية' : 'Vêtements Cuir' }}
           </button>
         </div>
 
         <div style="position: relative; width: 260px;">
-          <input v-model="catalogSearchQuery" placeholder="Rechercher produit..." class="form-control" style="border: 1px solid var(--ay-border); padding: 8px 12px 8px 34px; border-radius: 6px; font-size: 12px;" />
+          <input v-model="catalogSearchQuery" :placeholder="t.searchPlaceholder" class="form-control" style="border: 1px solid var(--ay-border); padding: 8px 12px 8px 34px; border-radius: 6px; font-size: 12px;" />
           <Search :size="15" style="position: absolute; left: 10px; top: 10px; color: var(--ay-muted);" />
         </div>
       </div>
@@ -424,7 +437,7 @@ function getWhatsAppUrl(orderNumber) {
           class="ayla-product-catalog-card"
         >
           <div class="ayla-card-img-wrapper" @click="selectProductAndOrder(p)">
-            <span class="ayla-card-badge">Best-Seller</span>
+            <span class="ayla-card-badge">{{ t.bestSeller }}</span>
             <img :src="p.image || '/luxury_hero.png'" :alt="p.name" class="ayla-card-img" />
           </div>
 
@@ -434,7 +447,7 @@ function getWhatsAppUrl(orderNumber) {
 
             <div style="display: flex; align-items: center; gap: 4px; color: #f59e0b; font-size: 11px; margin-bottom: 8px;">
               <Star :size="13" fill="#f59e0b" /><Star :size="13" fill="#f59e0b" /><Star :size="13" fill="#f59e0b" /><Star :size="13" fill="#f59e0b" /><Star :size="13" fill="#f59e0b" />
-              <span style="color: var(--ay-muted); margin-left: 4px; font-weight: 700;">4.9 (140+ avis)</span>
+              <span style="color: var(--ay-muted); margin-left: 4px; font-weight: 700;">{{ t.reviewsCount }}</span>
             </div>
 
             <div class="ayla-card-price-row">
@@ -444,10 +457,10 @@ function getWhatsAppUrl(orderNumber) {
 
             <div style="display: flex; gap: 8px; margin-top: 14px;">
               <button class="ayla-btn-gold" style="flex: 1; padding: 10px; font-size: 11px; justify-content: center;" @click="handleProductQuickAddToCart(p)">
-                <ShoppingCart :size="14" /> Panier
+                <ShoppingCart :size="14" /> {{ t.quickAddToCart }}
               </button>
               <button class="ayla-btn-emerald" style="flex: 1.2; padding: 10px; font-size: 11px; justify-content: center;" @click="openProductCheckoutModal(p)">
-                ⚡ Commander
+                {{ t.quickOrder }}
               </button>
             </div>
           </div>
@@ -460,9 +473,9 @@ function getWhatsAppUrl(orderNumber) {
          ==================================================================== -->
     <main v-else-if="storePage === 'order'" class="ayla-hero">
       <div style="text-align: center; max-width: 800px; margin: 0 auto 32px auto;">
-        <span style="color: var(--ay-gold); font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;">PERSONNALISATION</span>
+        <span style="color: var(--ay-gold); font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;">ELMORÉ LUXURY</span>
         <h1 style="font-family: 'Instrument Sans', sans-serif; font-size: 32px; font-weight: 700; color: var(--ay-emerald); text-transform: uppercase; margin-top: 6px;">
-          CHOISIR FINITION & OPTIONAL EMBALLAGE
+          {{ product.name }}
         </h1>
       </div>
 
@@ -472,18 +485,18 @@ function getWhatsAppUrl(orderNumber) {
           <div>
             <span style="font-size: 11px; font-weight: 700; color: var(--ay-gold); text-transform: uppercase;">{{ product.brand }} · {{ product.category }}</span>
             <h2 style="font-family: 'Instrument Sans', sans-serif; font-size: 22px; font-weight: 700; color: var(--ay-emerald); margin: 4px 0;">{{ product.name }}</h2>
-            <div style="font-size: 13px; font-weight: 700; color: var(--ay-muted); margin-bottom: 4px;">Finition sélectionnée : <span style="color: var(--ay-emerald);">{{ currentVariant?.color }} · {{ currentVariant?.size }}</span></div>
+            <div style="font-size: 13px; font-weight: 700; color: var(--ay-muted); margin-bottom: 4px;">{{ currentVariant?.color }} · {{ currentVariant?.size }}</div>
             <div style="font-size: 22px; font-weight: 800; color: var(--ay-emerald);">{{ finalUnitPrice }} DH</div>
           </div>
 
           <button class="btn-secondary" style="margin-left: auto; font-size: 11px;" @click="storePage = 'catalog'">
-            Changer de produit
+            {{ t.navCatalog }}
           </button>
         </div>
 
         <div style="margin-bottom: 24px;">
           <label style="font-size: 13px; font-weight: 800; color: var(--ay-emerald); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 10px;">
-            1. CHOISIR LA FINITION & COULEUR :
+            {{ t.finishSelection }}
           </label>
 
           <div style="display: flex; gap: 12px; flex-wrap: wrap;">
@@ -502,7 +515,7 @@ function getWhatsAppUrl(orderNumber) {
 
         <div style="margin-bottom: 24px;">
           <label style="font-size: 13px; font-weight: 800; color: var(--ay-emerald); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 10px;">
-            2. CHOISIR LE COFFRET / EMBALLAGE :
+            {{ t.boxSelection }}
           </label>
 
           <div class="packaging-selector">
@@ -520,7 +533,7 @@ function getWhatsAppUrl(orderNumber) {
                 <small style="color: var(--text-muted); font-size: 11px; display: block;">{{ boxOption.note }}</small>
               </div>
               <div class="box-price" style="margin-top: 8px;">
-                {{ boxOption.extraPrice === 0 ? 'Inclus Gratuitement' : `+${boxOption.extraPrice} DH` }}
+                {{ boxOption.extraPrice === 0 ? 'Inclus' : `+${boxOption.extraPrice} DH` }}
               </div>
             </div>
           </div>
@@ -528,10 +541,10 @@ function getWhatsAppUrl(orderNumber) {
 
         <div style="display: flex; gap: 14px; margin-top: 20px;">
           <button class="ayla-btn-gold" style="flex: 1; padding: 18px; font-size: 14px; justify-content: center;" @click="handleAddCurrentToCart">
-            <ShoppingCart :size="18" /> AJOUTER AU PANIER
+            <ShoppingCart :size="18" /> {{ t.addToCartBtn }}
           </button>
           <button class="ayla-btn-emerald" style="flex: 1.5; padding: 18px; font-size: 14px; justify-content: center;" @click="openCheckoutModal()">
-            ⚡ PASSER LA COMMANDE MODALE ({{ totalPrice }} DH)
+            {{ t.passOrderModalBtn }} ({{ totalPrice }} DH)
           </button>
         </div>
       </div>
@@ -542,9 +555,9 @@ function getWhatsAppUrl(orderNumber) {
          ==================================================================== -->
     <main v-else-if="storePage === 'reviews'" class="ayla-hero">
       <div style="text-align: center; max-width: 800px; margin: 0 auto 36px auto;">
-        <span style="color: var(--ay-gold); font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;">AVIS DE NOS CLIENTS AU MAROC</span>
+        <span style="color: var(--ay-gold); font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;">ELMORÉ LUXURY</span>
         <h1 style="font-family: 'Instrument Sans', sans-serif; font-size: 32px; font-weight: 700; color: var(--ay-emerald); text-transform: uppercase; margin-top: 6px;">
-          TÉMOIGNAGES & SATISFACTION CLIENT
+          {{ t.navReviews }}
         </h1>
       </div>
 
@@ -564,56 +577,38 @@ function getWhatsAppUrl(orderNumber) {
             "Montre incroyable! Le mouvement automatique est d'une précision parfaite et la finition en acier est juste magnifique. Reçue à Casablanca en moins de 24h."
           </p>
         </div>
-
-        <div class="ayla-review-card">
-          <div class="ayla-review-user">
-            <div class="ayla-review-avatar">FK</div>
-            <div>
-              <b style="font-size: 14px; display: block; color: var(--ay-emerald);">Fatima-Zohra K.</b>
-              <span style="font-size: 11px; color: #2e7d32; font-weight: 700;">✓ Achat Vérifié · Rabat</span>
-            </div>
-          </div>
-          <div style="color: #f59e0b; margin-bottom: 8px; display: flex; gap: 2px;">
-            <Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" />
-          </div>
-          <p style="font-size: 13px; color: var(--ay-dark); line-height: 1.5;">
-            "Service client très disponible sur WhatsApp. Le coffret de luxe en bois est splendide pour faire un cadeau."
-          </p>
-        </div>
       </div>
     </main>
 
-    <!-- Maison Ayla Style Footer -->
+    <!-- Footer -->
     <footer class="ayla-footer">
       <div class="ayla-footer-inner">
         <div>
           <h3 style="font-family: 'Instrument Sans', sans-serif; font-size: 22px; color: var(--ay-gold); letter-spacing: 0.15em; margin-bottom: 12px;">
-            ELMORÉ LUXURY
+            ELMORÉ LUXURY 🇲🇦
           </h3>
-          <p>Maison de luxe spécialisée dans l'horlogerie et les accessoires de haute finition au Maroc.</p>
+          <p>{{ t.heroSubtitle }}</p>
         </div>
         <div>
-          <h4>NAVIGATION</h4>
-          <p><span style="cursor: pointer;" @click="storePage = 'home'">Accueil</span></p>
-          <p><span style="cursor: pointer;" @click="storePage = 'catalog'">Catalogue</span></p>
-          <p><span style="cursor: pointer;" @click="storePage = 'order'">Commander</span></p>
+          <h4>{{ t.navHome }}</h4>
+          <p><span style="cursor: pointer;" @click="storePage = 'home'">{{ t.navHome }}</span></p>
+          <p><span style="cursor: pointer;" @click="storePage = 'catalog'">{{ t.navCatalog }}</span></p>
+          <p><span style="cursor: pointer;" @click="storePage = 'order'">{{ t.navOrder }}</span></p>
         </div>
         <div>
-          <h4>CONTACT</h4>
+          <h4>{{ store.currentLang === 'ar' ? 'التواصل' : 'CONTACT' }}</h4>
           <p>📍 Casablanca, Maroc</p>
           <p>📞 WhatsApp: +212 661-889900</p>
         </div>
       </div>
     </footer>
 
-    <!-- ====================================================================
-         MODAL 1: SHOPPING CART SLIDE-OVER DRAWER (MODAL PANIER)
-         ==================================================================== -->
+    <!-- MODAL 1: SHOPPING CART SLIDE-OVER DRAWER -->
     <div v-if="showCartDrawer" class="modal-overlay" @click.self="showCartDrawer = false">
       <div class="modal-card" style="max-width: 480px; width: 100%; border-radius: 16px; padding: 24px; max-height: 88vh; display: flex; flex-direction: column;">
         <div class="modal-header">
           <h3 style="display: flex; align-items: center; gap: 8px; color: var(--ay-emerald);">
-            <ShoppingCart :size="20" /> Votre Panier ({{ store.cartTotalCount }})
+            <ShoppingCart :size="20" /> {{ t.cartTitle }} ({{ store.cartTotalCount }})
           </h3>
           <button class="close-btn" @click="showCartDrawer = false"><X :size="18"/></button>
         </div>
@@ -621,9 +616,9 @@ function getWhatsAppUrl(orderNumber) {
         <div style="flex: 1; overflow-y: auto; margin-top: 14px; padding-right: 4px;">
           <div v-if="store.cart.length === 0" style="text-align: center; padding: 40px 10px; color: var(--ay-muted);">
             <ShoppingCart :size="48" style="opacity: 0.3; margin-bottom: 12px;" />
-            <p style="font-size: 14px; font-weight: 700;">Votre panier est actuellement vide.</p>
+            <p style="font-size: 14px; font-weight: 700;">{{ t.cartEmpty }}</p>
             <button class="ayla-btn-emerald" style="margin-top: 14px; font-size: 12px;" @click="showCartDrawer = false; storePage = 'catalog';">
-              Découvrir nos produits
+              {{ t.discoverCatalog }}
             </button>
           </div>
 
@@ -655,36 +650,33 @@ function getWhatsAppUrl(orderNumber) {
 
         <div v-if="store.cart.length > 0" style="border-top: 1px solid var(--ay-border); padding-top: 16px; margin-top: 10px;">
           <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 13px;">
-            <span style="color: var(--ay-muted);">Livraison :</span>
-            <b style="color: #2e7d32;">Gratuite partout au Maroc (0 DH)</b>
+            <span style="color: var(--ay-muted);">{{ t.shippingFree }}</span>
           </div>
           <div style="display: flex; justify-content: space-between; margin-bottom: 16px; font-size: 16px;">
-            <b>Total Général TTC :</b>
+            <b>{{ t.totalTtc }}</b>
             <b style="color: var(--ay-emerald); font-size: 20px;">{{ store.cartTotalPrice }} DH</b>
           </div>
 
           <button class="ayla-btn-emerald" style="width: 100%; justify-content: center; padding: 14px; font-size: 14px;" @click="openCheckoutModal">
-            PASSER LA COMMANDE ({{ store.cartTotalPrice }} DH) <ArrowRight :size="16" />
+            {{ t.passOrderBtn }} ({{ store.cartTotalPrice }} DH) <ArrowRight :size="16" />
           </button>
         </div>
       </div>
     </div>
 
-    <!-- ====================================================================
-         MODAL 2: EXPRESS CHECKOUT POPUP MODAL (MODAL CHECKOUT)
-         ==================================================================== -->
+    <!-- MODAL 2: EXPRESS CHECKOUT POPUP MODAL -->
     <div v-if="showCheckoutModal" class="modal-overlay" @click.self="showCheckoutModal = false">
       <div class="modal-card" style="max-width: 600px; width: 100%; border-radius: 16px; padding: 28px; border: 2px solid var(--ay-emerald);">
         <div class="modal-header" style="border-bottom: 1px solid var(--ay-border); padding-bottom: 12px; margin-bottom: 18px;">
           <h3 style="font-family: 'Instrument Sans', sans-serif; font-size: 20px; font-weight: 700; color: var(--ay-emerald); text-transform: uppercase;">
-            📦 COMMANDE EXPRESS (PAIEMENT À LA LIVRAISON)
+            {{ t.checkoutModalTitle }}
           </h3>
           <button class="close-btn" @click="showCheckoutModal = false"><X :size="18"/></button>
         </div>
 
-        <!-- Order Items Summary in Modal -->
+        <!-- Order Items Summary -->
         <div style="background: #F8FAFC; border: 1px solid var(--ay-border); border-radius: 10px; padding: 14px; margin-bottom: 18px; max-height: 160px; overflow-y: auto;">
-          <b style="font-size: 12px; color: var(--ay-gold); text-transform: uppercase; display: block; margin-bottom: 8px;">RÉCAPITULATIF DE LA COMMANDE :</b>
+          <b style="font-size: 12px; color: var(--ay-gold); text-transform: uppercase; display: block; margin-bottom: 8px;">{{ t.orderSummary }}</b>
           
           <div v-if="store.cart.length > 0">
             <div v-for="item in store.cart" :key="item.id" style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px;">
@@ -698,56 +690,54 @@ function getWhatsAppUrl(orderNumber) {
           </div>
 
           <div style="border-top: 1px solid var(--ay-border); margin-top: 8px; padding-top: 8px; display: flex; justify-content: space-between; font-size: 14px;">
-            <b>TOTAL A PAYER À LA LIVRAISON :</b>
+            <b>{{ t.totalToPay }}</b>
             <b style="color: var(--ay-emerald); font-size: 16px;">{{ checkoutTotalAmount }} DH</b>
           </div>
         </div>
 
-        <!-- Delivery Form inside Modal -->
+        <!-- Delivery Form -->
         <form @submit.prevent="handleCheckoutSubmit">
           <div class="grid-2" style="margin-bottom: 12px;">
             <div class="form-group">
-              <label style="font-size: 12px; font-weight: 700;">Nom & Prénom *</label>
-              <input v-model="customerForm.name" class="form-control" style="border: 1px solid var(--ay-border); padding: 10px; background: #ffffff;" required placeholder="Ex: Mohamed Alami" />
+              <label style="font-size: 12px; font-weight: 700;">{{ t.fullNameLabel }}</label>
+              <input v-model="customerForm.name" class="form-control" style="border: 1px solid var(--ay-border); padding: 10px; background: #ffffff;" required :placeholder="t.fullNamePlaceholder" />
             </div>
             <div class="form-group">
-              <label style="font-size: 12px; font-weight: 700;">Téléphone WhatsApp *</label>
-              <input v-model="customerForm.phone" class="form-control" style="border: 1px solid var(--ay-border); padding: 10px; background: #ffffff;" required placeholder="Ex: 06 61 22 33 44" />
+              <label style="font-size: 12px; font-weight: 700;">{{ t.phoneLabel }}</label>
+              <input v-model="customerForm.phone" class="form-control" style="border: 1px solid var(--ay-border); padding: 10px; background: #ffffff;" required :placeholder="t.phonePlaceholder" />
             </div>
           </div>
 
           <div class="grid-2" style="margin-bottom: 12px;">
             <div class="form-group">
-              <label style="font-size: 12px; font-weight: 700;">Ville *</label>
+              <label style="font-size: 12px; font-weight: 700;">{{ t.cityLabel }}</label>
               <select v-model="customerForm.city" class="form-control" style="border: 1px solid var(--ay-border); padding: 10px; background: #ffffff;">
-                <option value="Casablanca">Casablanca</option>
-                <option value="Rabat">Rabat</option>
-                <option value="Marrakech">Marrakech</option>
-                <option value="Tangier">Tanger</option>
-                <option value="Safi">Safi</option>
-                <option value="Agadir">Agadir</option>
-                <option value="Fès">Fès</option>
-                <option value="Meknès">Meknès</option>
-                <option value="Oujda">Oujda</option>
-                <option value="Autre Ville">Autre Ville</option>
+                <option value="Casablanca">Casablanca / الدار البيضاء</option>
+                <option value="Rabat">Rabat / الرباط</option>
+                <option value="Marrakech">Marrakech / مراكش</option>
+                <option value="Tangier">Tanger / طنجة</option>
+                <option value="Safi">Safi / آسفي</option>
+                <option value="Agadir">Agadir / أكادير</option>
+                <option value="Fès">Fès / فاس</option>
+                <option value="Meknès">Meknès / مكناس</option>
+                <option value="Oujda">Oujda / وجدة</option>
+                <option value="Autre Ville">Autre Ville / مدينة أخرى</option>
               </select>
             </div>
             <div class="form-group">
-              <label style="font-size: 12px; font-weight: 700;">Adresse de Livraison</label>
-              <input v-model="customerForm.address" class="form-control" style="border: 1px solid var(--ay-border); padding: 10px; background: #ffffff;" placeholder="Quartier, Rue, N° Appt" />
+              <label style="font-size: 12px; font-weight: 700;">{{ t.addressLabel }}</label>
+              <input v-model="customerForm.address" class="form-control" style="border: 1px solid var(--ay-border); padding: 10px; background: #ffffff;" :placeholder="t.addressPlaceholder" />
             </div>
           </div>
 
           <button type="submit" class="ayla-btn-emerald" style="width: 100%; justify-content: center; padding: 16px; font-size: 14px; margin-top: 6px;" :disabled="isOrdering">
-            {{ isOrdering ? 'ENREGISTREMENT EN COURS...' : `CONFIRMER MA COMMANDE (${checkoutTotalAmount} DH)` }}
+            {{ isOrdering ? '...' : `${t.confirmOrderBtn} (${checkoutTotalAmount} DH)` }}
           </button>
         </form>
       </div>
     </div>
 
-    <!-- ====================================================================
-         MODAL 3: ORDER CONFIRMATION MODAL
-         ==================================================================== -->
+    <!-- MODAL 3: ORDER CONFIRMATION MODAL -->
     <div v-if="showSuccessModal && lastOrder" class="modal-overlay" @click.self="showSuccessModal = false">
       <div class="modal-card" style="max-width: 540px; text-align: center; border-radius: 16px; padding: 36px; border: 2px solid var(--ay-emerald);">
         <div style="margin-bottom: 20px;">
@@ -755,9 +745,9 @@ function getWhatsAppUrl(orderNumber) {
             <CheckCircle2 :size="38" />
           </div>
           <h2 style="font-family: 'Instrument Sans', sans-serif; font-size: 24px; font-weight: 700; color: var(--ay-emerald); text-transform: uppercase;">
-            COMMANDE CONFIRMÉE !
+            {{ t.orderConfirmedTitle }}
           </h2>
-          <p style="color: var(--ay-muted); font-size: 14px;">Votre commande a été enregistrée sous la référence :</p>
+          <p style="color: var(--ay-muted); font-size: 14px;">{{ t.orderRefText }}</p>
           <div style="display: inline-block; background: var(--ay-emerald); color: var(--ay-gold); padding: 8px 20px; border-radius: 6px; font-size: 18px; font-weight: 800; margin-top: 10px; letter-spacing: 0.1em;">
             {{ lastOrder.orderNumber }}
           </div>
@@ -783,10 +773,10 @@ function getWhatsAppUrl(orderNumber) {
 
         <div style="display: flex; flex-direction: column; gap: 12px;">
           <a :href="getWhatsAppUrl(lastOrder.orderNumber)" target="_blank" class="ayla-btn-emerald" style="background: #25D366; border-color: #25D366; text-decoration: none; justify-content: center; font-size: 13px;">
-            <MessageSquare :size="18" /> SUIVRE MA COMMANDE SUR WHATSAPP
+            <MessageSquare :size="18" /> {{ t.followWhatsapp }}
           </a>
           <button class="btn-secondary" style="border-radius: 4px; justify-content: center; padding: 12px;" @click="showSuccessModal = false">
-            FERMER
+            {{ t.closeBtn }}
           </button>
         </div>
       </div>
