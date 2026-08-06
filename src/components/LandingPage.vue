@@ -618,16 +618,15 @@ function getWhatsAppUrl(orderNumber) {
             />
           </div>
 
-          <!-- Thumbnails switcher -->
           <div style="display: flex; gap: 12px; margin-top: 16px; overflow-x: auto; padding-bottom: 4px;">
             <div
               v-for="v in product.variants"
               :key="v.id"
-              style="width: 64px; height: 64px; border-radius: 8px; border: none; padding: 4px; background: #ffffff; cursor: pointer; display: grid; place-items: center; transition: all 0.2s;"
+              style="width: 64px; height: 64px; border-radius: 8px; border: none; padding: 4px; background: transparent; cursor: pointer; display: grid; place-items: center; transition: all 0.2s; flex-shrink: 0;"
               :style="selectedVariantId === v.id ? 'box-shadow: 0 0 0 2px var(--ay-emerald); opacity: 1;' : 'opacity: 0.6;'"
               @click="selectedVariantId = v.id"
             >
-              <img :src="v.image || product.image || '/luxury_hero.png'" style="max-height: 100%; max-width: 100%; object-fit: contain;" />
+              <img :src="v.image || product.image || '/luxury_hero.png'" style="max-height: 100%; max-width: 100%; object-fit: contain; border: none;" />
             </div>
           </div>
         </div>

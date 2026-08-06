@@ -1483,6 +1483,11 @@ table.data-table tr:hover {
     padding: 12px !important;
   }
 
+  .single-product-grid > div:first-child {
+    position: static !important;
+    top: unset !important;
+  }
+
   /* Header & Navigation Mobile */
   .ayla-header {
     padding: 10px 14px !important;
