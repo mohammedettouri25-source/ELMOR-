@@ -2,8 +2,8 @@
 -- BASE DE DONNÉES MYSQL — ELMORÉ STOCK MANAGEMENT & STOREFRONT
 -- ============================================================================
 
-CREATE DATABASE IF NOT EXISTS `elmore_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE `elmore_db`;
+CREATE DATABASE IF NOT EXISTS `elmore` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `elmore`;
 
 -- 1. Table des Entrepôts / Magasins
 CREATE TABLE IF NOT EXISTS `warehouses` (
@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `stock_movements` (
   `variant_id` VARCHAR(50) NOT NULL,
   `product_name` VARCHAR(255) NOT NULL,
   `variant_name` VARCHAR(150) DEFAULT NULL,
-  `type` VARCHAR(50) NOT NULL, -- 'Initial Stock', 'Purchase', 'Sale', 'Return', 'Transfer', etc.
+  `type` VARCHAR(50) NOT NULL,
   `quantity` INT NOT NULL,
   `prev_quantity` INT NOT NULL,
   `new_quantity` INT NOT NULL,
@@ -135,3 +135,12 @@ INSERT INTO `products` (`id`, `name`, `sku`, `barcode`, `category`, `brand`, `su
 ('prd-watch-a', 'Montre ELMORÉ Chrono Automatic A', 'WTC-CHRONO-A', '38009911001', 'Montres & Horlogerie', 'ELMORÉ', 'sup-1', '/hero.png', 'Montre chronographe automatique de haute précision. Boîtier en acier inoxydable 316L, mouvement suisse squelette et verre saphir inrayable.', 1200.00, 2490.00, 10),
 ('prd-jacket-b', 'Veste Cuir Lambskin ELMORÉ Classic', 'JKT-LAMB-01', '38009922002', 'Vêtements Cuir', 'ELMORÉ Leather', 'sup-2', '/hero.png', 'Veste en cuir véritable d\'agneau sur-mesure avec doublure satinée et fermetures éclair YKK.', 650.00, 1490.00, 8)
 ON DUPLICATE KEY UPDATE `name`=`name`;
+
+INSERT INTO `product_variants` (`id`, `product_id`, `color`, `size`, `material`, `packaging`, `sku`, `barcode`, `stock`, `min_stock`, `purchase_price`, `price`) VALUES
+('v-101', 'prd-watch-a', 'Gold', '40mm', 'Acier Doré 18K', 'stdbox', 'WTC-GOLD-40', '38009911001-G40', 12, 5, 1200.00, 2490.00),
+('v-102', 'prd-watch-a', 'Gold', '42mm', 'Acier Doré 18K', 'luxe', 'WTC-GOLD-42', '38009911001-G42', 8, 5, 1200.00, 2490.00),
+('v-103', 'prd-watch-a', 'Black', '40mm', 'Acier Noir Mat', 'nobox', 'WTC-BLK-40', '38009911001-B40', 20, 5, 1150.00, 2390.00),
+('v-104', 'prd-watch-a', 'Silver', '42mm', 'Acier Argenté', 'stdbox', 'WTC-SLV-42', '38009911001-S42', 4, 6, 1100.00, 2290.00),
+('v-201', 'prd-jacket-b', 'Noir', 'M', 'Cuir d\'agneau', 'nobox', 'JKT-BLK-M', '38009922002-BM', 15, 4, 650.00, 1490.00),
+('v-202', 'prd-jacket-b', 'Noir', 'L', 'Cuir d\'agneau', 'stdbox', 'JKT-BLK-L', '38009922002-BL', 3, 5, 650.00, 1490.00)
+ON DUPLICATE KEY UPDATE `sku`=`sku`;

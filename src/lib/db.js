@@ -4,11 +4,11 @@
  */
 
 export const mysqlConfig = {
-  host: process.env.VITE_MYSQL_HOST || 'localhost',
-  port: Number(process.env.VITE_MYSQL_PORT) || 3306,
-  user: process.env.VITE_MYSQL_USER || 'root',
-  password: process.env.VITE_MYSQL_PASSWORD || '',
-  database: process.env.VITE_MYSQL_DATABASE || 'elmore_db',
+  host: (typeof import.meta !== 'undefined' && import.meta.env?.VITE_MYSQL_HOST) || 'localhost',
+  port: Number(typeof import.meta !== 'undefined' && import.meta.env?.VITE_MYSQL_PORT) || 3306,
+  user: (typeof import.meta !== 'undefined' && import.meta.env?.VITE_MYSQL_USER) || 'root',
+  password: (typeof import.meta !== 'undefined' && import.meta.env?.VITE_MYSQL_PASSWORD) || '',
+  database: (typeof import.meta !== 'undefined' && import.meta.env?.VITE_MYSQL_DATABASE) || 'elmore',
   connectionLimit: 10
 }
 
