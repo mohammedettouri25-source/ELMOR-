@@ -240,7 +240,6 @@ function getWhatsAppUrl(orderNumber) {
       <nav class="ayla-nav-links">
         <span class="ayla-nav-link" :class="{ active: storePage === 'home' }" @click="storePage = 'home'">{{ t.navHome }}</span>
         <span class="ayla-nav-link" :class="{ active: storePage === 'catalog' }" @click="storePage = 'catalog'">{{ t.navCatalog }}</span>
-        <span class="ayla-nav-link" :class="{ active: storePage === 'order' }" @click="storePage = 'order'">{{ t.navOrder }}</span>
         <span class="ayla-nav-link" :class="{ active: storePage === 'reviews' }" @click="storePage = 'reviews'">{{ t.navReviews }}</span>
       </nav>
 
