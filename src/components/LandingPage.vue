@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useInventoryStore, PACKAGING_OPTIONS } from '../stores/inventory'
 import { translations } from '../lib/translations'
 import {
@@ -47,9 +47,16 @@ const catalogSearchQuery = ref('')
 
 const product = computed(() => store.selectedLandingProduct)
 
-const selectedVariantId = ref(product.value?.variants?.[0]?.id || '')
+const selectedVariantId = ref('')
 const selectedPackagingId = ref('stdbox')
 const orderQuantity = ref(1)
+
+// Keep selectedVariantId in sync whenever product or landing product changes
+watch(() => product.value?.id, () => {
+  if (product.value?.variants?.length > 0) {
+    selectedVariantId.value = product.value.variants[0].id
+  }
+}, { immediate: true })
 
 const customerForm = ref({
   name: '',
@@ -514,15 +521,23 @@ function getWhatsAppUrl(orderNumber) {
           </div>
 
           <!-- Calculated Dynamic Pricing Box -->
-          <div style="background: var(--ay-gold-light); border: 1px solid #f6dfc7; padding: 18px 20px; border-radius: 12px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
+          <div style="background: var(--ay-gold-light); border: 2px solid var(--ay-gold); padding: 20px; border-radius: 14px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(212, 153, 92, 0.15);">
             <div>
-              <span style="font-size: 12px; color: var(--ay-muted); font-weight: 700; display: block; text-transform: uppercase;">PRIX TOTAL UNITAIRE :</span>
-              <div style="display: flex; align-items: baseline; gap: 10px;">
-                <span style="font-size: 32px; font-weight: 900; color: var(--ay-emerald); font-family: 'Instrument Sans', sans-serif;">{{ finalUnitPrice }} DH</span>
-                <span v-if="selectedPackaging.extraPrice > 0" style="font-size: 12px; color: var(--ay-gold); font-weight: 800;">(Produit {{ currentVariant?.price || product.price }} DH + Coffret {{ selectedPackaging.extraPrice }} DH)</span>
+              <span style="font-size: 11px; color: var(--ay-muted); font-weight: 800; display: block; text-transform: uppercase; letter-spacing: 0.05em;">
+                {{ store.currentLang === 'ar' ? 'السعر الإجمالي للقطعة :' : 'PRIX UNITAIRE TOTAL :' }}
+              </span>
+              <div style="display: flex; align-items: baseline; gap: 10px; margin-top: 2px; flex-wrap: wrap;">
+                <span style="font-size: 34px; font-weight: 900; color: var(--ay-emerald); font-family: 'Instrument Sans', sans-serif;">{{ finalUnitPrice }} DH</span>
+                <span style="font-size: 12px; color: var(--ay-dark); font-weight: 700; background: #ffffff; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--ay-border);">
+                  (Produit {{ currentVariant?.price || product.price }} DH + Coffret {{ selectedPackaging.extraPrice }} DH)
+                </span>
+              </div>
+
+              <div v-if="orderQuantity > 1" style="font-size: 14px; font-weight: 800; color: var(--ay-emerald); margin-top: 8px;">
+                {{ store.currentLang === 'ar' ? `المجموع لـ (${orderQuantity} قطع) :` : `TOTAL COMMANDE (${orderQuantity} pièces) :` }} <span style="font-size: 20px; color: var(--ay-gold); font-weight: 900;">{{ totalPrice }} DH</span>
               </div>
             </div>
-            <span style="background: #e8f5e9; color: #2e7d32; font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 4px;">-35% OFFRE</span>
+            <span style="background: #2e7d32; color: #ffffff; font-size: 11px; font-weight: 800; padding: 6px 12px; border-radius: 6px;">-35% OFFRE</span>
           </div>
 
           <!-- Section 1: Choose Variant / Finish -->
