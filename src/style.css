@@ -851,3 +851,339 @@ table.data-table tr:hover {
   box-shadow: 0 0 0 1px #0071e3;
 }
 
+/* ==========================================================================
+   MAISON AYLA LUXURY MOROCCAN STOREFRONT DESIGN SYSTEM
+   ========================================================================== */
+
+:root {
+  --ay-cream: #FEFBEF;
+  --ay-emerald: #073C3A;
+  --ay-emerald-hover: #0b4e4b;
+  --ay-gold: #D4995C;
+  --ay-gold-light: #fdf5ea;
+  --ay-dark: #1C1C1C;
+  --ay-muted: #6b7280;
+  --ay-border: #E8E4D5;
+}
+
+.ayla-container {
+  background-color: var(--ay-cream);
+  color: var(--ay-dark);
+  min-height: 100vh;
+  font-family: 'Nunito', 'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Announcement Bar Sticky Top */
+.ayla-announcement-bar {
+  background-color: var(--ay-emerald);
+  color: #FFFFFF;
+  text-align: center;
+  padding: 8px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  position: sticky;
+  top: 0;
+  z-index: 1001;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.ayla-announcement-bar span {
+  color: var(--ay-gold);
+}
+
+/* Luxury Maison Ayla Header */
+.ayla-header {
+  background: var(--ay-cream);
+  border-bottom: 1px solid var(--ay-border);
+  padding: 16px 36px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 33px;
+  z-index: 1000;
+}
+
+.ayla-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.ayla-logo img {
+  height: 42px;
+  width: auto;
+  object-fit: contain;
+}
+
+.ayla-logo-text {
+  font-family: 'Instrument Sans', serif, sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ay-emerald);
+}
+
+.ayla-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ay-dark);
+}
+
+.ayla-nav-link {
+  color: var(--ay-dark);
+  text-decoration: none;
+  transition: color 0.2s;
+  cursor: pointer;
+}
+
+.ayla-nav-link:hover {
+  color: var(--ay-gold);
+}
+
+/* Hero Section */
+.ayla-hero {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+.ayla-badge-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1px solid var(--ay-border);
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ay-dark);
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+.ayla-title {
+  font-family: 'Instrument Sans', serif, sans-serif;
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ay-emerald);
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+
+.ayla-subtitle {
+  font-size: 16px;
+  color: var(--ay-muted);
+  max-width: 600px;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+/* Product Card Luxury */
+.ayla-product-card {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid var(--ay-border);
+  padding: 32px;
+  box-shadow: 0 10px 30px rgba(7, 60, 58, 0.05);
+}
+
+/* Buttons */
+.ayla-btn-emerald {
+  background-color: var(--ay-emerald);
+  color: #ffffff;
+  border: 1px solid var(--ay-emerald);
+  padding: 16px 32px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.ayla-btn-emerald:hover {
+  background-color: var(--ay-emerald-hover);
+  box-shadow: 0 6px 20px rgba(7, 60, 58, 0.2);
+}
+
+.ayla-btn-gold {
+  background-color: var(--ay-gold);
+  color: #ffffff;
+  border: 1px solid var(--ay-gold);
+  padding: 14px 28px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ayla-btn-gold:hover {
+  background-color: #c4894c;
+}
+
+/* Trust Badges Grid */
+.ayla-trust-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin: 50px 0;
+}
+
+@media (max-width: 900px) {
+  .ayla-trust-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.ayla-trust-card {
+  background: #ffffff;
+  border: 1px solid var(--ay-border);
+  border-radius: 12px;
+  padding: 24px 20px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.ayla-trust-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--ay-gold);
+}
+
+.ayla-trust-icon {
+  width: 50px;
+  height: 50px;
+  background: var(--ay-gold-light);
+  color: var(--ay-gold);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 14px auto;
+}
+
+.ayla-trust-card h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ay-emerald);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+
+.ayla-trust-card p {
+  font-size: 12px;
+  color: var(--ay-muted);
+  line-height: 1.4;
+}
+
+/* Customer Reviews Grid */
+.ayla-reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin: 40px 0;
+}
+
+@media (max-width: 900px) {
+  .ayla-reviews-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ayla-review-card {
+  background: #ffffff;
+  border: 1px solid var(--ay-border);
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+}
+
+.ayla-review-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.ayla-review-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--ay-emerald);
+  color: #ffffff;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+}
+
+/* Maison Ayla Footer */
+.ayla-footer {
+  background: var(--ay-emerald);
+  color: #ffffff;
+  padding: 60px 24px 30px 24px;
+  margin-top: 80px;
+  border-top: 4px solid var(--ay-gold);
+}
+
+.ayla-footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+}
+
+@media (max-width: 900px) {
+  .ayla-footer-inner {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.ayla-footer h4 {
+  font-family: 'Instrument Sans', serif, sans-serif;
+  color: var(--ay-gold);
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 16px;
+}
+
+.ayla-footer p, .ayla-footer a {
+  color: #d1d5db;
+  font-size: 13px;
+  line-height: 1.6;
+  text-decoration: none;
+}
+
+.ayla-footer a:hover {
+  color: var(--ay-gold);
+}
+
+
