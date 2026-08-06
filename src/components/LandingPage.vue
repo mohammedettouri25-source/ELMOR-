@@ -18,13 +18,20 @@ import {
   Settings,
   Star,
   Check,
-  RefreshCw,
-  PhoneCall,
-  Eye,
-  ArrowRight
+  Search,
+  ArrowRight,
+  Filter,
+  Grid,
+  Heart
 } from 'lucide-vue-next'
 
 const store = useInventoryStore()
+
+// Page Navigation State: 'home' | 'catalog' | 'order' | 'reviews'
+const storePage = ref('home')
+
+const selectedCategoryFilter = ref('all')
+const catalogSearchQuery = ref('')
 
 const product = computed(() => store.selectedLandingProduct)
 
@@ -62,12 +69,29 @@ const totalPrice = computed(() => {
   return finalUnitPrice.value * orderQuantity.value
 })
 
+const filteredCatalogProducts = computed(() => {
+  let list = store.products || []
+  if (selectedCategoryFilter.value !== 'all') {
+    list = list.filter(p => p.category === selectedCategoryFilter.value)
+  }
+  const q = catalogSearchQuery.value.trim().toLowerCase()
+  if (q) {
+    list = list.filter(p =>
+      p.name.toLowerCase().includes(q) ||
+      (p.brand || '').toLowerCase().includes(q) ||
+      p.category.toLowerCase().includes(q)
+    )
+  }
+  return list
+})
+
 const isCopied = ref(false)
 
-function selectProduct(p) {
+function selectProductAndOrder(p) {
   store.selectedLandingProductId = p.id
   selectedVariantId.value = p.variants?.[0]?.id || ''
-  scrollToOrderForm()
+  storePage.value = 'order'
+  window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
 function copyProductShareLink() {
@@ -136,11 +160,6 @@ function getWhatsAppUrl(orderNumber) {
   const msg = encodeURIComponent(`Bonjour ELMORÉ, je viens de passer la commande N° ${orderNumber}. Merci de me confirmer la livraison !`)
   return `https://wa.me/212661889900?text=${msg}`
 }
-
-function scrollToOrderForm() {
-  const el = document.getElementById('checkout-section')
-  if (el) el.scrollIntoView({ behavior: 'smooth' })
-}
 </script>
 
 <template>
@@ -150,25 +169,21 @@ function scrollToOrderForm() {
       ✨ <span>LIVRAISON GRATUITE PARTOUT AU MAROC 🇲🇦</span> · PAIEMENT À LA LIVRAISON (COD) · SATISFAIT OU ÉCHANGÉ ✨
     </div>
 
-    <!-- Luxury Maison Ayla Header (Clean White Theme) -->
+    <!-- Luxury Maison Ayla Header -->
     <header class="ayla-header">
-      <div class="ayla-logo" @click="store.activeTab = 'landing'">
+      <div class="ayla-logo" @click="storePage = 'home'">
         <img src="/logo.png" alt="ELMORÉ" />
         <span class="ayla-logo-text">ELMORÉ</span>
       </div>
 
       <nav class="ayla-nav-links">
-        <a class="ayla-nav-link" href="#catalog-section">NOTRE CATALOGUE</a>
-        <a class="ayla-nav-link" href="#hero-section">EN VEDETTE</a>
-        <a class="ayla-nav-link" href="#checkout-section">COMMANDER</a>
-        <a class="ayla-nav-link" href="#reviews-section">AVIS CLIENTS</a>
+        <span class="ayla-nav-link" :class="{ active: storePage === 'home' }" @click="storePage = 'home'">ACCUEIL</span>
+        <span class="ayla-nav-link" :class="{ active: storePage === 'catalog' }" @click="storePage = 'catalog'">CATALOGUE</span>
+        <span class="ayla-nav-link" :class="{ active: storePage === 'order' }" @click="storePage = 'order'">COMMANDER</span>
+        <span class="ayla-nav-link" :class="{ active: storePage === 'reviews' }" @click="storePage = 'reviews'">AVIS CLIENTS</span>
       </nav>
 
       <div style="display: flex; align-items: center; gap: 14px;">
-        <select v-model="store.selectedLandingProductId" style="border: 1px solid var(--ay-border); background: #ffffff; padding: 8px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; color: var(--ay-emerald); cursor: pointer;">
-          <option v-for="p in store.products" :key="p.id" :value="p.id">{{ p.name }}</option>
-        </select>
-
         <button class="ayla-btn-gold" style="padding: 8px 16px; font-size: 11px;" @click="copyProductShareLink">
           {{ isCopied ? 'Lien copié ✓' : 'Partager' }}
         </button>
@@ -179,148 +194,200 @@ function scrollToOrderForm() {
       </div>
     </header>
 
-    <!-- Maison Ayla Style Hero Section (Clean White) -->
-    <section id="hero-section" class="ayla-hero">
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;">
-        <!-- Left Text & Pricing -->
-        <div>
-          <div class="ayla-badge-rating">
-            <span style="color: #f59e0b; display: flex; gap: 2px;">
-              <Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" />
-            </span>
-            <span>4.9/5 · Plus de 1 400 avis au Maroc</span>
-          </div>
-
-          <h1 class="ayla-title">{{ product.name }}</h1>
-          <p class="ayla-subtitle">{{ product.description }}</p>
-
-          <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 24px;">
-            <span style="font-size: 38px; font-weight: 800; color: var(--ay-emerald); font-family: 'Instrument Sans', sans-serif;">
-              {{ finalUnitPrice }} DH
-            </span>
-            <span style="font-size: 20px; color: var(--ay-muted); text-decoration: line-through;">
-              {{ Math.round(finalUnitPrice * 1.35) }} DH
-            </span>
-            <span style="background: #e8f5e9; color: #2e7d32; font-size: 12px; font-weight: 800; padding: 4px 10px; border-radius: 4px;">
-              -35% OFFRE SPÉCIALE
-            </span>
-          </div>
-
-          <div style="display: flex; gap: 16px; margin-bottom: 32px;">
-            <button class="ayla-btn-emerald" style="font-size: 14px; padding: 18px 36px;" @click="scrollToOrderForm">
-              COMMANDER MAINTENANT <ChevronRight :size="18" />
-            </button>
-          </div>
-
-          <div style="display: flex; gap: 20px; font-size: 12px; color: var(--ay-dark); font-weight: 700;">
-            <span>✓ Acier Inoxydable 316L</span>
-            <span>✓ Garantie 2 Ans</span>
-            <span>✓ Satisfait ou Échangé</span>
-          </div>
-        </div>
-
-        <!-- Right Photo Gallery Showcase -->
-        <div style="text-align: center;">
-          <div style="background: #ffffff; border: 1px solid var(--ay-border); border-radius: 20px; padding: 32px; box-shadow: 0 12px 36px rgba(7, 60, 58, 0.06);">
-            <img :src="product.image || '/hero.png'" :alt="product.name" style="max-height: 380px; width: auto; object-fit: contain; border-radius: 12px;" />
-          </div>
-
-          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px;">
-            <img :src="product.image || '/hero.png'" style="width: 100%; height: 80px; object-fit: cover; border-radius: 10px; border: 2px solid var(--ay-emerald); cursor: pointer;" />
-            <img src="/logo.png" style="width: 100%; height: 80px; object-fit: contain; background: var(--ay-emerald); border-radius: 10px; padding: 8px; cursor: pointer;" />
-            <div style="background: #ffffff; border-radius: 10px; border: 1px solid var(--ay-border); display: grid; place-items: center; font-size: 11px; font-weight: 700; color: var(--ay-emerald); text-transform: uppercase;">
-              Écrin Prestige
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- STOREFRONT CATALOGUE GRID OF PRODUCT CARDS -->
-      <div id="catalog-section" style="margin-top: 70px;">
-        <div style="text-align: center; margin-bottom: 24px;">
-          <span style="color: var(--ay-gold); font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;">NOTRE COLLECTION EXCLUSIVE</span>
-          <h2 style="font-family: 'Instrument Sans', sans-serif; font-size: 28px; font-weight: 700; color: var(--ay-emerald); text-transform: uppercase; margin-top: 4px;">
-            DÉCOUVREZ NOS PRODUITS (CARTES CATALOGUE)
-          </h2>
-          <p style="font-size: 13px; color: var(--ay-muted);">Cliquez sur un produit pour personnaliser votre commande en 1-clic</p>
-        </div>
-
-        <div class="ayla-catalog-grid">
-          <div
-            v-for="p in store.products"
-            :key="p.id"
-            class="ayla-product-catalog-card"
-            :style="p.id === product.id ? 'border-color: var(--ay-emerald); box-shadow: 0 8px 25px rgba(7, 60, 58, 0.12);' : ''"
-            @click="selectProduct(p)"
-          >
-            <div class="ayla-card-img-wrapper">
-              <span class="ayla-card-badge">Best-Seller</span>
-              <img :src="p.image || '/hero.png'" :alt="p.name" class="ayla-card-img" />
+    <!-- ====================================================================
+         PAGE 1: ACCUEIL / HOME HERO SHOWCASE
+         ==================================================================== -->
+    <main v-if="storePage === 'home'">
+      <section class="ayla-hero">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;">
+          <!-- Left Content -->
+          <div>
+            <div class="ayla-badge-rating">
+              <span style="color: #f59e0b; display: flex; gap: 2px;">
+                <Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" />
+              </span>
+              <span>4.9/5 · Plus de 1 400 avis vérifiés au Maroc</span>
             </div>
 
-            <div class="ayla-card-body">
-              <div class="ayla-card-category">{{ p.brand || 'ELMORÉ' }} · {{ p.category }}</div>
-              <h3 class="ayla-card-title">{{ p.name }}</h3>
+            <h1 class="ayla-title">HORLOGERIE & ACCESSOIRES DE LUXE</h1>
+            <p class="ayla-subtitle">
+              Alliez l'élégance suprême à la précision mécanique. Conçus en acier inoxydable 316L chirurgical avec verre saphir inrayable.
+            </p>
 
-              <div style="display: flex; align-items: center; gap: 4px; color: #f59e0b; font-size: 11px; margin-bottom: 8px;">
-                <Star :size="13" fill="#f59e0b" />
-                <Star :size="13" fill="#f59e0b" />
-                <Star :size="13" fill="#f59e0b" />
-                <Star :size="13" fill="#f59e0b" />
-                <Star :size="13" fill="#f59e0b" />
-                <span style="color: var(--ay-muted); margin-left: 4px; font-weight: 700;">4.9 (120+ avis)</span>
-              </div>
+            <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 28px;">
+              <span style="font-size: 38px; font-weight: 800; color: var(--ay-emerald); font-family: 'Instrument Sans', sans-serif;">
+                À partir de {{ product.price }} DH
+              </span>
+              <span style="font-size: 20px; color: var(--ay-muted); text-decoration: line-through;">
+                {{ Math.round(product.price * 1.35) }} DH
+              </span>
+            </div>
 
-              <div class="ayla-card-price-row">
-                <span class="ayla-card-price">{{ p.price }} DH</span>
-                <span class="ayla-card-old-price">{{ Math.round(p.price * 1.35) }} DH</span>
-              </div>
-
-              <button class="ayla-btn-emerald" style="width: 100%; margin-top: 14px; padding: 12px; font-size: 11px;">
-                COMMANDER EN 1-CLIC <ArrowRight :size="14" />
+            <div style="display: flex; gap: 16px; margin-bottom: 32px;">
+              <button class="ayla-btn-emerald" style="font-size: 13px; padding: 18px 32px;" @click="storePage = 'catalog'">
+                DÉCOUVRIR LE CATALOGUE <Grid :size="18" />
+              </button>
+              <button class="ayla-btn-gold" style="font-size: 13px; padding: 18px 32px;" @click="storePage = 'order'">
+                COMMANDER CE PRODUIT <ArrowRight :size="18" />
               </button>
             </div>
+
+            <div style="display: flex; gap: 24px; font-size: 12px; color: var(--ay-dark); font-weight: 700;">
+              <span>✓ Acier Inoxydable 316L</span>
+              <span>✓ Garantie 2 Ans</span>
+              <span>✓ Satisfait ou Échangé</span>
+            </div>
+          </div>
+
+          <!-- Right Studio Professional Generated Image -->
+          <div style="text-align: center;">
+            <div style="background: #ffffff; border: 1px solid var(--ay-border); border-radius: 24px; padding: 24px; box-shadow: 0 16px 40px rgba(7, 60, 58, 0.08); position: relative;">
+              <span style="position: absolute; top: 20px; left: 20px; background: var(--ay-emerald); color: #ffffff; font-size: 10px; font-weight: 800; padding: 4px 12px; border-radius: 4px; letter-spacing: 0.1em;">
+                ÉDITION PRO LUXE
+              </span>
+              <img src="/luxury_hero.png" alt="ELMORÉ Luxury Watch" style="width: 100%; height: 380px; object-fit: cover; border-radius: 16px;" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Trust Badges Section -->
+        <div class="ayla-trust-grid" style="margin-top: 60px;">
+          <div class="ayla-trust-card">
+            <div class="ayla-trust-icon"><Truck :size="24" /></div>
+            <h4>LIVRAISON GRATUITE</h4>
+            <p>Expédition sous 24h à Casablanca, Rabat & partout au Maroc.</p>
+          </div>
+
+          <div class="ayla-trust-card">
+            <div class="ayla-trust-icon"><ShieldCheck :size="24" /></div>
+            <h4>QUALITÉ GARANTIE 2 ANS</h4>
+            <p>Acier Inoxydable 316L inaltérable qui ne rouille jamais.</p>
+          </div>
+
+          <div class="ayla-trust-card">
+            <div class="ayla-trust-icon"><Gift :size="24" /></div>
+            <h4>ÉCRIN LUXE OFFERT</h4>
+            <p>Chaque pièce est livrée dans son coffret prestige rigide.</p>
+          </div>
+
+          <div class="ayla-trust-card">
+            <div class="ayla-trust-icon"><Award :size="24" /></div>
+            <h4>INSPECTER AVANT DE PAYER</h4>
+            <p>Vérifiez votre colis lors de la livraison en espèces.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ====================================================================
+         PAGE 2: CATALOGUE DÉDIÉ (DEDICATED PRODUCTS PAGE)
+         ==================================================================== -->
+    <main v-else-if="storePage === 'catalog'" class="ayla-hero">
+      <div style="text-align: center; max-width: 800px; margin: 0 auto 36px auto;">
+        <span style="color: var(--ay-gold); font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;">PARCOUREZ NOS COLLECTIONS</span>
+        <h1 style="font-family: 'Instrument Sans', sans-serif; font-size: 36px; font-weight: 700; color: var(--ay-emerald); text-transform: uppercase; margin-top: 6px;">
+          NOTRE CATALOGUE EXCLUSIF
+        </h1>
+        <p style="font-size: 14px; color: var(--ay-muted);">Sélectionnez un produit pour accéder directement à sa fiche de commande 1-clic</p>
+      </div>
+
+      <!-- Filter Bar & Search -->
+      <div style="background: #ffffff; border: 1px solid var(--ay-border); border-radius: 12px; padding: 16px 24px; margin-bottom: 32px; display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap;">
+        <!-- Category Filter Pills -->
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button
+            style="padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;"
+            :style="selectedCategoryFilter === 'all' ? 'background: var(--ay-emerald); color: #ffffff; border: 1px solid var(--ay-emerald);' : 'background: #ffffff; color: var(--ay-dark); border: 1px solid var(--ay-border);'"
+            @click="selectedCategoryFilter = 'all'"
+          >
+            Toutes les Catégories ({{ store.products.length }})
+          </button>
+          <button
+            style="padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;"
+            :style="selectedCategoryFilter === 'Montres & Horlogerie' ? 'background: var(--ay-emerald); color: #ffffff; border: 1px solid var(--ay-emerald);' : 'background: #ffffff; color: var(--ay-dark); border: 1px solid var(--ay-border);'"
+            @click="selectedCategoryFilter = 'Montres & Horlogerie'"
+          >
+            Montres & Horlogerie
+          </button>
+          <button
+            style="padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;"
+            :style="selectedCategoryFilter === 'Vêtements Cuir' ? 'background: var(--ay-emerald); color: #ffffff; border: 1px solid var(--ay-emerald);' : 'background: #ffffff; color: var(--ay-dark); border: 1px solid var(--ay-border);'"
+            @click="selectedCategoryFilter = 'Vêtements Cuir'"
+          >
+            Vêtements Cuir
+          </button>
+        </div>
+
+        <!-- Search Input -->
+        <div style="position: relative; width: 260px;">
+          <input v-model="catalogSearchQuery" placeholder="Rechercher produit..." class="form-control" style="border: 1px solid var(--ay-border); padding: 8px 12px 8px 34px; border-radius: 6px; font-size: 12px;" />
+          <Search :size="15" style="position: absolute; left: 10px; top: 10px; color: var(--ay-muted);" />
+        </div>
+      </div>
+
+      <!-- Dedicated Product Cards Grid -->
+      <div class="ayla-catalog-grid">
+        <div
+          v-for="p in filteredCatalogProducts"
+          :key="p.id"
+          class="ayla-product-catalog-card"
+          @click="selectProductAndOrder(p)"
+        >
+          <div class="ayla-card-img-wrapper">
+            <span class="ayla-card-badge">Best-Seller</span>
+            <img :src="p.image || '/luxury_hero.png'" :alt="p.name" class="ayla-card-img" />
+          </div>
+
+          <div class="ayla-card-body">
+            <div class="ayla-card-category">{{ p.brand || 'ELMORÉ' }} · {{ p.category }}</div>
+            <h3 class="ayla-card-title">{{ p.name }}</h3>
+
+            <div style="display: flex; align-items: center; gap: 4px; color: #f59e0b; font-size: 11px; margin-bottom: 8px;">
+              <Star :size="13" fill="#f59e0b" /><Star :size="13" fill="#f59e0b" /><Star :size="13" fill="#f59e0b" /><Star :size="13" fill="#f59e0b" /><Star :size="13" fill="#f59e0b" />
+              <span style="color: var(--ay-muted); margin-left: 4px; font-weight: 700;">4.9 (140+ avis)</span>
+            </div>
+
+            <div class="ayla-card-price-row">
+              <span class="ayla-card-price">{{ p.price }} DH</span>
+              <span class="ayla-card-old-price">{{ Math.round(p.price * 1.35) }} DH</span>
+            </div>
+
+            <button class="ayla-btn-emerald" style="width: 100%; margin-top: 14px; padding: 12px; font-size: 11px;" @click.stop="selectProductAndOrder(p)">
+              COMMANDER EN 1-CLIC <ArrowRight :size="14" />
+            </button>
           </div>
         </div>
       </div>
+    </main>
 
-      <!-- Trust Badges Section (Maison Ayla Style) -->
-      <div id="trust-section" class="ayla-trust-grid">
-        <div class="ayla-trust-card">
-          <div class="ayla-trust-icon"><Truck :size="24" /></div>
-          <h4>LIVRAISON GRATUITE</h4>
-          <p>Expédition sous 24h à Casablanca, Rabat & partout au Maroc.</p>
-        </div>
-
-        <div class="ayla-trust-card">
-          <div class="ayla-trust-icon"><ShieldCheck :size="24" /></div>
-          <h4>QUALITÉ GARANTIE 2 ANS</h4>
-          <p>Acier Inoxydable 316L inaltérable qui ne rouille jamais.</p>
-        </div>
-
-        <div class="ayla-trust-card">
-          <div class="ayla-trust-icon"><Gift :size="24" /></div>
-          <h4>ÉCRIN LUXE OFFERT</h4>
-          <p>Chaque pièce est livrée dans son coffret prestige rigide.</p>
-        </div>
-
-        <div class="ayla-trust-card">
-          <div class="ayla-trust-icon"><Award :size="24" /></div>
-          <h4>INSPECTER AVANT DE PAYER</h4>
-          <p>Vérifiez votre colis lors de la livraison en espèces.</p>
-        </div>
+    <!-- ====================================================================
+         PAGE 3: PAGE DE COMMANDE DÉDIÉE (ORDER CUSTOMIZER PAGE)
+         ==================================================================== -->
+    <main v-else-if="storePage === 'order'" class="ayla-hero">
+      <div style="text-align: center; max-width: 800px; margin: 0 auto 32px auto;">
+        <span style="color: var(--ay-gold); font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;">COMMANDE EXPRESS (COD)</span>
+        <h1 style="font-family: 'Instrument Sans', sans-serif; font-size: 32px; font-weight: 700; color: var(--ay-emerald); text-transform: uppercase; margin-top: 6px;">
+          PERSONNALISER & COMMANDER
+        </h1>
+        <p style="font-size: 13px; color: var(--ay-muted);">Livraison gratuite partout au Maroc · Paiement à la réception</p>
       </div>
 
-      <!-- Main Express Checkout Form Card (Maison Ayla Style) -->
-      <div id="checkout-section" class="ayla-product-card" style="max-width: 820px; margin: 40px auto;">
-        <div style="text-align: center; margin-bottom: 32px; border-bottom: 1px solid var(--ay-border); padding-bottom: 20px;">
-          <h2 style="font-family: 'Instrument Sans', sans-serif; font-size: 26px; font-weight: 700; color: var(--ay-emerald); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px;">
-            COMMANDER : {{ product.name }}
-          </h2>
-          <p style="font-size: 13px; color: var(--ay-muted);">Remplissez le formulaire ci-dessous pour recevoir votre colis chez vous</p>
+      <div class="ayla-product-card" style="max-width: 860px; margin: 0 auto;">
+        <!-- Product Header Summary -->
+        <div style="display: flex; gap: 24px; align-items: center; border-bottom: 1px solid var(--ay-border); padding-bottom: 24px; margin-bottom: 24px;">
+          <img :src="product.image || '/luxury_hero.png'" style="width: 100px; height: 100px; object-fit: contain; background: #F8FAFC; border-radius: 12px; padding: 8px; border: 1px solid var(--ay-border);" />
+          <div>
+            <span style="font-size: 11px; font-weight: 700; color: var(--ay-gold); text-transform: uppercase;">{{ product.brand }} · {{ product.category }}</span>
+            <h2 style="font-family: 'Instrument Sans', sans-serif; font-size: 22px; font-weight: 700; color: var(--ay-emerald); margin: 4px 0;">{{ product.name }}</h2>
+            <div style="font-size: 22px; font-weight: 800; color: var(--ay-emerald);">{{ finalUnitPrice }} DH</div>
+          </div>
+
+          <button class="btn-secondary" style="margin-left: auto; font-size: 11px;" @click="storePage = 'catalog'">
+            Changer de produit
+          </button>
         </div>
 
-        <!-- 1. Variant Picker -->
+        <!-- 1. Select Variant -->
         <div style="margin-bottom: 24px;">
           <label style="font-size: 13px; font-weight: 800; color: var(--ay-emerald); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 10px;">
             1. CHOISIR LA FINITION DE VOTRE PIÈCE :
@@ -423,67 +490,70 @@ function scrollToOrderForm() {
           </button>
         </form>
       </div>
+    </main>
 
-      <!-- Customer Reviews Section (Maison Ayla Style) -->
-      <div id="reviews-section" style="margin-top: 60px;">
-        <div style="text-align: center; margin-bottom: 32px;">
-          <span style="color: var(--ay-gold); font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;">AVIS DE NOS CLIENTS AU MAROC</span>
-          <h2 style="font-family: 'Instrument Sans', sans-serif; font-size: 28px; font-weight: 700; color: var(--ay-emerald); text-transform: uppercase; margin-top: 4px;">
-            CE QUE DISENT NOS CLIENTS SATISFAITS
-          </h2>
+    <!-- ====================================================================
+         PAGE 4: AVIS CLIENTS DÉDIÉ (REVIEWS & TRUST PAGE)
+         ==================================================================== -->
+    <main v-else-if="storePage === 'reviews'" class="ayla-hero">
+      <div style="text-align: center; max-width: 800px; margin: 0 auto 36px auto;">
+        <span style="color: var(--ay-gold); font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;">AVIS DE NOS CLIENTS AU MAROC</span>
+        <h1 style="font-family: 'Instrument Sans', sans-serif; font-size: 32px; font-weight: 700; color: var(--ay-emerald); text-transform: uppercase; margin-top: 6px;">
+          TÉMOIGNAGES & SATISFACTION CLIENT
+        </h1>
+        <p style="font-size: 14px; color: var(--ay-muted);">Plus de 1 400 clients satisfaits à Casablanca, Rabat, Marrakech et partout au Maroc</p>
+      </div>
+
+      <div class="ayla-reviews-grid">
+        <div class="ayla-review-card">
+          <div class="ayla-review-user">
+            <div class="ayla-review-avatar">YB</div>
+            <div>
+              <b style="font-size: 14px; display: block; color: var(--ay-emerald);">Youssef B.</b>
+              <span style="font-size: 11px; color: #2e7d32; font-weight: 700;">✓ Achat Vérifié · Casablanca</span>
+            </div>
+          </div>
+          <div style="color: #f59e0b; margin-bottom: 8px; display: flex; gap: 2px;">
+            <Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" />
+          </div>
+          <p style="font-size: 13px; color: var(--ay-dark); line-height: 1.5;">
+            "Montre incroyable! Le mouvement automatique est d'une précision parfaite et la finition en acier est juste magnifique. Reçue à Casablanca en moins de 24h."
+          </p>
         </div>
 
-        <div class="ayla-reviews-grid">
-          <div class="ayla-review-card">
-            <div class="ayla-review-user">
-              <div class="ayla-review-avatar">YB</div>
-              <div>
-                <b style="font-size: 14px; display: block; color: var(--ay-emerald);">Youssef B.</b>
-                <span style="font-size: 11px; color: #2e7d32; font-weight: 700;">✓ Achat Vérifié · Casablanca</span>
-              </div>
+        <div class="ayla-review-card">
+          <div class="ayla-review-user">
+            <div class="ayla-review-avatar">FK</div>
+            <div>
+              <b style="font-size: 14px; display: block; color: var(--ay-emerald);">Fatima-Zohra K.</b>
+              <span style="font-size: 11px; color: #2e7d32; font-weight: 700;">✓ Achat Vérifié · Rabat</span>
             </div>
-            <div style="color: #f59e0b; margin-bottom: 8px; display: flex; gap: 2px;">
-              <Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" />
-            </div>
-            <p style="font-size: 13px; color: var(--ay-dark); line-height: 1.5;">
-              "Montre incroyable! Le mouvement automatique est d'une précision parfaite et la finition en acier est juste magnifique. Reçue à Casablanca en moins de 24h."
-            </p>
           </div>
+          <div style="color: #f59e0b; margin-bottom: 8px; display: flex; gap: 2px;">
+            <Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" />
+          </div>
+          <p style="font-size: 13px; color: var(--ay-dark); line-height: 1.5;">
+            "Service client très disponible sur WhatsApp. Le coffret de luxe en bois est splendide pour faire un cadeau. Très satisfaite de mon achat chez ELMORÉ."
+          </p>
+        </div>
 
-          <div class="ayla-review-card">
-            <div class="ayla-review-user">
-              <div class="ayla-review-avatar">FK</div>
-              <div>
-                <b style="font-size: 14px; display: block; color: var(--ay-emerald);">Fatima-Zohra K.</b>
-                <span style="font-size: 11px; color: #2e7d32; font-weight: 700;">✓ Achat Vérifié · Rabat</span>
-              </div>
+        <div class="ayla-review-card">
+          <div class="ayla-review-user">
+            <div class="ayla-review-avatar">AT</div>
+            <div>
+              <b style="font-size: 14px; display: block; color: var(--ay-emerald);">Amine T.</b>
+              <span style="font-size: 11px; color: #2e7d32; font-weight: 700;">✓ Achat Vérifié · Marrakech</span>
             </div>
-            <div style="color: #f59e0b; margin-bottom: 8px; display: flex; gap: 2px;">
-              <Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" />
-            </div>
-            <p style="font-size: 13px; color: var(--ay-dark); line-height: 1.5;">
-              "Service client très disponible sur WhatsApp. Le coffret de luxe en bois est splendide pour faire un cadeau. Très satisfaite de mon achat chez ELMORÉ."
-            </p>
           </div>
-
-          <div class="ayla-review-card">
-            <div class="ayla-review-user">
-              <div class="ayla-review-avatar">AT</div>
-              <div>
-                <b style="font-size: 14px; display: block; color: var(--ay-emerald);">Amine T.</b>
-                <span style="font-size: 11px; color: #2e7d32; font-weight: 700;">✓ Achat Vérifié · Marrakech</span>
-              </div>
-            </div>
-            <div style="color: #f59e0b; margin-bottom: 8px; display: flex; gap: 2px;">
-              <Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" />
-            </div>
-            <p style="font-size: 13px; color: var(--ay-dark); line-height: 1.5;">
-              "Rapport qualité prix imbattable au Maroc pour une montre en acier 316L avec verre saphir. J'ai inspecté la montre avant de payer le livreur. Parfait!"
-            </p>
+          <div style="color: #f59e0b; margin-bottom: 8px; display: flex; gap: 2px;">
+            <Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" /><Star :size="14" fill="#f59e0b" />
           </div>
+          <p style="font-size: 13px; color: var(--ay-dark); line-height: 1.5;">
+            "Rapport qualité prix imbattable au Maroc pour une montre en acier 316L avec verre saphir. J'ai inspecté la montre avant de payer le livreur. Parfait!"
+          </p>
         </div>
       </div>
-    </section>
+    </main>
 
     <!-- Maison Ayla Style Footer -->
     <footer class="ayla-footer">
@@ -503,10 +573,10 @@ function scrollToOrderForm() {
 
         <div>
           <h4>NAVIGATION</h4>
-          <p><a href="#catalog-section">Catalogue</a></p>
-          <p><a href="#hero-section">En Vedette</a></p>
-          <p><a href="#checkout-section">Commander</a></p>
-          <p><a href="#reviews-section">Avis Clients</a></p>
+          <p><span style="cursor: pointer;" @click="storePage = 'home'">Accueil</span></p>
+          <p><span style="cursor: pointer;" @click="storePage = 'catalog'">Catalogue</span></p>
+          <p><span style="cursor: pointer;" @click="storePage = 'order'">Commander</span></p>
+          <p><span style="cursor: pointer;" @click="storePage = 'reviews'">Avis Clients</span></p>
         </div>
 
         <div>
@@ -530,7 +600,7 @@ function scrollToOrderForm() {
       </div>
     </footer>
 
-    <!-- Order Confirmation Modal (Maison Ayla Style) -->
+    <!-- Order Confirmation Modal -->
     <div v-if="showSuccessModal && lastOrder" class="modal-overlay" @click.self="showSuccessModal = false">
       <div class="modal-card" style="max-width: 540px; text-align: center; border-radius: 16px; padding: 36px; border: 2px solid var(--ay-emerald);">
         <div style="margin-bottom: 20px;">
