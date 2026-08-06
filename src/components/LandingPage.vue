@@ -134,12 +134,17 @@ function selectProductAndOrder(p) {
 
 function openCheckoutModal() {
   showCartDrawer.value = false
+  if (!selectedVariantId.value && product.value?.variants?.length > 0) {
+    selectedVariantId.value = product.value.variants[0].id
+  }
   showCheckoutModal.value = true
 }
 
 function openProductCheckoutModal(p) {
+  store.clearCart()
   store.selectedLandingProductId = p.id
   selectedVariantId.value = p.variants?.[0]?.id || ''
+  orderQuantity.value = 1
   showCheckoutModal.value = true
 }
 
